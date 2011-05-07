@@ -4,16 +4,20 @@
 class Object: public QGraphicsItem
 {
 public:
+	Object(QGraphicsItem *parent = 0)
+		: QGraphicsItem(parent)
+	{
+	}
 
     void paint(QPainter* p,const QStyleOptionGraphicsItem* option,QWidget* widget)
     {
-	p->setBrush(QBrush(QColor(255,0,0)));
-        p->drawRoundedRect(0,0,20,20,5,5);
+		p->setBrush(Qt::blue);
+		p->drawRoundedRect(0,0,40,40,5,5);
     }
 
     QRectF boundingRect() const
     {
-	return QRect(-10,-10,40,40);
+		return QRect(0,0,40,40);
     }
 
 

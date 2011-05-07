@@ -7,12 +7,12 @@
 
 lo21::lo21(): QMainWindow(0,0), scene(0, 0, 640, 440),view(this)
 {
-   view.setScene(&scene);
-   setCentralWidget( &view );
-   
-   Object b;
-   scene.addItem(&b);
-   scene.advance();
+	view.setScene(&scene);
+	setCentralWidget( &view );
+	
+	Object *b = new Object();
+	b->setPos(50,100);
+	scene.addItem(b);
 }
 
 lo21::~lo21()
