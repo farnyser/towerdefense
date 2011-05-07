@@ -15,8 +15,10 @@ public:
 private:
     int x,y,a;
 
-    int frameInterval;
+    int frameInterval, currentFrame;
     QList<QPixmap> animatedPixmap;
+	
+	void advance(int phase);
 };
 
 #endif /* end of include guard: LO21_OBJECT */

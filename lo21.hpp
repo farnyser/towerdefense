@@ -14,8 +14,12 @@ public:
     virtual ~lo21();
     
 private:
-  QGraphicsView view;
-  QGraphicsScene scene;
+	QGraphicsView view;
+	QGraphicsScene scene;
+	QTimer timer;
+
+private slots:
+	void update();
 };
 
 #endif // lo21_H
