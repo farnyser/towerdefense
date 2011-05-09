@@ -6,8 +6,8 @@
 class Enemy: public Object
 {
 private:
-    float hp;
-    int size;
+	float hp;
+	int size;
 
 };
 

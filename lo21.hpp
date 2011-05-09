@@ -8,11 +8,11 @@
 
 class lo21 : public QMainWindow
 {
-Q_OBJECT
+	Q_OBJECT
 public:
-    lo21();
-    virtual ~lo21();
-    
+	lo21();
+	virtual ~lo21();
+
 private:
 	QGraphicsView view;
 	QGraphicsScene scene;

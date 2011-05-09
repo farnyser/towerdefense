@@ -7,16 +7,16 @@
 
 #include "lo21.hpp"
 
-lo21::lo21(): QMainWindow(0,0), timer(this), scene(0, 0, 640, 440), view(this)
+lo21::lo21() : QMainWindow(0, 0), timer(this), scene(0, 0, 640, 440), view(this)
 {
 	view.setScene(&scene);
-	setCentralWidget( &view );
-	
+	setCentralWidget(&view);
+
 	Object *b = new Object();
-	b->setPos(50,100);
+	b->setPos(50, 100);
 	scene.addItem(b);
 
-	timer.start(1000.0/50.0);
+	timer.start(1000.0 / 50.0);
 	connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
@@ -33,3 +33,4 @@ void lo21::update()
 
 
 #include "lo21.moc"
+
