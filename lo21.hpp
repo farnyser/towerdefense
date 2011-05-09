@@ -6,6 +6,7 @@
 
 #include "object.hpp"
 #include "dock.hpp"
+#include "gamescene.hpp"
 
 class lo21 : public QMainWindow
 {
@@ -16,7 +17,7 @@ public:
 
 private:
 	QGraphicsView view;
-	QGraphicsScene scene;
+	GameScene scene;
 	QTimer timer;
 	Dock dock;
 

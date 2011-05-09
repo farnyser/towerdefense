@@ -6,16 +6,16 @@
 #include <QtGui/QAction>
 
 
-lo21::lo21() : QMainWindow(0, 0), timer(this), scene(0, 0, 640, 440), view(this), dock(this)
+lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this)
 {
 	//Ajout de la scene en tant que widget principale
-	view.setFixedSize(700, 700);
+	scene.setSceneRect(0, 0, 700, 700);
 	view.setScene(&scene);
 	setCentralWidget(&view);
 
 	//Ajout du dock des options de jeu
 	dock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-	dock.setMinimumWidth(150);
+	dock.setMinimumWidth(200);
 	addDockWidget(Qt::RightDockWidgetArea, &dock);
 
 	Object *b = new Object();
