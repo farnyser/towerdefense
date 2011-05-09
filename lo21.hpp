@@ -5,6 +5,7 @@
 #include <QGraphicsView>
 
 #include "object.hpp"
+#include "dock.hpp"
 
 class lo21 : public QMainWindow
 {
@@ -17,6 +18,7 @@ private:
 	QGraphicsView view;
 	QGraphicsScene scene;
 	QTimer timer;
+	Dock dock;
 
 private slots:
 	void update();
