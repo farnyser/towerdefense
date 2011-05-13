@@ -8,6 +8,23 @@
 
 lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this)
 {
+	//Init des tableaux
+	for ( int i = 0 ; i < MAP_SIZE ; i++ )
+	{
+		for ( int j = 0 ; j < MAP_SIZE ; j++ )
+		{
+			tileMap[i][j] = NULL;
+			towerMap[i][j] = NULL;
+		}
+	}
+
+	//Config par defaut
+	frequency = 50.0;
+	lives = 10;
+	credits = 100; /* valeur inconnue ? */
+	loadMap("ressources/map.txt");
+	loadWaves("ressources/waves.txt");
+
 	//Ajout de la scene en tant que widget principale
 	scene.setSceneRect(0, 0, 700, 700);
 	view.setScene(&scene);
@@ -31,13 +48,31 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 	scene.addItem(ant);
 
 
-	timer.start(1000.0 / 50.0);
+	timer.start(1000.0 / frequency);
 	connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
 lo21::~lo21()
 {
 }
+
+//
+// METHODES
+//
+
+void lo21::loadMap(const QString &path)
+{
+
+}
+
+void lo21::loadWaves(const QString &path)
+{
+
+}
+
+//
+// SLOTS 
+//
 
 void lo21::update()
 {
