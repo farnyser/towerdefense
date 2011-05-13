@@ -1,34 +1,37 @@
-#ifndef LO21_ENEMY
-#define LO21_ENEMY
+#ifndef LO21_ENEMY_HPP
+#define LO21_ENEMY_HPP
 
 #include "object.hpp"
 
 class Enemy: public Object
 {
-private:
+protected:
 	float hp;
 	int size;
-
 };
 
 class Ant: public Enemy
 {
-
+public:
+	Ant();
 };
 
 class Bug: public Enemy
 {
-
+public:
+	Bug();
 };
 
 class Bee: public Enemy
 {
-
+public:
+	Bee();
 };
 
 class Mosquito: public Enemy
 {
-
+public:
+	Mosquito();
 };
 
-#endif /* end of include guard: LO21_ENEMY */
+#endif /* end of include guard: LO21_ENEMY_HPP */

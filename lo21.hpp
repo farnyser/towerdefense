@@ -5,6 +5,8 @@
 #include <QGraphicsView>
 
 #include "object.hpp"
+#include "tower.hpp"
+#include "enemy.hpp"
 #include "dock.hpp"
 #include "gamescene.hpp"
 

@@ -18,9 +18,18 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 	dock.setMinimumWidth(200);
 	addDockWidget(Qt::RightDockWidgetArea, &dock);
 
-	Object *b = new Object();
+	Object *b = new Bug();
 	b->setPos(50, 100);
 	scene.addItem(b);
+
+	Object *bee = new Bee();
+	bee->setPos(150, 150);
+	scene.addItem(bee);
+
+	Object *ant = new Ant();
+	ant->setPos(250, 350);
+	scene.addItem(ant);
+
 
 	timer.start(1000.0 / 50.0);
 	connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
@@ -37,7 +46,5 @@ void lo21::update()
 }
 
 
-
 #include "lo21.moc"
-
 

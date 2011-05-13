@@ -12,12 +12,13 @@ public:
 	void paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget);
 	QRectF boundingRect() const;
 
-private:
-	int x, y, a;
-
+protected:
 	int frameInterval, currentFrame;
 	QList<QPixmap> animatedPixmap;
 
+private:
+	void incCurrentFrame();
+	int getCurrentFrame() const;
 	void advance(int phase);
 };
 

@@ -6,57 +6,67 @@ Object::Object(QGraphicsItem *parent)
 {
 	this->frameInterval = 10;
 	this->currentFrame = 0;
-
-	// chargement des images
-	// dans les classes filles
-
-	// pour le test
-	this->animatedPixmap.push_back(QPixmap("ressources/images/cafard1.png"));
-	this->animatedPixmap.push_back(QPixmap("ressources/images/cafard2.png"));
-	this->animatedPixmap.push_back(QPixmap("ressources/images/cafard3.png"));
 }
 
-void Object::paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget)
+int Object::getCurrentFrame() const
 {
-	if (this->animatedPixmap.size())
+	if (this->animatedPixmap.size() > 1)
 	{
-		p->drawPixmap(0, 0, this->animatedPixmap[(this->currentFrame-this->currentFrame%this->frameInterval)/this->frameInterval]);
+		// calcul du numero de la frame a afficher
+		// exemple : currentFrame = 42, frameInterval = 10
+		// affichage de la 5eme frame (0,1,2,3,[4],3,2,1)
+		int i = (this->currentFrame-this->currentFrame%this->frameInterval)/this->frameInterval;
+		
+		// affichage sequence inverse
+		// exemple: size = 5, currentFrame = 62, frameInterval = 10 => i = 6
+		// et i = 6 - 2 - (6%5) = 4-1 = 3eme image
+		// affichage de la 3eme frame (0,1,[2],3,4,3,[2],1)
+		if (i >= this->animatedPixmap.size())
+			i = this->animatedPixmap.size() - 2 - (i % this->animatedPixmap.size());
+
+		return i;
 	}
-	else
-	{
-		p->setBrush(Qt::blue);
-		p->drawRoundedRect(0, 0, 40, 40, 5, 5);
-	}
+
+	return 0;
 }
 
-QRectF Object::boundingRect() const
+void Object::incCurrentFrame()
 {
-	if (this->animatedPixmap.size())
-	{
-		return this->animatedPixmap[(this->currentFrame-this->currentFrame%this->frameInterval)/this->frameInterval].rect();
-	}
-	else
-	{
-		return QRect(0, 0, 40, 40);
-	}
-}
-
-void Object::advance(int phase)
-{
-	if (phase == 0)
-		return;
-
 	// ce test est necessaire car A % 0
 	// entraine une floatting point exception
-	if (this->animatedPixmap.size())
+	// de plus, si une seule image, pas besoin de boucler
+	if (this->animatedPixmap.size() > 1)
 	{
 		this->currentFrame++;
-		this->currentFrame %= (this->animatedPixmap.size() * this->frameInterval);
+		this->currentFrame %= ((this->animatedPixmap.size()*2-2) * this->frameInterval);
 
 		if (this->currentFrame % this->frameInterval == 0)
 			this->update();
 	}
 }
 
+void Object::paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget)
+{
+	if (this->animatedPixmap.size())
+	{
+		// std::cout << this->currentFrame << " ** " << this->getCurrentFrame() << std::endl;
+		p->drawPixmap(0, 0, this->animatedPixmap[this->getCurrentFrame()]);
+	}
+}
 
+QRectF Object::boundingRect() const
+{
+	if (this->animatedPixmap.size())
+		return this->animatedPixmap[this->getCurrentFrame()].rect();
+	else
+		return QRect(0, 0, 40, 40);
+}
+
+void Object::advance(int phase)
+{
+	if (phase == 0)
+		return;
+	else
+		this->incCurrentFrame();
+}
 
