@@ -10,13 +10,8 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 {
 	//Init des tableaux
 	for ( int i = 0 ; i < MAP_SIZE ; i++ )
-	{
 		for ( int j = 0 ; j < MAP_SIZE ; j++ )
-		{
 			tileMap[i][j] = NULL;
-			towerMap[i][j] = NULL;
-		}
-	}
 
 	//Config par defaut
 	frequency = 50.0;

@@ -36,7 +36,6 @@ private:
 	QTimer timer;
 	Dock dock;
 
-	Tower* towerMap[MAP_SIZE][MAP_SIZE];
 	Tile* tileMap[MAP_SIZE][MAP_SIZE];
 
 private slots:
