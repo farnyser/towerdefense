@@ -7,7 +7,7 @@
 class Object: public QGraphicsItem
 {
 public:
-	Object(QGraphicsItem *parent = 0);
+	Object(QList<QPixmap> p, int interval = 10, QGraphicsItem *parent = 0);
 
 	void paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget);
 	QRectF boundingRect() const;

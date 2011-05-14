@@ -1,22 +1,21 @@
 #include "tile.hpp"
-
+#include "ressources.hpp"
 
 //
 // Tile
 //
 
 Tile::Tile(QList<QPixmap> p, int interval)
+ : Object(p,interval)
 {
-	this->animatedPixmap = p;
-	this->frameInterval = interval;
 }
 
 //
 // Grass
 //
 
-Grass::Grass(QList<QPixmap> p) 
- : Tile(p), tower(NULL) 
+Grass::Grass() 
+ : Tile(Ressources::getAnimatedPixmap("grass"),Ressources::getAnimatedInterval("grass")), tower(NULL) 
 {
 }
 

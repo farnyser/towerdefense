@@ -8,6 +8,7 @@ class Enemy: public Object
 protected:
 	float hp;
 	int size;
+	Enemy(QList<QPixmap> p, int interval);
 };
 
 class Ant: public Enemy

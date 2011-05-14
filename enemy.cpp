@@ -1,32 +1,29 @@
 #include "enemy.hpp"
+#include "ressources.hpp"
 
-Bug::Bug()
+Enemy::Enemy(QList<QPixmap> p, int interval)
+ : Object(p, interval) 
 {
-	this->frameInterval = 8;
-	this->animatedPixmap.push_back(QPixmap("ressources/images/cafard1.png"));
-	this->animatedPixmap.push_back(QPixmap("ressources/images/cafard2.png"));
-	this->animatedPixmap.push_back(QPixmap("ressources/images/cafard3.png"));
 }
 
 Ant::Ant()
+ : Enemy(Ressources::getAnimatedPixmap("ant"),Ressources::getAnimatedInterval("ant"))
 {
-	this->frameInterval = 8;
-	this->animatedPixmap.push_back(QPixmap("ressources/images/fourmi1.png"));
-	this->animatedPixmap.push_back(QPixmap("ressources/images/fourmi2.png"));
-	this->animatedPixmap.push_back(QPixmap("ressources/images/fourmi3.png"));
+}
+
+Bug::Bug()
+ : Enemy(Ressources::getAnimatedPixmap("bug"),Ressources::getAnimatedInterval("bug"))
+{
 }
 
 Bee::Bee()
+ : Enemy(Ressources::getAnimatedPixmap("bee"),Ressources::getAnimatedInterval("bee"))
 {
-	this->frameInterval = 8;
-	this->animatedPixmap.push_back(QPixmap("ressources/images/guepe1.png"));
-	this->animatedPixmap.push_back(QPixmap("ressources/images/guepe2.png"));
 }
 
 Mosquito::Mosquito()
+ : Enemy(Ressources::getAnimatedPixmap("mosquito"),Ressources::getAnimatedInterval("mosquito"))
 {
-	this->frameInterval = 8;
-	this->animatedPixmap.push_back(QPixmap("ressources/images/moustiquevolant1.png"));
-	this->animatedPixmap.push_back(QPixmap("ressources/images/moustiquevolant2.png"));
 }
+
 

@@ -5,6 +5,7 @@
 #include <QtGui/QMenuBar>
 #include <QtGui/QAction>
 
+#include "ressources.hpp"
 
 lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this)
 {
@@ -38,11 +39,8 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 
 	addDockWidget(Qt::RightDockWidgetArea, &dock);
 
-	QList<QPixmap> pxmGrass;
 
-	pxmGrass.push_back(QPixmap("ressources/images/herbe.jpg"));
-
-	Grass *g = new Grass(pxmGrass);
+	Grass *g = new Grass();
 
 	scene.addItem(g);
 

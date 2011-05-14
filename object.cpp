@@ -1,10 +1,9 @@
 #include "object.hpp"
 #include <iostream>
 
-Object::Object(QGraphicsItem *parent)
-		: QGraphicsItem(parent)
+Object::Object(QList<QPixmap> p, int interval, QGraphicsItem *parent)
+ : QGraphicsItem(parent), animatedPixmap(p), frameInterval(interval)
 {
-	this->frameInterval = 10;
 	this->currentFrame = 0;
 }
 

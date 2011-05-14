@@ -20,7 +20,7 @@ public:
 class Grass : public Tile
 {
 public:
-	Grass(QList<QPixmap> p);
+	Grass();
 	bool isBuildable() const;
 	bool isWalkable() const;
 private:
