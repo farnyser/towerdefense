@@ -5,16 +5,17 @@
 // Tile
 //
 
-Tile::Tile(QPixmap p)
- : pixmap(p)
+Tile::Tile(QList<QPixmap> p, int interval)
 {
+	this->animatedPixmap = p;
+	this->frameInterval = interval;
 }
 
 //
 // Grass
 //
 
-Grass::Grass(QPixmap p) 
+Grass::Grass(QList<QPixmap> p) 
  : Tile(p), tower(NULL) 
 {
 }
@@ -69,6 +70,6 @@ bool Road::isEndPoint() const
 
 const vec2i Road::getVector() const
 {
-
+	return this->vector;
 }
 

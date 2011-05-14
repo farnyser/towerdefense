@@ -30,6 +30,11 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 	dock.setMinimumWidth(200);
 	addDockWidget(Qt::RightDockWidgetArea, &dock);
 
+	QList<QPixmap> pxmGrass;
+	pxmGrass.push_back(QPixmap("ressources/images/herbe.jpg"));
+	Grass *g = new Grass(pxmGrass);
+	scene.addItem(g);
+
 	Object *b = new Bug();
 	b->setPos(50, 100);
 	scene.addItem(b);

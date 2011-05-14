@@ -2,17 +2,15 @@
 #define LO21_TILE_HPP
 
 #include <QGraphicsItem>
+#include "object.hpp"
 
 class Tower;
 typedef QPair<QPoint, QPoint> vec2i;
 
-class Tile : public QGraphicsItem
+class Tile : public Object 
 {
-private:
-	QPixmap pixmap;
-
 protected:
-	Tile(QPixmap p);
+	Tile(QList<QPixmap> p, int interval = 1);
 
 public:
 	virtual bool isBuildable() const = 0;
@@ -22,7 +20,7 @@ public:
 class Grass : public Tile
 {
 public:
-	Grass(QPixmap p);
+	Grass(QList<QPixmap> p);
 	bool isBuildable() const;
 	bool isWalkable() const;
 private:
@@ -38,6 +36,9 @@ public:
 
 class Road : public Tile
 {
+protected:
+	vec2i vector;
+	
 public:
 	bool isBuildable() const;
 	bool isWalkable() const;
