@@ -1,5 +1,7 @@
 #include "lo21.hpp"
 
+#include <iostream>
+
 #include <QtGui/QLabel>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
@@ -40,9 +42,7 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 	addDockWidget(Qt::RightDockWidgetArea, &dock);
 
 
-	Grass *g = new Grass();
-
-	scene.addItem(g);
+	Tile *t;
 
 	Object *b = new Bug();
 
@@ -95,23 +95,32 @@ void lo21::loadMap(const QString &path)
 
 		while (it.hasNext())
 		{
-			switch (it.next().toInt())
-			{
-			case 0:
-				scene.addRect(30*x, 30*y, 30, 30, QPen(Qt::darkGreen), QBrush(Qt::green));
-				break;
-			case 64:
-				scene.addRect(30*x, 30*y, 30, 30, QPen(Qt::darkBlue), QBrush(Qt::blue));
-				break;
-			default:
-				scene.addRect(30*x, 30*y, 30, 30, QPen(Qt::black), QBrush(Qt::yellow));
-			}
+			QString itn = it.next();
+			std::cout << x << "," << y << "(size=" << itn.size() << ")" << " -> " << itn.toStdString() << std::endl;
 
-			x++;
+			// end of map (not integer) should be ignored
+			if (x < MAP_SIZE and y < MAP_SIZE)
+			{
+				switch (itn.toInt())
+				{
+				case 0:
+					tileMap[x][y] = new Grass();
+					tileMap[x][y]->setPos(TILE_SIZE*x, TILE_SIZE*y);
+					scene.addItem(tileMap[x][y]);
+					break;
+				case 64:
+					tileMap[x][y] = new Mud();
+					tileMap[x][y]->setPos(TILE_SIZE*x, TILE_SIZE*y);
+					scene.addItem(tileMap[x][y]);
+					break;
+				default:
+					scene.addRect(TILE_SIZE*x, TILE_SIZE*y, TILE_SIZE, TILE_SIZE, QPen(Qt::black), QBrush(Qt::yellow));
+				}
+				x++;
+			}
 		}
 
 		x = 0;
-
 		y++;
 	}
 }

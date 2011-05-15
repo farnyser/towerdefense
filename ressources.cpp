@@ -1,10 +1,11 @@
 #include "ressources.hpp"
+#include "lo21.hpp" /* for const */
 
 Ressources *Ressources::_singleton = NULL;
 
 Ressources::Ressources()
 {
-	QList<QPixmap> bug, ant, bee, mosquito, grass;
+	QList<QPixmap> bug, ant, bee, mosquito, grass, mud;
 
     bug.push_back(QPixmap("ressources/images/cafard1.png"));
 	bug.push_back(QPixmap("ressources/images/cafard2.png"));
@@ -28,7 +29,11 @@ Ressources::Ressources()
 	animatedPixmap["mosquito"] = mosquito;
 	animatedInterval["mosquito"] = 8;
 
-	grass.push_back(QPixmap("ressources/images/herbe.jpg"));
+	mud.push_back(QPixmap("ressources/images/boue.png").scaled(TILE_SIZE, TILE_SIZE));
+	animatedPixmap["mud"] = mud;
+	animatedInterval["mud"] = 1;
+
+	grass.push_back(QPixmap("ressources/images/herbe.jpg").scaled(TILE_SIZE, TILE_SIZE));
 	animatedPixmap["grass"] = grass;
 	animatedInterval["grass"] = 1;
 }

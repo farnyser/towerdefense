@@ -33,6 +33,11 @@ bool Grass::isWalkable() const
 // Mud
 //
 
+Mud::Mud()
+ : Tile(Ressources::getAnimatedPixmap("mud"), Ressources::getAnimatedInterval("mud"))
+{
+}
+
 bool Mud::isBuildable() const
 {
 	return false;

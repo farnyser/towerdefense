@@ -30,6 +30,7 @@ private:
 class Mud : public Tile
 {
 public:
+	Mud();
 	bool isBuildable() const;
 	bool isWalkable() const;
 };

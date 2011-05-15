@@ -12,6 +12,7 @@
 #include "gamescene.hpp"
 
 #define MAP_SIZE 16
+#define TILE_SIZE 30
 
 class lo21 : public QMainWindow
 {
