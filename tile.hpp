@@ -10,9 +10,10 @@ typedef QPair<QPoint, QPoint> vec2i;
 class Tile : public Object 
 {
 protected:
-	Tile(QList<QPixmap> p, int interval = 1);
+	Tile(lo21* g, QList<QPixmap> p, int interval = 1);
 
 public:
+	void advance();
 	virtual bool isBuildable() const = 0;
 	virtual bool isWalkable() const = 0;
 };
@@ -20,7 +21,7 @@ public:
 class Grass : public Tile
 {
 public:
-	Grass();
+	Grass(lo21*);
 	bool isBuildable() const;
 	bool isWalkable() const;
 private:
@@ -30,7 +31,7 @@ private:
 class Mud : public Tile
 {
 public:
-	Mud();
+	Mud(lo21*);
 	bool isBuildable() const;
 	bool isWalkable() const;
 };

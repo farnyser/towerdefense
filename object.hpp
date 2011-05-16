@@ -4,19 +4,23 @@
 #include <QGraphicsItem>
 #include <QPainter>
 
+class lo21;
+
 class Object: public QGraphicsItem
 {
 public:
-	Object(QList<QPixmap> p, int interval = 10, QGraphicsItem *parent = 0);
+	Object(lo21* g, QList<QPixmap> p, int interval = 10, QGraphicsItem *parent = 0);
 
 	void paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget);
 	QRectF boundingRect() const;
 
 protected:
-	int frameInterval, currentFrame;
-	QList<QPixmap> animatedPixmap;
+	const lo21* game;
+	virtual void advance() = 0;
 
 private:
+	QList<QPixmap> animatedPixmap;
+	int frameInterval, currentFrame;
 	void incCurrentFrame();
 	int getCurrentFrame() const;
 	void advance(int phase);

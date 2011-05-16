@@ -18,53 +18,40 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 
 	//Config par defaut
 	frequency = 50.0;
-
 	lives = 10;
-
 	credits = 100; /* valeur inconnue ? */
 
 	loadMap("ressources/map.txt");
-
 	loadWaves("ressources/waves.txt");
 
 	//Ajout de la scene en tant que widget principale
 	scene.setSceneRect(0, 0, 700, 700);
-
 	view.setScene(&scene);
-
 	setCentralWidget(&view);
 
 	//Ajout du dock des options de jeu
 	dock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-
 	dock.setMinimumWidth(200);
-
 	addDockWidget(Qt::RightDockWidgetArea, &dock);
 
 
 	Tile *t;
 
-	Object *b = new Bug();
-
+	Object *b = new Bug(this);
 	b->setPos(50, 100);
-
 	scene.addItem(b);
 
-	Object *bee = new Bee();
 
+	Object *bee = new Bee(this);
 	bee->setPos(150, 150);
-
 	scene.addItem(bee);
 
-	Object *ant = new Ant();
-
+	Object *ant = new Ant(this);
 	ant->setPos(250, 350);
-
 	scene.addItem(ant);
 
 
 	timer.start(1000.0 / frequency);
-
 	connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
@@ -104,12 +91,12 @@ void lo21::loadMap(const QString &path)
 				switch (itn.toInt())
 				{
 				case 0:
-					tileMap[x][y] = new Grass();
+					tileMap[x][y] = new Grass(this);
 					tileMap[x][y]->setPos(TILE_SIZE*x, TILE_SIZE*y);
 					scene.addItem(tileMap[x][y]);
 					break;
 				case 64:
-					tileMap[x][y] = new Mud();
+					tileMap[x][y] = new Mud(this);
 					tileMap[x][y]->setPos(TILE_SIZE*x, TILE_SIZE*y);
 					scene.addItem(tileMap[x][y]);
 					break;

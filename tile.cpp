@@ -5,8 +5,12 @@
 // Tile
 //
 
-Tile::Tile(QList<QPixmap> p, int interval)
- : Object(p,interval)
+Tile::Tile(lo21 *g, QList<QPixmap> p, int interval)
+ : Object(g, p,interval)
+{
+}
+
+void Tile::advance()
 {
 }
 
@@ -14,8 +18,8 @@ Tile::Tile(QList<QPixmap> p, int interval)
 // Grass
 //
 
-Grass::Grass() 
- : Tile(Ressources::getAnimatedPixmap("grass"),Ressources::getAnimatedInterval("grass")), tower(NULL) 
+Grass::Grass(lo21 *g) 
+ : Tile(g, Ressources::getAnimatedPixmap("grass"),Ressources::getAnimatedInterval("grass")), tower(NULL) 
 {
 }
 
@@ -33,8 +37,8 @@ bool Grass::isWalkable() const
 // Mud
 //
 
-Mud::Mud()
- : Tile(Ressources::getAnimatedPixmap("mud"), Ressources::getAnimatedInterval("mud"))
+Mud::Mud(lo21 *g)
+ : Tile(g, Ressources::getAnimatedPixmap("mud"), Ressources::getAnimatedInterval("mud"))
 {
 }
 

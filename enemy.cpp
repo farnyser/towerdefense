@@ -1,29 +1,65 @@
 #include "enemy.hpp"
 #include "ressources.hpp"
+#include "tile.hpp"
+#include "lo21.hpp"
 
-Enemy::Enemy(QList<QPixmap> p, int interval)
- : Object(p, interval) 
+Enemy::Enemy(lo21* g, QList<QPixmap> p, int interval)
+ : Object(g, p, interval) 
 {
 }
 
-Ant::Ant()
- : Enemy(Ressources::getAnimatedPixmap("ant"),Ressources::getAnimatedInterval("ant"))
+/// \brief Move the enemy along the path
+void Enemy::advance()
+{
+	int x = this->pos().x();
+	int y = this->pos().y();
+	
+	const Tile* tile = this->game->getTile(x,y);
+	
+	if ( tile != NULL ) 
+	{
+		//vec2i vector = tile->getVector();	
+
+		x++;
+
+		this->setPos(x, y);	
+	}
+
+	this->setPos( this->pos().x()+1, this->pos().y() );	
+}
+
+Ant::Ant(lo21 *g)
+ : Enemy(g, Ressources::getAnimatedPixmap("ant"),Ressources::getAnimatedInterval("ant"))
 {
 }
 
-Bug::Bug()
- : Enemy(Ressources::getAnimatedPixmap("bug"),Ressources::getAnimatedInterval("bug"))
+int Ant::getSpeed()
 {
 }
 
-Bee::Bee()
- : Enemy(Ressources::getAnimatedPixmap("bee"),Ressources::getAnimatedInterval("bee"))
+Bug::Bug(lo21 *g)
+ : Enemy(g, Ressources::getAnimatedPixmap("bug"),Ressources::getAnimatedInterval("bug"))
 {
 }
 
-Mosquito::Mosquito()
- : Enemy(Ressources::getAnimatedPixmap("mosquito"),Ressources::getAnimatedInterval("mosquito"))
+int Bug::getSpeed()
 {
 }
 
+Bee::Bee(lo21 *g)
+ : Enemy(g, Ressources::getAnimatedPixmap("bee"),Ressources::getAnimatedInterval("bee"))
+{
+}
 
+int Bee::getSpeed()
+{
+}
+
+Mosquito::Mosquito(lo21 *g)
+ : Enemy(g, Ressources::getAnimatedPixmap("mosquito"),Ressources::getAnimatedInterval("mosquito"))
+{
+}
+
+int Mosquito::getSpeed()
+{
+}

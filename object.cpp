@@ -1,8 +1,8 @@
 #include "object.hpp"
 #include <iostream>
 
-Object::Object(QList<QPixmap> p, int interval, QGraphicsItem *parent)
- : QGraphicsItem(parent), animatedPixmap(p), frameInterval(interval)
+Object::Object(lo21* g, QList<QPixmap> p, int interval, QGraphicsItem *parent)
+ : game(g), QGraphicsItem(parent), animatedPixmap(p), frameInterval(interval)
 {
 	this->currentFrame = 0;
 }
@@ -66,6 +66,9 @@ void Object::advance(int phase)
 	if (phase == 0)
 		return;
 	else
+	{
 		this->incCurrentFrame();
+		this->advance();
+	}
 }
 

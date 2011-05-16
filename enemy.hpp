@@ -8,31 +8,42 @@ class Enemy: public Object
 protected:
 	float hp;
 	int size;
-	Enemy(QList<QPixmap> p, int interval);
+	Enemy(lo21* g, QList<QPixmap> p, int interval);
+protected:
+	virtual int getSpeed() = 0;
+	virtual void advance();
 };
 
 class Ant: public Enemy
 {
 public:
-	Ant();
+	Ant(lo21*);
+protected:
+	int getSpeed();
 };
 
 class Bug: public Enemy
 {
 public:
-	Bug();
+	Bug(lo21*);
+protected:
+	int getSpeed();
 };
 
 class Bee: public Enemy
 {
 public:
-	Bee();
+	Bee(lo21*);
+protected:
+	int getSpeed();
 };
 
 class Mosquito: public Enemy
 {
 public:
-	Mosquito();
+	Mosquito(lo21*);
+protected:
+	int getSpeed();
 };
 
 #endif /* end of include guard: LO21_ENEMY_HPP */
