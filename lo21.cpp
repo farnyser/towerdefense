@@ -130,6 +130,17 @@ void lo21::loadWaves(const QString &path)
 
 }
 
+const Tile * lo21::getTile(int x, int y) const
+{
+	int xi = x % TILE_SIZE;
+	int yi = y % TILE_SIZE;
+
+	if ( xi < MAP_SIZE && yi < MAP_SIZE )
+		return tileMap[xi][yi];
+	else
+		return NULL;
+}
+
 //
 // SLOTS
 //

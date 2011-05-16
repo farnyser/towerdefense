@@ -21,9 +21,10 @@ public:
 	lo21();
 	virtual ~lo21();
 
-private:
+public:
 	void loadMap(const QString &path);
 	void loadWaves(const QString &path);
+	const Tile* getTile(int x, int y) const;
 
 private:
 	// configuration
