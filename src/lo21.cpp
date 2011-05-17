@@ -52,7 +52,7 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 
 
 	timer.start(1000.0 / frequency);
-	connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
+	connect(&timer, SIGNAL(timeout()), &scene, SLOT(advance()));
 }
 
 lo21::~lo21()
@@ -127,17 +127,6 @@ const Tile * lo21::getTile(int x, int y) const
 	else
 		return NULL;
 }
-
-//
-// SLOTS
-//
-
-void lo21::update()
-{
-	// foreach Object (on the scene), call advance
-	emit scene.advance();
-}
-
 
 #include "lo21.moc"
 

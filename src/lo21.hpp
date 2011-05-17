@@ -39,9 +39,6 @@ private:
 	Dock dock;
 
 	Tile* tileMap[MAP_SIZE][MAP_SIZE];
-
-private slots:
-	void update();
 };
 
 #endif // LO21_HPP
