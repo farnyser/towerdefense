@@ -105,31 +105,16 @@ void lo21::loadMap(const QString &path)
 					scene.addItem(tileMap[x][y]);
 
 					vec2i vector;
-					vector.first.setX(0);
-					vector.first.setY(0);
-					vector.second.setX(0);
-					vector.second.setY(0);
-	
-					if ( value == 32 ) 
-					{
-						r->setEnd();
-					}
-					else
-					{
-						if ( value & 16 )
-							r->setStart();
-
-						if ( value & 1 )
-							vector.second.setY(1);
-						else if ( value & 2 )
-							vector.first.setY(1);
-						if ( value & 4 )
-							vector.second.setX(1);
-						else if ( value & 8 )
-							vector.first.setX(1);
+					vector.first.setX((value&8)? 1 : 0);
+					vector.first.setY((value&2)? 1 : 0);
+					vector.second.setX((value&4)? 1 : 0);
+					vector.second.setY((value&1)? 1 : 0);
+					r->setVector(vector);
 					
-						r->setVector(vector);
-					}
+					if ( value == 32 ) 
+						r->setEnd();
+					else if ( value & 16 )
+						r->setStart();
 				}
 
 				x++;
