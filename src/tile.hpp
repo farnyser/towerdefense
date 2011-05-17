@@ -40,8 +40,16 @@ class Road : public Tile
 {
 protected:
 	vec2i vector;
-	
+	bool startpoint;
+	bool endpoint;
+
 public:
+	Road(lo21*);
+	
+	void setStart();
+	void setEnd();
+	void setVector(vec2i);
+
 	bool isBuildable() const;
 	bool isWalkable() const;
 	bool isStartPoint() const;

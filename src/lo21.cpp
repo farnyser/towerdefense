@@ -1,7 +1,5 @@
 #include "lo21.hpp"
 
-#include <iostream>
-
 #include <QtGui/QLabel>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
@@ -50,7 +48,6 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 	ant->setPos(250, 350);
 	scene.addItem(ant);
 
-
 	timer.start(1000.0 / frequency);
 	connect(&timer, SIGNAL(timeout()), &scene, SLOT(advance()));
 }
@@ -83,26 +80,58 @@ void lo21::loadMap(const QString &path)
 		while (it.hasNext())
 		{
 			QString itn = it.next();
-			std::cout << x << "," << y << "(size=" << itn.size() << ")" << " -> " << itn.toStdString() << std::endl;
+			int value = itn.toInt();
 
 			// end of map (not integer) should be ignored
 			if (x < MAP_SIZE and y < MAP_SIZE)
 			{
-				switch (itn.toInt())
+				if ( value == 0 )
 				{
-				case 0:
 					tileMap[x][y] = new Grass(this);
 					tileMap[x][y]->setPos(TILE_SIZE*x, TILE_SIZE*y);
 					scene.addItem(tileMap[x][y]);
-					break;
-				case 64:
+				}
+				else if ( value == 64 )
+				{
 					tileMap[x][y] = new Mud(this);
 					tileMap[x][y]->setPos(TILE_SIZE*x, TILE_SIZE*y);
 					scene.addItem(tileMap[x][y]);
-					break;
-				default:
-					scene.addRect(TILE_SIZE*x, TILE_SIZE*y, TILE_SIZE, TILE_SIZE, QPen(Qt::black), QBrush(Qt::yellow));
 				}
+				else
+				{
+					Road *r = new Road(this);
+					tileMap[x][y] = r;
+					tileMap[x][y]->setPos(TILE_SIZE*x, TILE_SIZE*y);
+					scene.addItem(tileMap[x][y]);
+
+					vec2i vector;
+					vector.first.setX(0);
+					vector.first.setY(0);
+					vector.second.setX(0);
+					vector.second.setY(0);
+	
+					if ( value == 32 ) 
+					{
+						r->setEnd();
+					}
+					else
+					{
+						if ( value & 16 )
+							r->setStart();
+
+						if ( value & 1 )
+							vector.second.setY(1);
+						else if ( value & 2 )
+							vector.first.setY(1);
+						if ( value & 4 )
+							vector.second.setX(1);
+						else if ( value & 8 )
+							vector.first.setX(1);
+					
+						r->setVector(vector);
+					}
+				}
+
 				x++;
 			}
 		}

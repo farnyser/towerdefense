@@ -56,6 +56,28 @@ bool Mud::isWalkable() const
 // Road
 //
 
+Road::Road(lo21* game)
+ : Tile(game, Ressources::getAnimatedPixmap("road"), Ressources::getAnimatedInterval("road"))
+{
+	this->startpoint = false;
+	this->endpoint = false;
+}
+
+void Road::setStart()
+{
+	this->startpoint = true;
+}
+
+void Road::setEnd()
+{
+	this->endpoint = true;
+}
+
+void Road::setVector(vec2i vector)
+{
+	this->vector = vector;
+}
+
 bool Road::isBuildable() const
 {
 	return false;
@@ -68,12 +90,12 @@ bool Road::isWalkable() const
 
 bool Road::isStartPoint() const
 {
-	return /*something*/ false;
+	return this->startpoint;
 }
 
 bool Road::isEndPoint() const
 {
-	return /*something*/ false;
+	return this->endpoint;
 }
 
 const vec2i Road::getVector() const

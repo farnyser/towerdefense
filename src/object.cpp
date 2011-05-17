@@ -47,10 +47,7 @@ void Object::incCurrentFrame()
 void Object::paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	if (this->animatedPixmap.size())
-	{
-		// std::cout << this->currentFrame << " ** " << this->getCurrentFrame() << std::endl;
 		p->drawPixmap(0, 0, this->animatedPixmap[this->getCurrentFrame()]);
-	}
 }
 
 QRectF Object::boundingRect() const
