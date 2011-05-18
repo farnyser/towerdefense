@@ -41,6 +41,12 @@ private:
 
 	Tile* tileMap[MAP_SIZE][MAP_SIZE];
 	QList<Wave> waves;
+	
+private slots:
+	void updateGame();
+	
+signals:
+	void advance_scene();
 };
 
 #endif // LO21_HPP
