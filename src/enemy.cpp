@@ -16,16 +16,16 @@ void Enemy::advance()
 	
 	const Tile* tile = this->game->getTile(x,y);
 	
-	if ( tile != NULL ) 
+	if ( tile != NULL && tile->isWalkable() ) 
 	{
-		//vec2i vector = tile->getVector();	
+		vec2i vector = tile->getVector();	
 
-		x++;
+		x += (vector.second.x() - vector.first.x());
+		y += (vector.second.y() - vector.first.y());
 
 		this->setPos(x, y);	
+		//this->setRotation(vec2i.angle());
 	}
-
-	this->setPos( this->pos().x()+1, this->pos().y() );	
 }
 
 Ant::Ant(lo21 *g)

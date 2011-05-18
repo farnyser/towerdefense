@@ -14,8 +14,11 @@ protected:
 
 public:
 	void advance();
-	virtual bool isBuildable() const = 0;
-	virtual bool isWalkable() const = 0;
+	virtual bool isBuildable() const;
+	virtual bool isWalkable() const;
+	virtual bool isStartPoint() const;
+	virtual bool isEndPoint() const;
+	virtual const vec2i getVector() const;
 };
 
 class Grass : public Tile
@@ -23,7 +26,6 @@ class Grass : public Tile
 public:
 	Grass(lo21*);
 	bool isBuildable() const;
-	bool isWalkable() const;
 private:
 	Tower *tower;
 };
@@ -32,8 +34,6 @@ class Mud : public Tile
 {
 public:
 	Mud(lo21*);
-	bool isBuildable() const;
-	bool isWalkable() const;
 };
 
 class Road : public Tile
@@ -50,7 +50,6 @@ public:
 	void setEnd();
 	void setVector(vec2i);
 
-	bool isBuildable() const;
 	bool isWalkable() const;
 	bool isStartPoint() const;
 	bool isEndPoint() const;

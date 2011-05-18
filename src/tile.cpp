@@ -14,6 +14,32 @@ void Tile::advance()
 {
 }
 
+bool Tile::isWalkable() const
+{
+	return false;
+}
+
+bool Tile::isBuildable() const
+{
+	return false;
+}
+
+bool Tile::isStartPoint() const
+{
+	return false;
+}
+
+bool Tile::isEndPoint() const
+{
+	return false;
+}
+
+const vec2i Tile::getVector() const
+{
+	vec2i vector;
+	return vector;
+}
+
 //
 // Grass
 //
@@ -28,11 +54,6 @@ bool Grass::isBuildable() const
 	return (this->tower == NULL);
 }
 
-bool Grass::isWalkable() const
-{
-	return false;
-}
-
 //
 // Mud
 //
@@ -40,16 +61,6 @@ bool Grass::isWalkable() const
 Mud::Mud(lo21 *g)
  : Tile(g, Ressources::getAnimatedPixmap("mud"), Ressources::getAnimatedInterval("mud"))
 {
-}
-
-bool Mud::isBuildable() const
-{
-	return false;
-}
-
-bool Mud::isWalkable() const
-{
-	return false;
 }
 
 //
@@ -65,22 +76,19 @@ Road::Road(lo21* game)
 
 void Road::setStart()
 {
+	this->endpoint = false;
 	this->startpoint = true;
 }
 
 void Road::setEnd()
 {
+	this->startpoint = false;
 	this->endpoint = true;
 }
 
 void Road::setVector(vec2i vector)
 {
 	this->vector = vector;
-}
-
-bool Road::isBuildable() const
-{
-	return false;
 }
 
 bool Road::isWalkable() const

@@ -1,5 +1,6 @@
 #include "lo21.hpp"
 
+#include <QDebug>
 #include <QtGui/QLabel>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
@@ -33,20 +34,19 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 	addDockWidget(Qt::RightDockWidgetArea, &dock);
 
 
-	Tile *t;
+	Tile *start = NULL;
+
+	for ( int i = 0 ; i < MAP_SIZE ; i++ )
+		for ( int j = 0 ; j < MAP_SIZE ; j++ )
+			if ( tileMap[i][j] != NULL && tileMap[i][j]->isStartPoint() )
+				start = tileMap[i][j];
 
 	Object *b = new Bug(this);
-	b->setPos(50, 100);
+	b->setScale(0.3);
+	b->setPos(start->pos());
 	scene.addItem(b);
 
-
-	Object *bee = new Bee(this);
-	bee->setPos(150, 150);
-	scene.addItem(bee);
-
-	Object *ant = new Ant(this);
-	ant->setPos(250, 350);
-	scene.addItem(ant);
+	qDebug() << "getTile(b->x, b->y)->isWalkable() " << getTile(b->x(), b->y())->isWalkable();
 
 	timer.start(1000.0 / frequency);
 	connect(&timer, SIGNAL(timeout()), &scene, SLOT(advance()));
