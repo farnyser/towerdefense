@@ -40,13 +40,17 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 		for ( int j = 0 ; j < MAP_SIZE ; j++ )
 			if ( tileMap[i][j] != NULL && tileMap[i][j]->isStartPoint() )
 				start = tileMap[i][j];
+	
+	if ( start != NULL )
+	{
+		Bug *b = new Bug(this);
+		b->setScale(0.3);
+		b->setPos(start->pos());
+		scene.addItem(b);
 
-	Object *b = new Bug(this);
-	b->setScale(0.3);
-	b->setPos(start->pos());
-	scene.addItem(b);
-
-	qDebug() << "getTile(b->x, b->y)->isWalkable() " << getTile(b->x(), b->y())->isWalkable();
+		qDebug() << "getTile(b->x, b->y)->isWalkable() " << getTile(b->x(), b->y())->isWalkable();
+		qDebug() << "getTile(b->x, b->y)->isStartPoint() " << getTile(b->x(), b->y())->isStartPoint();
+	}
 
 	timer.start(1000.0 / frequency);
 	connect(&timer, SIGNAL(timeout()), &scene, SLOT(advance()));
@@ -106,9 +110,9 @@ void lo21::loadMap(const QString &path)
 
 					vec2i vector;
 					vector.first.setX((value&8)? 1 : 0);
-					vector.first.setY((value&2)? 1 : 0);
+					vector.first.setY((value&1)? 1 : 0);
 					vector.second.setX((value&4)? 1 : 0);
-					vector.second.setY((value&1)? 1 : 0);
+					vector.second.setY((value&2)? 1 : 0);
 					r->setVector(vector);
 					
 					if ( value == 32 ) 
@@ -131,10 +135,10 @@ void lo21::loadWaves(const QString &path)
 
 }
 
-const Tile * lo21::getTile(int x, int y) const
+const Tile* lo21::getTile(int x, int y) const
 {
-	int xi = x % TILE_SIZE;
-	int yi = y % TILE_SIZE;
+	int xi = x / TILE_SIZE;
+	int yi = y / TILE_SIZE;
 
 	if ( xi < MAP_SIZE && yi < MAP_SIZE )
 		return tileMap[xi][yi];
