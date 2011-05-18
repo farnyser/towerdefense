@@ -8,8 +8,9 @@ class Enemy: public Object
 protected:
 	float hp;
 	int size;
-	Enemy(lo21* g, QList<QPixmap> p, int interval);
+
 protected:
+	Enemy(lo21* g, QList<QPixmap> p, int interval);
 	virtual int getSpeed() = 0;
 	virtual void advance();
 };

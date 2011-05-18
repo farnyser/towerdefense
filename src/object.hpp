@@ -3,6 +3,7 @@
 
 #include <QGraphicsItem>
 #include <QPainter>
+#include <QPointF>
 
 class lo21;
 
@@ -13,6 +14,7 @@ public:
 
 	void paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget);
 	QRectF boundingRect() const;
+	QPointF getCenterPos() const;
 
 protected:
 	const lo21* game;

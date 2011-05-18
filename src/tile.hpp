@@ -5,7 +5,7 @@
 #include "object.hpp"
 
 class Tower;
-typedef QPair<QPoint, QPoint> vec2i;
+typedef QPair<QPoint, QPointF> vec2f;
 
 class Tile : public Object 
 {
@@ -18,7 +18,7 @@ public:
 	virtual bool isWalkable() const;
 	virtual bool isStartPoint() const;
 	virtual bool isEndPoint() const;
-	virtual const vec2i getVector() const;
+	virtual const vec2f getVector() const;
 };
 
 class Grass : public Tile
@@ -39,7 +39,7 @@ public:
 class Road : public Tile
 {
 protected:
-	vec2i vector;
+	vec2f vector;
 	bool startpoint;
 	bool endpoint;
 
@@ -48,12 +48,12 @@ public:
 	
 	void setStart();
 	void setEnd();
-	void setVector(vec2i);
+	void setVector(vec2f);
 
 	bool isWalkable() const;
 	bool isStartPoint() const;
 	bool isEndPoint() const;
-	const vec2i getVector() const;
+	const vec2f getVector() const;
 };
 
 #endif /* end of include guard: LO21_TILE_HPP */

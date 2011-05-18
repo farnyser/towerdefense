@@ -34,9 +34,9 @@ bool Tile::isEndPoint() const
 	return false;
 }
 
-const vec2i Tile::getVector() const
+const vec2f Tile::getVector() const
 {
-	vec2i vector;
+	vec2f vector;
 	return vector;
 }
 
@@ -86,7 +86,7 @@ void Road::setEnd()
 	this->endpoint = true;
 }
 
-void Road::setVector(vec2i vector)
+void Road::setVector(vec2f vector)
 {
 	this->vector = vector;
 }
@@ -106,7 +106,7 @@ bool Road::isEndPoint() const
 	return this->endpoint;
 }
 
-const vec2i Road::getVector() const
+const vec2f Road::getVector() const
 {
 	return this->vector;
 }

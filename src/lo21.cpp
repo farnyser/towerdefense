@@ -45,11 +45,11 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 	{
 		Bug *b = new Bug(this);
 		b->setScale(0.3);
-		b->setPos(start->pos());
+		b->setPos(start->pos() + start->getCenterPos());
 		scene.addItem(b);
 
-		qDebug() << "getTile(b->x, b->y)->isWalkable() " << getTile(b->x(), b->y())->isWalkable();
-		qDebug() << "getTile(b->x, b->y)->isStartPoint() " << getTile(b->x(), b->y())->isStartPoint();
+		qDebug() << "start->getCenterPos() " << start->getCenterPos();
+		qDebug() << "b->pos() " << b->pos();
 	}
 
 	timer.start(1000.0 / frequency);
@@ -108,7 +108,7 @@ void lo21::loadMap(const QString &path)
 					tileMap[x][y]->setPos(TILE_SIZE*x, TILE_SIZE*y);
 					scene.addItem(tileMap[x][y]);
 
-					vec2i vector;
+					vec2f vector;
 					vector.first.setX((value&8)? 1 : 0);
 					vector.first.setY((value&1)? 1 : 0);
 					vector.second.setX((value&4)? 1 : 0);

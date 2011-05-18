@@ -1,10 +1,25 @@
+#include <QDebug>
 #include "object.hpp"
-#include <iostream>
 
 Object::Object(lo21* g, QList<QPixmap> p, int interval, QGraphicsItem *parent)
  : game(g), QGraphicsItem(parent), animatedPixmap(p), frameInterval(interval)
 {
 	this->currentFrame = 0;
+}
+
+QPointF Object::getCenterPos() const
+{
+	if ( this->animatedPixmap.size() )
+	{
+		return QPointF(
+			this->animatedPixmap[this->getCurrentFrame()].width() / 2.0,
+			this->animatedPixmap[this->getCurrentFrame()].height() / 2.0
+		);
+	}
+	else
+	{
+		return QPointF(0.0, 0.0);
+	}
 }
 
 int Object::getCurrentFrame() const
