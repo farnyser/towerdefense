@@ -9,8 +9,7 @@
 Enemy::Enemy(lo21* g, QList<QPixmap> p, int interval)
  : Object(g, p, interval) 
 {
-	// scale depend on the Enemy's size
-	this->setScale(0.3);
+	setPos(g->getStart()->pos() + g->getStart()->getCenterPos());
 }
 
 /// \brief Move the enemy along the path
@@ -31,8 +30,8 @@ void Enemy::advance()
 		QPointF vectorP = vector.second - vector.first;
 		qreal angle;
 
-		x += vectorP.x() / vectorP.manhattanLength();
-		y += vectorP.y() / vectorP.manhattanLength();
+		x += 3*vectorP.x() / vectorP.manhattanLength();
+		y += 3*vectorP.y() / vectorP.manhattanLength();
 		angle = 90 - std::atan(vectorP.x() / vectorP.y()) * 360.0 / (2*3.14957);
 
 		this->setPos(x, y);	

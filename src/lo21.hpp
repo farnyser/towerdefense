@@ -26,6 +26,7 @@ public:
 	void loadMap(const QString &path);
 	void loadWaves(const QString &path);
 	const Tile* getTile(int x, int y) const;
+	const Tile* getStart() const;
 
 private:
 	// configuration
@@ -40,6 +41,8 @@ private:
 	Dock dock;
 
 	Tile* tileMap[MAP_SIZE][MAP_SIZE];
+	Tile *start;
+	
 	QList<Wave> waves;
 	
 private slots:

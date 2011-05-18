@@ -8,6 +8,7 @@
 
 #include "ressources.hpp"
 
+
 lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this)
 {
 	//Init des tableaux
@@ -34,32 +35,38 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 	addDockWidget(Qt::RightDockWidgetArea, &dock);
 
 
-	Tile *start = NULL;
-
 	for ( int i = 0 ; i < MAP_SIZE ; i++ )
 		for ( int j = 0 ; j < MAP_SIZE ; j++ )
 			if ( tileMap[i][j] != NULL && tileMap[i][j]->isStartPoint() )
 				start = tileMap[i][j];
 	
-	if ( start != NULL )
-	{
-		Bug *b = new Bug(this);
-		b->setScale(0.3);
-		b->setPos(start->pos() + start->getCenterPos());
-		scene.addItem(b);
 
-		qDebug() << "start->getCenterPos() " << start->getCenterPos();
-		qDebug() << "b->pos() " << b->pos();
-	}
-
-	timer.start(1000.0 / frequency);
+	timer.start(1000.0/ frequency);
 	connect(&timer, SIGNAL(timeout()), this, SLOT(updateGame()));
 	connect(this, SIGNAL(advance_scene()),&scene,SLOT(advance()));
 }
 
+const Tile* lo21::getStart() const
+{
+	return start;
+}
+
+
 void lo21::updateGame()
 {
+	if(waves.first().end())
+		waves.pop_front();
+	
+	if(waves.first().tick())
+	{
+		Enemy* e=waves.first().getEnemy(this);
+		e->setScale(0.3);
+		e->setPos(start->pos() + start->getCenterPos());
+		scene.addItem(e);
+	}
+	
 	emit advance_scene();
+	
 }
 
 
