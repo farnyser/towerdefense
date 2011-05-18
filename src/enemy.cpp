@@ -35,9 +35,9 @@ void Enemy::advance()
 		angle = 90 - std::atan(vectorP.x() / vectorP.y()) * 360.0 / (2*3.14957);
 
 		this->setPos(x, y);	
-		qDebug() << "new pos : " << this->pos();
-		qDebug() << "origin point : " << this->transformOriginPoint();
-		qDebug() << "vector : " << vector;
+		//qDebug() << "new pos : " << this->pos();
+		//qDebug() << "origin point : " << this->transformOriginPoint();
+		//qDebug() << "vector : " << vector;
 
 		if ( angle != this->rotation() )
 		{

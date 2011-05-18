@@ -53,7 +53,6 @@ Enemy* Wave::getEnemy(lo21* game)
 			e= NULL;
 	}
 	
-	
 	e->setScale(size);
 	
 	return e;
