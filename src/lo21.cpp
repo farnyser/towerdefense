@@ -17,9 +17,9 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 			tileMap[i][j] = NULL;
 
 	//Config par defaut
-	frequency = 50.0;
 	lives = 10;
 	credits = 100; /* valeur inconnue ? */
+	frequency = 50;
 
 	loadMap("ressources/map.txt");
 	loadWaves("ressources/waves.txt");
@@ -41,7 +41,7 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 				start = tileMap[i][j];
 	
 
-	timer.start(1000.0/ frequency);
+	timer.start(1000.0/frequency);
 	connect(&timer, SIGNAL(timeout()), this, SLOT(updateGame()));
 	connect(this, SIGNAL(advance_scene()),&scene,SLOT(advance()));
 }
@@ -54,19 +54,23 @@ const Tile* lo21::getStart() const
 
 void lo21::updateGame()
 {
-	if(waves.first().end())
-		waves.pop_front();
 	
-	if(waves.length() && waves.first().tick())
+	if(!waves.empty())
+		if(waves.first().end())
+			waves.pop_front();
+	
+	if(!waves.empty())
 	{
-		Enemy* e=waves.first().getEnemy(this);
-		e->setScale(0.3);
-		e->setPos(start->pos() + start->getCenterPos());
-		scene.addItem(e);
+		if(waves.first().tick())
+		{
+			Enemy* e=waves.first().getEnemy(this);
+			e->setScale(0.3);
+			e->setPos(start->pos() + start->getCenterPos());
+			scene.addItem(e);
+		}
 	}
 	
 	emit advance_scene();
-	
 }
 
 
@@ -148,31 +152,37 @@ void lo21::loadMap(const QString &path)
 
 void lo21::loadWaves(const QString &path)
 {
-	QFile waves(path);
-	if (!waves.open(QIODevice::ReadOnly | QIODevice::Text))
+	QFile file(path);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		QMessageBox(QMessageBox::Warning, tr("Impossible de charger les vagues"), tr("Impossible d'ouvrir le fichier des vagues"));
 		return;
 	}
 	
-	while (!waves.atEnd())
+	while (!file.atEnd())
 	{
-		QString line(waves.readLine());
+		QString rawLine=file.readLine();
+		QStringList line = rawLine.split(';', QString::SkipEmptyParts);
+		line.pop_front(); //On vire le commentaire de debut 
 		
-		//Renvoie une liste contenant les informations utiles d'un vague d'un insecte
-		QStringList wave = line.split(';', QString::SkipEmptyParts).last().split(':', QString::SkipEmptyParts);
+		QStringListIterator itLine(line);
 		
-		//On rajoute cette vague à la liste des vagues
-		this->waves.push_back(
-								Wave(wave[0],			//Type d'insect
-									wave[1].toFloat(),	//taille
-									wave[2].toInt(),	//Nombre
-									wave[3].toInt()		//Interval
-									)
-							 );
+		while(itLine.hasNext())
+		{
+			QStringList wave=itLine.next().split(':', QString::SkipEmptyParts);
+			
+				this->waves.push_back(
+										Wave(wave[0],			//Type d'insect
+											wave[1].toFloat(),	//taille
+											wave[2].toInt(),	//Nombre
+											wave[3].toInt()		//Interval
+											)
+									);
+		}
+	
 	}
 	
-	waves.close();
+	file.close();
 }
 
 const Tile* lo21::getTile(int x, int y) const

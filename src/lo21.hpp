@@ -12,8 +12,8 @@
 #include "gamescene.hpp"
 #include "wave.hpp"
 
-#define MAP_SIZE 16
-#define TILE_SIZE 30
+const int 	MAP_SIZE=16,
+			TILE_SIZE=30;
 
 class lo21 : public QMainWindow
 {
@@ -30,9 +30,9 @@ public:
 
 private:
 	// configuration
-	float frequency;
 	int lives;
 	int credits;
+	int frequency;
 	
 	// widgets et objets
 	QGraphicsView view;
