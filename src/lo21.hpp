@@ -10,6 +10,7 @@
 #include "tile.hpp"
 #include "dock.hpp"
 #include "gamescene.hpp"
+#include "wave.hpp"
 
 #define MAP_SIZE 16
 #define TILE_SIZE 30
@@ -39,6 +40,7 @@ private:
 	Dock dock;
 
 	Tile* tileMap[MAP_SIZE][MAP_SIZE];
+	QList<Wave> waves;
 };
 
 #endif // LO21_HPP

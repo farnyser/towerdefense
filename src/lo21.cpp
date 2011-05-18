@@ -71,6 +71,7 @@ void lo21::loadMap(const QString &path)
 
 	if (!map.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
+		map.close();
 		QMessageBox(QMessageBox::Warning, tr("Impossible de charger la carte"), tr("Impossible d'ouvrir le fichier de la carte"));
 		return;
 	}
@@ -128,11 +129,36 @@ void lo21::loadMap(const QString &path)
 		x = 0;
 		y++;
 	}
+	map.close();
 }
 
 void lo21::loadWaves(const QString &path)
 {
-
+	QFile waves(path);
+	if (!waves.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		QMessageBox(QMessageBox::Warning, tr("Impossible de charger les vagues"), tr("Impossible d'ouvrir le fichier des vagues"));
+		return;
+	}
+	
+	while (!waves.atEnd())
+	{
+		QString line(waves.readLine());
+		
+		//Renvoie une liste contenant les informations utiles d'un vague d'un insecte
+		QStringList wave = line.split(';', QString::SkipEmptyParts).last().split(':', QString::SkipEmptyParts);
+		
+		//On rajoute cette vague à la liste des vagues
+		this->waves.push_back(
+								Wave(wave[0],			//Type d'insect
+									wave[1].toFloat(),	//taille
+									wave[2].toInt(),	//Nombre
+									wave[3].toInt()		//Interval
+									)
+							 );
+	}
+	
+	waves.close();
 }
 
 const Tile* lo21::getTile(int x, int y) const
