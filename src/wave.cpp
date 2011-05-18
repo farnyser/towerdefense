@@ -34,27 +34,23 @@ Enemy* Wave::getEnemy(lo21* game)
 	ticksLeftBeforeNextEnnemis=interval;
 	amount--;
 	
-	Enemy* e;
+	Enemy* e = NULL;
 	
 	switch(enemyType)
 	{
 		case ANT:
-			e=new Ant(game);
+			e = new Ant(game, size);
 			break;
 		case BUG:
-			e= new Bug(game);
+			e = new Bug(game, size);
 			break;
 		case BEE:
-			e= new Bee(game);
-		case MOSQUITO:
-			e= new Mosquito(game);
+			e = new Bee(game, size);
 			break;
-		default:
-			e= NULL;
+		case MOSQUITO:
+			e = new Mosquito(game, size);
+			break;
 	}
-	
-	
-	e->setScale(size);
 	
 	return e;
 }

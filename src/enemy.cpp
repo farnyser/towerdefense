@@ -6,10 +6,11 @@
 #include <QDebug>
 #include <QPoint>
 
-Enemy::Enemy(lo21* g, QList<QPixmap> p, int interval)
- : Object(g, p, interval) 
+Enemy::Enemy(lo21* g, int arg_size, QList<QPixmap> p, int interval)
+ : Object(g, p, interval), size(arg_size)
 {
 	setPos(g->getStart()->pos() + g->getStart()->getCenterPos());
+	// setScale(getSize());
 }
 
 /// \brief Move the enemy along the path
@@ -46,8 +47,9 @@ void Enemy::advance()
 		}
 	}
 }
-Ant::Ant(lo21 *g)
- : Enemy(g, Ressources::getAnimatedPixmap("ant"),Ressources::getAnimatedInterval("ant"))
+
+Ant::Ant(lo21 *g, int size)
+ : Enemy(g, size, Ressources::getAnimatedPixmap("ant"),Ressources::getAnimatedInterval("ant"))
 {
 }
 
@@ -55,8 +57,12 @@ int Ant::getSpeed()
 {
 }
 
-Bug::Bug(lo21 *g)
- : Enemy(g, Ressources::getAnimatedPixmap("bug"),Ressources::getAnimatedInterval("bug"))
+int Ant::getSize()
+{
+}
+
+Bug::Bug(lo21 *g, int size)
+ : Enemy(g, size, Ressources::getAnimatedPixmap("bug"),Ressources::getAnimatedInterval("bug"))
 {
 }
 
@@ -64,8 +70,12 @@ int Bug::getSpeed()
 {
 }
 
-Bee::Bee(lo21 *g)
- : Enemy(g, Ressources::getAnimatedPixmap("bee"),Ressources::getAnimatedInterval("bee"))
+int Bug::getSize()
+{
+}
+
+Bee::Bee(lo21 *g, int size)
+ : Enemy(g, size, Ressources::getAnimatedPixmap("bee"),Ressources::getAnimatedInterval("bee"))
 {
 }
 
@@ -73,11 +83,20 @@ int Bee::getSpeed()
 {
 }
 
-Mosquito::Mosquito(lo21 *g)
- : Enemy(g, Ressources::getAnimatedPixmap("mosquito"),Ressources::getAnimatedInterval("mosquito"))
+int Bee::getSize()
+{
+}
+
+Mosquito::Mosquito(lo21 *g, int size)
+ : Enemy(g, size, Ressources::getAnimatedPixmap("mosquito"),Ressources::getAnimatedInterval("mosquito"))
 {
 }
 
 int Mosquito::getSpeed()
 {
 }
+
+int Mosquito::getSize()
+{
+}
+

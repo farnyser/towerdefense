@@ -57,7 +57,7 @@ void lo21::updateGame()
 	if(waves.first().end())
 		waves.pop_front();
 	
-	if(waves.first().tick())
+	if(waves.length() && waves.first().tick())
 	{
 		Enemy* e=waves.first().getEnemy(this);
 		e->setScale(0.3);
