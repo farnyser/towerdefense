@@ -10,6 +10,9 @@
     <height>513</height>
    </rect>
   </property>
+  <property name="features">
+   <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+  </property>
   <property name="windowTitle">
    <string>Options</string>
   </property>
