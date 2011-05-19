@@ -8,7 +8,7 @@ Tower::Tower(lo21* g, QList< QPixmap > p)
 }
 
 WaterGun::WaterGun(lo21* g)
-:Tower(g,Ressources::getAnimatedPixmap("watergun"),Ressources::getAnimatedInterval("watergun"))
+:Tower(g,Ressources::getAnimatedPixmap("watergun"))
 {
 	
 }
