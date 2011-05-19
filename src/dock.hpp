@@ -9,7 +9,6 @@ class Dock : public QDockWidget
 public:
 	explicit Dock(QWidget* parent = 0, Qt::WindowFlags flags = 0);
 	
-private:
 	Ui_DockWidget *ui;
 };
 

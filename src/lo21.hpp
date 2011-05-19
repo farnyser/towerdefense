@@ -24,7 +24,6 @@ public:
 
 public:
 	void loadMap(const QString &path);
-	void loadWaves(const QString &path);
 	const Tile* getTile(int x, int y) const;
 	const Tile* getStart() const;
 
@@ -47,6 +46,9 @@ private:
 	
 private slots:
 	void updateGame();
+	
+public slots:
+	void loadWaves();
 	
 signals:
 	void advance_scene();
