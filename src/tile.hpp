@@ -13,7 +13,7 @@ protected:
 	Tile(lo21* g, QList<QPixmap> p, int interval = 1);
 
 public:
-	void advance();
+	void action();
 	virtual bool isBuildable() const;
 	virtual bool isWalkable() const;
 	virtual bool isStartPoint() const;

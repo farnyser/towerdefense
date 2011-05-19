@@ -11,6 +11,6 @@ WaterGun::WaterGun(lo21* g)
 {	
 }
 
-void WaterGun::advance()
+void WaterGun::action()
 {
 }

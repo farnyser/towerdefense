@@ -11,7 +11,7 @@ Tile::Tile(lo21 *g, QList<QPixmap> p, int interval)
 {
 }
 
-void Tile::advance()
+void Tile::action()
 {
 }
 

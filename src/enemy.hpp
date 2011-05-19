@@ -18,8 +18,9 @@ protected:
 	float getSpeed() const;
 	float getHeatPoint() const;
 	float getResistance() const;
-	virtual void advance();
+	virtual void action();
 };
+//advance()
 
 class Ant: public Enemy
 {
@@ -39,10 +40,10 @@ protected:
 	int getSize();
 };
 
-class Bee: public Enemy
+class Wasp: public Enemy
 {
 public:
-	Bee(lo21*, int size);
+	Wasp(lo21*, int size);
 protected:
 	int getSpeed();
 	int getSize();

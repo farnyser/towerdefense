@@ -80,7 +80,7 @@ void Object::advance(int phase)
 	else
 	{
 		this->incCurrentFrame();
-		this->advance();
+		this->action();
 	}
 }
 

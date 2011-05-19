@@ -50,7 +50,7 @@ Enemy* Wave::getEnemy(lo21* game)
 			e = new Bug(game, size);
 			break;
 		case BEE:
-			e = new Bee(game, size);
+			e = new Wasp(game, size);
 			break;
 		case MOSQUITO:
 			e = new Mosquito(game, size);
