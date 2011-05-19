@@ -9,8 +9,12 @@
 Enemy::Enemy(lo21* g, int arg_size, QList<QPixmap> p, int interval)
  : Object(g, p, interval), size(arg_size)
 {
+	// fixme
+	// scale = 0.1 + size/10;
+	// setScale(scale);
 	setPos(g->getStart()->pos() + g->getStart()->getCenterPos());
-	// setScale(getSize());
+
+	qDebug() << "Enemy scale : " << QGraphicsItem::scale();
 }
 
 /// \brief Move the enemy along the path
@@ -30,9 +34,10 @@ void Enemy::advance()
 		vec2f vector = tile->getVector();	
 		QPointF vectorP = vector.second - vector.first;
 		qreal angle;
+		qreal speed = this->getSpeed() * TILE_SIZE/FREQUENCY;
 
-		x += 3*vectorP.x() / vectorP.manhattanLength();
-		y += 3*vectorP.y() / vectorP.manhattanLength();
+		x += speed * vectorP.x() / vectorP.manhattanLength();
+		y += speed * vectorP.y() / vectorP.manhattanLength();
 		angle = 90 - std::atan(vectorP.x() / vectorP.y()) * 360.0 / (2*3.14957);
 
 		this->setPos(x, y);	
@@ -42,61 +47,55 @@ void Enemy::advance()
 
 		if ( angle != this->rotation() )
 		{
-			// this->setTransformOriginPoint(this->getCenterPos());
-			this->setRotation(1.0/3.0*angle+2.0/3.0*this->rotation());
+			//this->setTransformOriginPoint(this->getCenterPos());
+			// this->setRotation(1.0/3.0*angle+2.0/3.0*this->rotation());
+			this->setRotation(angle);
 		}
 	}
+}
+
+float Enemy::getScale() const
+{
+	return scale; 
+}
+
+float Enemy::getSpeed() const
+{
+	return this->speed;
+}
+
+float Enemy::getResistance() const
+{
+	return this->resistance;
 }
 
 Ant::Ant(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("ant"),Ressources::getAnimatedInterval("ant"))
 {
-}
-
-int Ant::getSpeed()
-{
-}
-
-int Ant::getSize()
-{
+	this->speed = 2 + this->size/2;
+	this->hp = 5 * this->size * this->size;
+	this->resistance = this->size * this->size;
 }
 
 Bug::Bug(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("bug"),Ressources::getAnimatedInterval("bug"))
 {
-}
-
-int Bug::getSpeed()
-{
-}
-
-int Bug::getSize()
-{
+	this->hp = 10 * this->size * this->size;
+	this->resistance = 5 * this->size * this->size;
+	this->speed = 2;
 }
 
 Bee::Bee(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("bee"),Ressources::getAnimatedInterval("bee"))
 {
-}
-
-int Bee::getSpeed()
-{
-}
-
-int Bee::getSize()
-{
+	this->hp = 7 * this->size * this->size;
+	this->resistance = 4 * this->size * this->size;
+	this->speed = 3;
 }
 
 Mosquito::Mosquito(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("mosquito"),Ressources::getAnimatedInterval("mosquito"))
 {
-}
-
-int Mosquito::getSpeed()
-{
-}
-
-int Mosquito::getSize()
-{
+	this->hp = 6 * this->size * this->size; 
 }
 

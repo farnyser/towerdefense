@@ -4,19 +4,19 @@
 #include <QMainWindow>
 #include <QGraphicsView>
 
-#include "object.hpp"
-#include "tower.hpp"
-#include "enemy.hpp"
-#include "tile.hpp"
 #include "dock.hpp"
-#include "gamescene.hpp"
 #include "wave.hpp"
+#include "gamescene.hpp"
 
 const int 	MAP_SIZE=16,
 			TILE_SIZE=30,
 			TIME_BETWEEN_WAVES=4,
 			FREQUENCY=50;
 			
+
+class Tile;
+class Enemy;
+class GameScene;
 
 class lo21 : public QMainWindow
 {
@@ -43,7 +43,7 @@ private:
 	Dock dock;
 	TowerType selectedTower;
 
-	Tile* tileMap[MAP_SIZE][MAP_SIZE];
+	Tile *tileMap[MAP_SIZE][MAP_SIZE];
 	Tile *start;
 	
 	QList<Wave> waves;
