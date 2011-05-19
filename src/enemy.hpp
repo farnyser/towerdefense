@@ -3,14 +3,6 @@
 
 #include "object.hpp"
 
-enum EnemyType
-{
-	ANT,
-	BUG,
-	BEE,
-	MOSQUITO
-};
-
 class Enemy: public Object
 {
 protected:

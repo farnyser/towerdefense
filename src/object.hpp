@@ -4,6 +4,7 @@
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QPointF>
+#include "config.hpp"
 
 class lo21;
 
