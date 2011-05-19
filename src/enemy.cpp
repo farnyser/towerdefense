@@ -6,22 +6,32 @@
 #include <QDebug>
 #include <QPoint>
 
-Enemy::Enemy(lo21* g, int arg_size, QList<QPixmap> p, int interval)
- : Object(g, p, interval), size(arg_size)
+Enemy::Enemy(lo21* game, int arg_size, QList<QPixmap> pixmaps, int interval)
+ : 
+  Object(game, pixmaps, interval), 
+  size(arg_size), 
+  wantedRotation(0),
+  scale(0.2 + arg_size/20)
 {
-	// fixme
-	// scale = 0.1 + size/10;
-	// setScale(scale);
-	setPos(g->getStart()->pos() + g->getStart()->getCenterPos());
+	this->setScale(scale);
 
-	qDebug() << "Enemy scale : " << QGraphicsItem::scale();
+	// remember current vector
+	this->lastVector = game->getStart()->getVector().second - game->getStart()->getVector().first;
+	
+	// compute rotation
+	qreal angle = 90 - std::atan(lastVector.x() / lastVector.y()) * 360.0 / (2*3.14957);
+	this->setRotation(angle);
+
+	// set position to the middle of the start tile
+	this->setPos(game->getStart()->pos() + game->getStart()->getCenterPos() - this->getCenterPos());
+
 }
 
 /// \brief Move the enemy along the path
 void Enemy::action()
 {
-	float x = this->pos().x();
-	float y = this->pos().y();
+	float x = this->x() + this->getCenterPos().x();
+	float y = this->y() + this->getCenterPos().y();
 
 	const Tile* tile = this->game->getTile(x,y);
 
@@ -36,45 +46,68 @@ void Enemy::action()
 		qreal angle = 90 - std::atan(vectorP.x() / vectorP.y()) * 360.0 / (2*3.14957);
 		qreal speed = this->getSpeed() * TILE_SIZE/FREQUENCY;
 
-		// rectiligne
-		x += speed * vectorP.x() / vectorP.manhattanLength();
-		y += speed * vectorP.y() / vectorP.manhattanLength();
 
-		// courbe
-		if ( lastVector != vectorP && (pos() - (tile->pos()+tile->getCenterPos())).manhattanLength() < 5 )
+		// courbe (changement de direction
+		if ( lastVector != vectorP )
 		{
-			this->rotateState++;
+			if ( wantedRotation == 0 )
+			{
+				// precedent mouvement : haut/bas
+				if ( lastVector.x() && !lastVector.y() )
+				{
+					if ( vectorP.y() > 0 )
+						wantedRotation = 90 - rotation();
+					else
+						wantedRotation = -90 - rotation();
+				}
+				// precedent mouvement : gauche/droite
+				if ( !lastVector.x() && lastVector.y() )
+				{
+					if ( vectorP.x() > 0 )
+						wantedRotation = 0 - rotation();
+					else
+						wantedRotation = 180 - rotation();
+				}
+			}
+			else
+			{
+				int newangle = rotation() + (wantedRotation<0 ? -10 : 10); 
 
-			// precedent mouvement : haut/bas
-			if ( lastVector.x() && !lastVector.y() )
-			{
-				if ( vectorP.y() > 0 )
-					angle = 90;
-				else
-					angle = -90;
+				qDebug() << "will rotate to the angle " << newangle;
+				qDebug() << "Wanted one is " << wantedRotation;
+
+				this->setTransformOriginPoint(getCenterPos());
+				this->setRotation(newangle);
+				this->setTransformOriginPoint(0,0);
+				
+				wantedRotation += (wantedRotation<0 ? 10 : -10);
+				
+				if ( this->wantedRotation == 0 )
+					this->lastVector = vectorP;
 			}
-			// precedent mouvement : gauche/droite
-			if ( !lastVector.x() && lastVector.y() )
-			{
-				if ( vectorP.x() > 0 )
-					angle = 0;
-				else
-					angle = 180;
-			}
-			
-			this->setRotation(this->rotation() + (this->rotateState/5)*(angle-this->rotation()));
-			
-			if ( this->rotateState == 5 )
-				this->lastVector = vectorP;
 		}
 		else
 		{
-			this->rotateState = 0;
-			this->setPos(x, y);	
+			// rectiligne
+			float dx = speed * vectorP.x() / vectorP.manhattanLength();
+			float dy = speed * vectorP.y() / vectorP.manhattanLength();
+			
+			this->moveBy(dx, dy);
+
+			// this->setTransformOriginPoint(getCenterPos());
+			// this->setRotation(angle);
+			// this->setTransformOriginPoint(0,0);
 		}
-		//this->setTransformOriginPoint(this->getCenterPos());
-		//this->setRotation(angle);
-	
+	}
+	else
+	{
+		qDebug() << "There is no Walkbale Tile there : " << x << " , " << y; 
+		
+		if ( tile != NULL )
+		{
+			qDebug() << "Tile->isWalkable() -> " << tile->isWalkable();
+			qDebug() << "Tile->getVector() -> " << tile->getVector();
+		}
 	}
 }
 

@@ -13,7 +13,8 @@ protected:
 	int size;
 	
 	QPointF lastVector;
-	int rotateState;
+	int wantedRotation;
+
 
 protected:
 	Enemy(lo21* g, int size, QList<QPixmap> p, int interval);

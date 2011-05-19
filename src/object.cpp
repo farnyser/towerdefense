@@ -12,8 +12,8 @@ QPointF Object::getCenterPos() const
 	if ( this->animatedPixmap.size() )
 	{
 		return QPointF(
-			this->animatedPixmap[this->getCurrentFrame()].width() / 2.0,
-			this->animatedPixmap[this->getCurrentFrame()].height() / 2.0
+			this->scale() * this->animatedPixmap[this->getCurrentFrame()].width() / 2.0,
+			this->scale() * this->animatedPixmap[this->getCurrentFrame()].height() / 2.0
 		);
 	}
 	else
