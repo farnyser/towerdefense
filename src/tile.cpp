@@ -46,6 +46,7 @@ bool Tile::buildTower(Tower *t)
 	if ( isBuildable() && tower == NULL )
 	{
 		tower = t;
+		t->setParentItem(this);
 		return true;
 	}
 
@@ -83,19 +84,11 @@ Road::Road(lo21* game)
  : Tile(game, Ressources::getAnimatedPixmap("road"), Ressources::getAnimatedInterval("road"))
 {
 	this->startpoint = false;
-	this->endpoint = false;
 }
 
 void Road::setStart()
 {
-	this->endpoint = false;
 	this->startpoint = true;
-}
-
-void Road::setEnd()
-{
-	this->startpoint = false;
-	this->endpoint = true;
 }
 
 void Road::setVector(vec2f vector)
@@ -113,13 +106,31 @@ bool Road::isStartPoint() const
 	return this->startpoint;
 }
 
-bool Road::isEndPoint() const
-{
-	return this->endpoint;
-}
-
 const vec2f Road::getVector() const
 {
 	return this->vector;
 }
+
+//
+// End
+//
+
+Goal::Goal(lo21 *game) 
+ : Tile(game, Ressources::getAnimatedPixmap("end"), Ressources::getAnimatedInterval("end"))
+{
+	Grass *grass = new Grass(game);
+	grass->setFlags(ItemStacksBehindParent);
+	grass->setParentItem(this);
+}
+
+bool Goal::isWalkable() const
+{
+	return true;
+}
+
+bool Goal::isEndPoint() const
+{
+	return true;
+}
+
 

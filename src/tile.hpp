@@ -43,7 +43,6 @@ class Road : public Tile
 protected:
 	vec2f vector;
 	bool startpoint;
-	bool endpoint;
 
 public:
 	Road(lo21*);
@@ -54,8 +53,15 @@ public:
 
 	bool isWalkable() const;
 	bool isStartPoint() const;
-	bool isEndPoint() const;
 	const vec2f getVector() const;
+};
+
+class Goal : public Tile 
+{
+public:
+	Goal(lo21*);
+	bool isEndPoint() const;
+	bool isWalkable() const;
 };
 
 #endif /* end of include guard: LO21_TILE_HPP */
