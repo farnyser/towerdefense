@@ -13,7 +13,7 @@
 #include "tower.hpp"
 
 lo21::lo21()
-        : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1),selectedTower(NONE)
+ : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1),selectedTower(NONE)
 {
     //Init des tableaux
     for (int i = 0 ; i < MAP_SIZE ; i++)
@@ -112,24 +112,21 @@ void lo21::selectTowerWater()
 
 void lo21::clickOnScene(int x, int y)
 {
-    qDebug()<< "clickOnScene" << x <<" "<< y;
-    
 	int xi = x / TILE_SIZE;
     int yi = y / TILE_SIZE;
 	Tile *t = NULL;
 	
+    qDebug()<< "clickOnScene" << xi << " " << yi;
+
     if ( xi < MAP_SIZE && yi < MAP_SIZE )
         t = tileMap[xi][yi];
 	
 	if ( t != NULL ) 
 	{
 		Tower *tw = new WaterGun(this);
-		tw->setPos(t->pos());
 
 		if ( !t->buildTower(tw) )
 			qDebug() << "impossible de constuire ici !";
-		else
-			scene.addItem(tw);
 	}
 }
 const Tile* lo21::getStart() const
@@ -213,6 +210,12 @@ void lo21::loadMap(const QString &path)
                     tileMap[x][y]->setPos(TILE_SIZE*x, TILE_SIZE*y);
                     scene.addItem(tileMap[x][y]);
                 }
+				else if ( value == 32 )
+				{
+				    tileMap[x][y] = new Goal(this);
+                    tileMap[x][y]->setPos(TILE_SIZE*x, TILE_SIZE*y);
+                    scene.addItem(tileMap[x][y]);
+				}
                 else if ( value == 64 )
                 {
                     tileMap[x][y] = new Mud(this);
@@ -233,9 +236,7 @@ void lo21::loadMap(const QString &path)
                     vector.second.setY((value&2)? 1 : 0);
                     r->setVector(vector);
 
-                    if ( value == 32 )
-                        r->setEnd();
-                    else if ( value & 16 )
+                    if ( value & 16 )
                         r->setStart();
                 }
 
