@@ -32,7 +32,6 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 
 	//Ajout du dock des options de jeu
 	dock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-	dock.setMinimumWidth(200);
 	addDockWidget(Qt::RightDockWidgetArea, &dock);
 
 
