@@ -1,8 +1,8 @@
 #include "wave.hpp"
 
 
-Wave::Wave(QString enemyType, float size, int amount, int interval)
-:size(size),amount(amount),interval(interval), ticksLeftBeforeNextEnnemis(interval)
+Wave::Wave(QString comment,QString enemyType, float size, int amount, int interval)
+:comment(comment),size(size),amount(amount),interval(interval), ticksLeftBeforeNextEnnemis(interval)
 {
 	if(enemyType=="fourmi")
 		this->enemyType=ANT;
@@ -16,12 +16,17 @@ Wave::Wave(QString enemyType, float size, int amount, int interval)
 		//throw Exception("Type d'ennemis non connus");
 }
 
+const QString& Wave::getComment() const
+{
+	return comment;
+}
+
 bool Wave::tick()
 {
 	return !(--ticksLeftBeforeNextEnnemis);
 }
 
-bool Wave::end()
+bool Wave::end() const
 {
 	return !amount;
 }

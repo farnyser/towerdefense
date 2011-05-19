@@ -64,6 +64,7 @@ void lo21::updateGame()
 	
 	if(!waves.empty())
 	{
+		dock.ui->waveComment->setText(waves.first().getComment());
 		if(waves.first().tick())
 		{
 			Enemy* e=waves.first().getEnemy(this);
@@ -166,8 +167,9 @@ void lo21::loadWaves()
 	{
 		QString rawLine=file.readLine();
 		QStringList line = rawLine.split(';', QString::SkipEmptyParts);
+		QString comment=line.first();
+
 		line.pop_front(); //On vire le commentaire de debut 
-		
 		QStringListIterator itLine(line);
 		
 		while(itLine.hasNext())
@@ -175,7 +177,8 @@ void lo21::loadWaves()
 			QStringList wave=itLine.next().split(':', QString::SkipEmptyParts);
 			
 				this->waves.push_back(
-										Wave(wave[0],			//Type d'insect
+										Wave(comment,
+											wave[0],			//Type d'insect
 											wave[1].toFloat(),	//taille
 											wave[2].toInt(),	//Nombre
 											wave[3].toInt()		//Interval

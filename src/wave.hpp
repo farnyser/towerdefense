@@ -7,12 +7,14 @@ class Wave
 {
 
 public:
-	Wave(QString enemyType,float size, int amount, int interval);
+	Wave(QString comment,QString enemyType,float size, int amount, int interval);
 	//Avance d'une unité de temps et renvoie vrai si un insecte doit etre crée.
 	bool tick();
 	Enemy* getEnemy(lo21* game);
-	bool end();
+	bool end() const;
+	const QString& getComment() const;
 private:
+	QString comment;
 	EnemyType enemyType;
 	float size;
 	int amount;
