@@ -10,6 +10,7 @@
 #include "ressources.hpp"
 #include "tile.hpp"
 #include "enemy.hpp"
+#include "tower.hpp"
 
 lo21::lo21()
         : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1),selectedTower(NONE)
@@ -111,13 +112,26 @@ void lo21::selectTowerWater()
 
 void lo21::clickOnScene(int x, int y)
 {
-    qDebug()<< "TEST";
+    qDebug()<< "clickOnScene" << x <<" "<< y;
+    
+	int xi = x / TILE_SIZE;
+    int yi = y / TILE_SIZE;
+	Tile *t = NULL;
+	
+    if ( xi < MAP_SIZE && yi < MAP_SIZE )
+        t = tileMap[xi][yi];
+	
+	if ( t != NULL ) 
+	{
+		Tower *tw = new WaterGun(this);
+		tw->setPos(t->pos());
+
+		if ( !t->buildTower(tw) )
+			qDebug() << "impossible de constuire ici !";
+		else
+			scene.addItem(tw);
+	}
 }
-
-
-
-
-
 const Tile* lo21::getStart() const
 {
     return start;

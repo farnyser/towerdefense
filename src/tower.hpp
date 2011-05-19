@@ -16,6 +16,7 @@ class WaterGun: public Tower
 {
 public:
 	WaterGun(lo21* g);
+	void advance();
 };
 
 class Slingshot: public Tower

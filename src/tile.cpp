@@ -1,12 +1,13 @@
 #include "tile.hpp"
 #include "ressources.hpp"
+#include "tower.hpp"
 
 //
 // Tile
 //
 
 Tile::Tile(lo21 *g, QList<QPixmap> p, int interval)
- : Object(g, p,interval)
+ : Object(g, p,interval), tower(NULL)
 {
 }
 
@@ -40,12 +41,23 @@ const vec2f Tile::getVector() const
 	return vector;
 }
 
+bool Tile::buildTower(Tower *t)
+{
+	if ( isBuildable() && tower == NULL )
+	{
+		tower = t;
+		return true;
+	}
+
+	return false;
+}
+
 //
 // Grass
 //
 
 Grass::Grass(lo21 *g) 
- : Tile(g, Ressources::getAnimatedPixmap("grass"),Ressources::getAnimatedInterval("grass")), tower(NULL) 
+ : Tile(g, Ressources::getAnimatedPixmap("grass"),Ressources::getAnimatedInterval("grass")) 
 {
 }
 
