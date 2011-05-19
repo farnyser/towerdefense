@@ -11,7 +11,7 @@
 
 
 lo21::lo21()
-: QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1)
+: QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1),selectedTower(NONE)
 {
 	//Init des tableaux
 	for (int i = 0 ; i < MAP_SIZE ; i++)
@@ -48,7 +48,62 @@ lo21::lo21()
 	connect(this, SIGNAL(advance_scene()),&scene,SLOT(advance()));
 	
 	connect(dock.ui->launchWave,SIGNAL(clicked()),this,SLOT(launchWave()));
+	connect(dock.ui->SelectWater,SIGNAL(clicked()),this,SLOT(selectTowerWater()));
+	connect(dock.ui->SelectRock,SIGNAL(clicked()),this,SLOT(selectTowerRock()));
+	connect(dock.ui->SelectPaint,SIGNAL(clicked()),this,SLOT(selectTowerPaint()));
+	connect(dock.ui->SelectPetanque,SIGNAL(clicked()),this,SLOT(selectTowerPetanque()));
+	
+	connect(&scene,SIGNAL(clickOnScene(int,int)),this,SLOT(clickOnScene(int,int)));
 }
+
+void lo21::selectTowerPaint()
+{
+	QPalette p=dock.ui->SelectPaint->palette();
+	dock.ui->SelectPaint->setPalette(QPalette(Qt::red));
+	dock.ui->SelectRock->setPalette(p);
+	dock.ui->SelectWater->setPalette(p);
+	dock.ui->SelectPetanque->setPalette(p);
+	selectedTower=PAINTBALL;
+}
+
+void lo21::selectTowerPetanque()
+{
+	QPalette p=dock.ui->SelectPetanque->palette();
+	dock.ui->SelectPaint->setPalette(p);
+	dock.ui->SelectRock->setPalette(p);
+	dock.ui->SelectWater->setPalette(p);
+	dock.ui->SelectPetanque->setPalette(QPalette(Qt::red));
+	selectedTower=PETANQUEPLAYER;
+
+}
+void lo21::selectTowerRock()
+{
+	QPalette p=dock.ui->SelectRock->palette();
+	dock.ui->SelectPaint->setPalette(p);
+	dock.ui->SelectRock->setPalette(QPalette(Qt::red));
+	dock.ui->SelectWater->setPalette(p);
+	dock.ui->SelectPetanque->setPalette(p);
+	selectedTower=SLINGSHOT;
+}
+
+void lo21::selectTowerWater()
+{
+	QPalette p=dock.ui->SelectWater->palette();
+	dock.ui->SelectPaint->setPalette(p);
+	dock.ui->SelectRock->setPalette(p);
+	dock.ui->SelectWater->setPalette(QPalette(Qt::red));
+	dock.ui->SelectPetanque->setPalette(p);
+	selectedTower=WATERGUN;
+}
+
+void lo21::clickOnScene(int x, int y)
+{
+	qDebug()<< "TEST";
+}
+
+
+
+
 
 const Tile* lo21::getStart() const
 {

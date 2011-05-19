@@ -3,6 +3,15 @@
 
 #include "object.hpp"
 
+enum TowerType
+{
+	WATERGUN,
+	SLINGSHOT,
+	PAINTBALL,
+	PETANQUEPLAYER,
+	NONE
+};
+
 class Tower: public Object
 {
 private:
