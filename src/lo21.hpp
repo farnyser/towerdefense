@@ -1,7 +1,7 @@
 #ifndef LO21_HPP
 #define LO21_HPP
 
-#include <QtGui>
+#include <QMainWindow>
 #include <QGraphicsView>
 
 #include "object.hpp"

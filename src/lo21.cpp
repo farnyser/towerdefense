@@ -5,6 +5,7 @@
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
 #include <QtGui/QAction>
+#include <QMessageBox>
 
 #include "ressources.hpp"
 
