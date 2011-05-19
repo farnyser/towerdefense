@@ -13,7 +13,9 @@
 #include "wave.hpp"
 
 const int 	MAP_SIZE=16,
-			TILE_SIZE=30;
+			TILE_SIZE=30,
+			TIME_BETWEEN_WAVES=4,
+			FREQUENCY=50;
 
 class lo21 : public QMainWindow
 {
@@ -24,6 +26,7 @@ public:
 
 public:
 	void loadMap(const QString &path);
+	void loadWaves(const QString path);
 	const Tile* getTile(int x, int y) const;
 	const Tile* getStart() const;
 
@@ -31,7 +34,6 @@ private:
 	// configuration
 	int lives;
 	int credits;
-	int frequency;
 	
 	// widgets et objets
 	QGraphicsView view;
@@ -43,12 +45,13 @@ private:
 	Tile *start;
 	
 	QList<Wave> waves;
+	int timeUntilNextWave;
 	
 private slots:
 	void updateGame();
 	
 public slots:
-	void loadWaves();
+	void launchWave();
 	
 signals:
 	void advance_scene();

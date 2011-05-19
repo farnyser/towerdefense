@@ -9,7 +9,8 @@
 #include "ressources.hpp"
 
 
-lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this)
+lo21::lo21()
+: QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1)
 {
 	//Init des tableaux
 	for (int i = 0 ; i < MAP_SIZE ; i++)
@@ -19,9 +20,9 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 	//Config par defaut
 	lives = 10;
 	credits = 100; /* valeur inconnue ? */
-	frequency = 50;
 
 	loadMap("ressources/map.txt");
+	loadWaves("ressources/waves.txt");
 
 	//Ajout de la scene en tant que widget principale
 	//scene.setSceneRect(0, 0, 300, 300);
@@ -41,11 +42,11 @@ lo21::lo21() : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(thi
 				start = tileMap[i][j];
 	
 
-	timer.start(1000.0/frequency);
+	timer.start(1000.0/FREQUENCY);
 	connect(&timer, SIGNAL(timeout()), this, SLOT(updateGame()));
 	connect(this, SIGNAL(advance_scene()),&scene,SLOT(advance()));
 	
-	connect(dock.ui->launchWave,SIGNAL(clicked()),this,SLOT(loadWaves()));
+	connect(dock.ui->launchWave,SIGNAL(clicked()),this,SLOT(launchWave()));
 }
 
 const Tile* lo21::getStart() const
@@ -56,24 +57,36 @@ const Tile* lo21::getStart() const
 
 void lo21::updateGame()
 {
-	
-	if(!waves.empty())
-		if(waves.first().end())
-			waves.pop_front();
-	
 	if(!waves.empty())
 	{
-		dock.ui->waveComment->setText(waves.first().getComment());
-		if(waves.first().tick())
+		//Si la vague en cours est vide, on passe à la suivante.
+		if(waves.first().end())
 		{
-			Enemy* e=waves.first().getEnemy(this);
-			e->setScale(0.3);
-			e->setPos(start->pos() + start->getCenterPos());
-			scene.addItem(e);
+			waves.pop_front();
+			timeUntilNextWave=TIME_BETWEEN_WAVES*FREQUENCY;
 		}
+
+		if(timeUntilNextWave==0)
+		{
+			dock.ui->waveComment->setText(waves.first().getComment());
+			if(waves.first().tick())
+			{
+				Enemy* e=waves.first().getEnemy(this);
+				e->setScale(0.3);
+				e->setPos(start->pos() + start->getCenterPos());
+				scene.addItem(e);
+			}
+		}
+		else if(timeUntilNextWave>0)
+			timeUntilNextWave--;
 	}
 	
 	emit advance_scene();
+}
+
+void lo21::launchWave()
+{
+	timeUntilNextWave=0;
 }
 
 
@@ -153,9 +166,9 @@ void lo21::loadMap(const QString &path)
 	map.close();
 }
 
-void lo21::loadWaves()
+void lo21::loadWaves(const QString path)
 {
-	QFile file("ressources/waves.txt");
+	QFile file(path);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		QMessageBox(QMessageBox::Warning, tr("Impossible de charger les vagues"), tr("Impossible d'ouvrir le fichier des vagues"));
