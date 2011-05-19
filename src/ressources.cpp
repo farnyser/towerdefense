@@ -5,7 +5,7 @@ Ressources *Ressources::_singleton = NULL;
 
 Ressources::Ressources()
 {
-	QList<QPixmap> bug, ant, bee, mosquito, grass, mud, road;
+	QList<QPixmap> bug, ant, bee, mosquito, grass, mud, road, watergun;
 
     bug.push_back(QPixmap("ressources/images/cafard1.png"));
 	bug.push_back(QPixmap("ressources/images/cafard2.png"));
@@ -40,6 +40,11 @@ Ressources::Ressources()
 	road.push_back(QPixmap("ressources/images/sand.png").scaled(TILE_SIZE, TILE_SIZE));
 	animatedPixmap["road"] = road;
 	animatedInterval["road"] = 1;
+
+
+	watergun.push_back(QPixmap("ressources/images/watergun.png").scaled(TILE_SIZE, TILE_SIZE));
+	animatedPixmap["watergun"] = watergun;
+	animatedInterval["watergun"] = 1;
 }
 
 Ressources* Ressources::getInstance()

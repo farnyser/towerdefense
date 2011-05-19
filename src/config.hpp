@@ -1,0 +1,29 @@
+#ifndef LO21_CONFIG_HPP
+#define LO21_CONFIG_HPP
+
+const int 	MAP_SIZE=16,
+			TILE_SIZE=30,
+			TIME_BETWEEN_WAVES=4,
+			FREQUENCY=50;
+
+enum TowerType
+{
+	WATERGUN,
+	SLINGSHOT,
+	PAINTBALL,
+	PETANQUEPLAYER,
+	NONE
+};
+
+
+enum EnemyType
+{
+	ANT,
+	BUG,
+	BEE,
+	MOSQUITO
+};
+
+
+
+#endif // LO21_CONFIG_HPP

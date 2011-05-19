@@ -7,11 +7,7 @@
 #include "dock.hpp"
 #include "wave.hpp"
 #include "gamescene.hpp"
-
-const int 	MAP_SIZE=16,
-			TILE_SIZE=30,
-			TIME_BETWEEN_WAVES=4,
-			FREQUENCY=50;
+#include "config.hpp"
 
 class Tile;
 class Enemy;
@@ -40,6 +36,7 @@ private:
 	GameScene scene;
 	QTimer timer;
 	Dock dock;
+	TowerType selectedTower;
 
 	Tile *tileMap[MAP_SIZE][MAP_SIZE];
 	Tile *start;
@@ -52,6 +49,11 @@ private slots:
 	
 public slots:
 	void launchWave();
+	void selectTowerWater();
+	void selectTowerRock();
+	void selectTowerPaint();
+	void selectTowerPetanque();
+	void clickOnScene(int x,int y);
 	
 signals:
 	void advance_scene();

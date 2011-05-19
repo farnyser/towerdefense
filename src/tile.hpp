@@ -13,12 +13,16 @@ protected:
 	Tile(lo21* g, QList<QPixmap> p, int interval = 1);
 
 public:
-	void advance();
+	void action();
 	virtual bool isBuildable() const;
 	virtual bool isWalkable() const;
 	virtual bool isStartPoint() const;
 	virtual bool isEndPoint() const;
 	virtual const vec2f getVector() const;
+	bool buildTower(Tower *t);
+
+protected:
+	Tower *tower;
 };
 
 class Grass : public Tile
@@ -26,8 +30,6 @@ class Grass : public Tile
 public:
 	Grass(lo21*);
 	bool isBuildable() const;
-private:
-	Tower *tower;
 };
 
 class Mud : public Tile

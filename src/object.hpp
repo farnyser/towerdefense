@@ -4,6 +4,7 @@
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QPointF>
+#include "config.hpp"
 
 class lo21;
 
@@ -18,7 +19,7 @@ public:
 
 protected:
 	const lo21* game;
-	virtual void advance() = 0;
+	virtual void action() = 0;
 
 private:
 	QList<QPixmap> animatedPixmap;

@@ -18,7 +18,7 @@ Enemy::Enemy(lo21* g, int arg_size, QList<QPixmap> p, int interval)
 }
 
 /// \brief Move the enemy along the path
-void Enemy::advance()
+void Enemy::action()
 {
 	float x = this->pos().x();
 	float y = this->pos().y();
@@ -109,7 +109,7 @@ Bug::Bug(lo21 *g, int size)
 	this->speed = 2;
 }
 
-Bee::Bee(lo21 *g, int size)
+Wasp::Wasp(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("bee"),Ressources::getAnimatedInterval("bee"))
 {
 	this->hp = 7 * this->size * this->size;
