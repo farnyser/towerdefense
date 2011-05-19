@@ -8,7 +8,8 @@
 #include <QMessageBox>
 
 #include "ressources.hpp"
-
+#include "tile.hpp"
+#include "enemy.hpp"
 
 lo21::lo21()
 : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1)

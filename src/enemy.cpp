@@ -9,6 +9,7 @@
 Enemy::Enemy(lo21* g, int arg_size, QList<QPixmap> p, int interval)
  : Object(g, p, interval), size(arg_size)
 {
+	// fixme
 	// scale = 0.1 + size/10;
 	// setScale(scale);
 	setPos(g->getStart()->pos() + g->getStart()->getCenterPos());
@@ -33,9 +34,10 @@ void Enemy::advance()
 		vec2f vector = tile->getVector();	
 		QPointF vectorP = vector.second - vector.first;
 		qreal angle;
+		qreal speed = this->getSpeed() * TILE_SIZE/FREQUENCY;
 
-		x += 3*vectorP.x() / vectorP.manhattanLength();
-		y += 3*vectorP.y() / vectorP.manhattanLength();
+		x += speed * vectorP.x() / vectorP.manhattanLength();
+		y += speed * vectorP.y() / vectorP.manhattanLength();
 		angle = 90 - std::atan(vectorP.x() / vectorP.y()) * 360.0 / (2*3.14957);
 
 		this->setPos(x, y);	
@@ -45,8 +47,9 @@ void Enemy::advance()
 
 		if ( angle != this->rotation() )
 		{
-			// this->setTransformOriginPoint(this->getCenterPos());
-			this->setRotation(1.0/3.0*angle+2.0/3.0*this->rotation());
+			//this->setTransformOriginPoint(this->getCenterPos());
+			// this->setRotation(1.0/3.0*angle+2.0/3.0*this->rotation());
+			this->setRotation(angle);
 		}
 	}
 }
