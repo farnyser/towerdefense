@@ -24,7 +24,7 @@ void Enemy::advance()
 	float y = this->pos().y();
 
 	const Tile* tile = this->game->getTile(x,y);
-	
+
 	if ( tile != NULL && tile->isEndPoint() )
 	{
 		delete this;
@@ -33,24 +33,48 @@ void Enemy::advance()
 	{
 		vec2f vector = tile->getVector();	
 		QPointF vectorP = vector.second - vector.first;
-		qreal angle;
+		qreal angle = 90 - std::atan(vectorP.x() / vectorP.y()) * 360.0 / (2*3.14957);
 		qreal speed = this->getSpeed() * TILE_SIZE/FREQUENCY;
 
+		// rectiligne
 		x += speed * vectorP.x() / vectorP.manhattanLength();
 		y += speed * vectorP.y() / vectorP.manhattanLength();
-		angle = 90 - std::atan(vectorP.x() / vectorP.y()) * 360.0 / (2*3.14957);
 
-		this->setPos(x, y);	
-		//qDebug() << "new pos : " << this->pos();
-		//qDebug() << "origin point : " << this->transformOriginPoint();
-		//qDebug() << "vector : " << vector;
-
-		if ( angle != this->rotation() )
+		// courbe
+		if ( lastVector != vectorP && (pos() - (tile->pos()+tile->getCenterPos())).manhattanLength() < 5 )
 		{
-			//this->setTransformOriginPoint(this->getCenterPos());
-			// this->setRotation(1.0/3.0*angle+2.0/3.0*this->rotation());
-			this->setRotation(angle);
+			this->rotateState++;
+
+			// precedent mouvement : haut/bas
+			if ( lastVector.x() && !lastVector.y() )
+			{
+				if ( vectorP.y() > 0 )
+					angle = 90;
+				else
+					angle = -90;
+			}
+			// precedent mouvement : gauche/droite
+			if ( !lastVector.x() && lastVector.y() )
+			{
+				if ( vectorP.x() > 0 )
+					angle = 0;
+				else
+					angle = 180;
+			}
+			
+			this->setRotation(this->rotation() + (this->rotateState/5)*(angle-this->rotation()));
+			
+			if ( this->rotateState == 5 )
+				this->lastVector = vectorP;
 		}
+		else
+		{
+			this->rotateState = 0;
+			this->setPos(x, y);	
+		}
+		//this->setTransformOriginPoint(this->getCenterPos());
+		//this->setRotation(angle);
+	
 	}
 }
 

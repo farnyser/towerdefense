@@ -19,6 +19,9 @@ protected:
 	float resistance;
 	float speed;
 	int size;
+	
+	QPointF lastVector;
+	int rotateState;
 
 protected:
 	Enemy(lo21* g, int size, QList<QPixmap> p, int interval);
