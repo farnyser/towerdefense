@@ -2,16 +2,20 @@
 #define LO21_TOWER
 
 #include "object.hpp"
+#include "ressources.hpp"
 
 class Tower: public Object
 {
 private:
 	int level;
+protected:
+	Tower(lo21* g,QList<QPixmap> p);
 };
 
 class WaterGun: public Tower
 {
-
+public:
+	WaterGun(lo21* g);
 };
 
 class Slingshot: public Tower
