@@ -20,12 +20,15 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # Build a list of sources and moc.
 file(GLOB_RECURSE PROJECT_SRC ${PROJECT_SRC_DIR}/*.cpp)
 qt4_automoc(${PROJECT_SRC})
+qt4_wrap_ui(PROJECT_UIC src/dock.ui)
+
 
 # Add executable.
 add_executable(
 	${PROJECT_BIN}
 	${PROJECT_SRC}
 	${PROJECT_MOC_SRC}
+	${PROJECT_UIC}
 )
 
 # Configure the linker.
