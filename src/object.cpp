@@ -70,7 +70,7 @@ QRectF Object::boundingRect() const
 	if (this->animatedPixmap.size())
 		return this->animatedPixmap[this->getCurrentFrame()].rect();
 	else
-		return QRect(0, 0, 40, 40);
+		return QRect(0, 0, 1, 1);
 }
 
 void Object::advance(int phase)

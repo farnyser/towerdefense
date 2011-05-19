@@ -3,7 +3,6 @@
 
 #include "object.hpp"
 
-
 enum EnemyType
 {
 	ANT,
@@ -15,15 +14,18 @@ enum EnemyType
 class Enemy: public Object
 {
 protected:
+	float scale;
 	float hp;
+	float resistance;
+	float speed;
 	int size;
 
 protected:
 	Enemy(lo21* g, int size, QList<QPixmap> p, int interval);
-	virtual int getSpeed() = 0;
-	virtual int getSize() = 0;
-	// virtual int getLife() = 0:
-	// virtual int getResistance() = 0;
+	float getScale() const;
+	float getSpeed() const;
+	float getHeatPoint() const;
+	float getResistance() const;
 	virtual void advance();
 };
 
