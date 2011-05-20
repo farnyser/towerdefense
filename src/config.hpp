@@ -6,24 +6,29 @@ const int 	MAP_SIZE=16,
 			TIME_BETWEEN_WAVES=4,
 			FREQUENCY=50;
 
-enum TowerType
+namespace TOWER
 {
-	WATERGUN,
-	SLINGSHOT,
-	PAINTBALL,
-	PETANQUEPLAYER,
-	NONE
-};
+	enum Type
+	{
+		WATERGUN,
+		SLINGSHOT,
+		PAINTBALL,
+		PETANQUEPLAYER,
+		NONE
+	};
+}
 
 
-enum EnemyType
+namespace ENEMY
 {
-	ANT,
-	BUG,
-	BEE,
-	MOSQUITO
-};
-
+	enum Type
+	{
+		ANT,
+		BUG,
+		WASP,
+		MOSQUITO
+	};
+}
 
 
 #endif // LO21_CONFIG_HPP

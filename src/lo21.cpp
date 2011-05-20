@@ -13,7 +13,7 @@
 #include "tower.hpp"
 
 lo21::lo21()
- : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1),selectedTower(NONE)
+ : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1),selectedTower(TOWER::NONE)
 {
     //Init des tableaux
     for (int i = 0 ; i < MAP_SIZE ; i++)
@@ -60,7 +60,7 @@ lo21::lo21()
 
 void lo21::selectTowerPaint()
 {
-    if (selectedTower==PAINTBALL)
+    if (selectedTower == TOWER::PAINTBALL)
         return;
 
     QPalette p=dock.ui->SelectPaint->palette();
@@ -68,12 +68,12 @@ void lo21::selectTowerPaint()
     dock.ui->SelectRock->setPalette(p);
     dock.ui->SelectWater->setPalette(p);
     dock.ui->SelectPetanque->setPalette(p);
-    selectedTower=PAINTBALL;
+    selectedTower = TOWER::PAINTBALL;
 }
 
 void lo21::selectTowerPetanque()
 {
-    if (selectedTower==PETANQUEPLAYER)
+    if (selectedTower == TOWER::PETANQUEPLAYER)
         return;
 
     QPalette p=dock.ui->SelectPetanque->palette();
@@ -81,12 +81,12 @@ void lo21::selectTowerPetanque()
     dock.ui->SelectRock->setPalette(p);
     dock.ui->SelectWater->setPalette(p);
     dock.ui->SelectPetanque->setPalette(QPalette(Qt::red));
-    selectedTower=PETANQUEPLAYER;
+    selectedTower = TOWER::PETANQUEPLAYER;
 
 }
 void lo21::selectTowerRock()
 {
-    if (selectedTower==SLINGSHOT)
+    if (selectedTower == TOWER::SLINGSHOT)
         return;
 
     QPalette p=dock.ui->SelectRock->palette();
@@ -94,12 +94,12 @@ void lo21::selectTowerRock()
     dock.ui->SelectRock->setPalette(QPalette(Qt::red));
     dock.ui->SelectWater->setPalette(p);
     dock.ui->SelectPetanque->setPalette(p);
-    selectedTower=SLINGSHOT;
+    selectedTower = TOWER::SLINGSHOT;
 }
 
 void lo21::selectTowerWater()
 {
-    if (selectedTower==WATERGUN)
+    if (selectedTower == TOWER::WATERGUN)
         return;
 
     QPalette p=dock.ui->SelectWater->palette();
@@ -107,22 +107,16 @@ void lo21::selectTowerWater()
     dock.ui->SelectRock->setPalette(p);
     dock.ui->SelectWater->setPalette(QPalette(Qt::red));
     dock.ui->SelectPetanque->setPalette(p);
-    selectedTower=WATERGUN;
+    selectedTower = TOWER::WATERGUN;
 }
 
 void lo21::clickOnScene(int x, int y)
 {
-	int xi = x / TILE_SIZE;
-    int yi = y / TILE_SIZE;
-	Tile *t = NULL;
-	
-    qDebug()<< "clickOnScene" << xi << " " << yi;
+	Tile *t = this->getTile(x,y);
 
-    if ( xi < MAP_SIZE && yi < MAP_SIZE )
-        t = tileMap[xi][yi];
-	
-	if ( t != NULL ) 
+	if (selectedTower != TOWER::NONE && t != NULL) 
 	{
+		//Tower *tw = Factory<Enemy>::get(selectedTower,this);
 		Tower *tw = new WaterGun(this);
 
 		if ( !t->buildTower(tw) )
@@ -289,8 +283,19 @@ void lo21::loadWaves(const QString path)
 
 const Tile* lo21::getTile(int x, int y) const
 {
-    int xi = x / TILE_SIZE;
-    int yi = y / TILE_SIZE;
+    int xi = (x - (x % TILE_SIZE)) / TILE_SIZE;
+    int yi = (y - (y % TILE_SIZE)) / TILE_SIZE;
+
+    if ( xi < MAP_SIZE && yi < MAP_SIZE )
+        return tileMap[xi][yi];
+    else
+        return NULL;
+}
+
+Tile* lo21::getTile(int x, int y)
+{
+    int xi = (x - (x % TILE_SIZE)) / TILE_SIZE;
+    int yi = (y - (y % TILE_SIZE)) / TILE_SIZE;
 
     if ( xi < MAP_SIZE && yi < MAP_SIZE )
         return tileMap[xi][yi];

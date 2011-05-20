@@ -27,6 +27,9 @@ public:
 	const Tile* getStart() const;
 
 private:
+	Tile* getTile(int x, int y);
+
+private:
 	// configuration
 	int lives;
 	int credits;
@@ -36,7 +39,7 @@ private:
 	GameScene scene;
 	QTimer timer;
 	Dock dock;
-	TowerType selectedTower;
+	TOWER::Type selectedTower;
 
 	Tile *tileMap[MAP_SIZE][MAP_SIZE];
 	Tile *start;
