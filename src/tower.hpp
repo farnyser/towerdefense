@@ -6,6 +6,15 @@
 
 class Tower: public Object
 {
+public:
+	enum Type 
+	{
+		NONE,
+		WATERGUN,
+		SLINGSHOT,
+		PAINTBALL,
+		PETANQUEPLAYER,
+	};
 private:
 	int level;
 protected:
@@ -21,17 +30,23 @@ public:
 
 class Slingshot: public Tower
 {
-
+public:
+	Slingshot(lo21* g);
+	void action();
 };
 
 class PaintBall: public Tower
 {
-
+public:
+	PaintBall(lo21* g);
+	void action();
 };
 
 class PetanquePlayer: public Tower
 {
-
+public:
+	PetanquePlayer(lo21* g);
+	void action();
 };
 
 class Musician: public Tower

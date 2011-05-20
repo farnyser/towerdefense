@@ -9,6 +9,8 @@
 Tile::Tile(lo21 *g, QList<QPixmap> p, int interval)
  : Object(g, p,interval), tower(NULL)
 {
+	// evite l'appel a paint pour un object sans transformation
+	this->setCacheMode(DeviceCoordinateCache);
 }
 
 void Tile::action()

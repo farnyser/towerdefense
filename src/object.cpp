@@ -1,5 +1,6 @@
 #include <cmath>
 #include <QDebug>
+#include <QStyleOptionGraphicsItem>
 #include "object.hpp"
 
 Object::Object(lo21* g, QList<QPixmap> p, int interval, QGraphicsItem *parent)
@@ -10,8 +11,8 @@ Object::Object(lo21* g, QList<QPixmap> p, int interval, QGraphicsItem *parent)
 
 QPoint Object::getCenterPos() const
 {
-	int x = pos().x() + getHalfSize().x() * (cos(rotation()));
-	int y = pos().y() + getHalfSize().y() * (sin(rotation()) + cos(rotation()));
+	int x = pos().x() + getHalfSize().x() * (cos(2 * DEG_RAD * rotation()));
+	int y = pos().y() + getHalfSize().y() * (sin(rotation()*DEG_RAD) + cos(rotation()*DEG_RAD));
 
 	return QPoint(x,y);
 }
@@ -21,8 +22,8 @@ QPointF Object::getHalfSize() const
 	if ( this->animatedPixmap.size() )
 	{
 		return QPointF(
-			this->animatedPixmap[this->getCurrentFrame()].width() / 2.0,
-			this->animatedPixmap[this->getCurrentFrame()].height() / 2.0
+			this->scale() * this->animatedPixmap[this->getCurrentFrame()].width() / 2.0,
+			this->scale() * this->animatedPixmap[this->getCurrentFrame()].height() / 2.0
 		);
 	}
 	else

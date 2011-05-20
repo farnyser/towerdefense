@@ -6,6 +6,9 @@
 #include <QPointF>
 #include "config.hpp"
 
+const float RAD_DEG = 360.0 / (2 * 3.14);
+const float DEG_RAD = 1.0 / RAD_DEG;
+
 class lo21;
 
 class Object: public QGraphicsItem

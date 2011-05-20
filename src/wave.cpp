@@ -1,17 +1,17 @@
 #include "wave.hpp"
-
+#include "factory.hpp"
 
 Wave::Wave(QString comment,QString enemyType, float size, int amount, int interval)
 :comment(comment),size(size),amount(amount),interval(interval), ticksLeftBeforeNextEnnemis(interval)
 {
 	if(enemyType == "fourmi")
-		this->enemyType = ENEMY::ANT;
+		this->enemyType = Enemy::ANT;
 	else if(enemyType == "cafard")
-		this->enemyType = ENEMY::BUG;
+		this->enemyType = Enemy::BUG;
 	else if(enemyType == "guepe")
-		this->enemyType = ENEMY::WASP;
+		this->enemyType = Enemy::WASP;
 	else if(enemyType == "moustique")
-		this->enemyType = ENEMY::MOSQUITO;
+		this->enemyType = Enemy::MOSQUITO;
 	//else
 		//throw Exception("Type d'ennemis non connus");
 }
@@ -38,25 +38,7 @@ Enemy* Wave::getEnemy(lo21* game)
 	
 	ticksLeftBeforeNextEnnemis=interval;
 	amount--;
-	
-	Enemy* e = NULL;
-	
-	switch(enemyType)
-	{
-		case ENEMY::ANT:
-			e = new Ant(game, size);
-			break;
-		case ENEMY::BUG:
-			e = new Bug(game, size);
-			break;
-		case ENEMY::WASP:
-			e = new Wasp(game, size);
-			break;
-		case ENEMY::MOSQUITO:
-			e = new Mosquito(game, size);
-			break;
-	}
-	
-	return e;
+
+	return Factory::getEnemy(enemyType, game, size);
 }
 
