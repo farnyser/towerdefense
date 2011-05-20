@@ -1,3 +1,4 @@
+#include <cmath>
 #include <QDebug>
 #include "object.hpp"
 
@@ -7,7 +8,15 @@ Object::Object(lo21* g, QList<QPixmap> p, int interval, QGraphicsItem *parent)
 	this->currentFrame = 0;
 }
 
-QPointF Object::getCenterPos() const
+QPoint Object::getCenterPos() const
+{
+	int x = pos().x() + getHalfSize().x() * (cos(rotation()));
+	int y = pos().y() + getHalfSize().y() * (sin(rotation()) + cos(rotation()));
+
+	return QPoint(x,y);
+}
+
+QPointF Object::getHalfSize() const
 {
 	if ( this->animatedPixmap.size() )
 	{

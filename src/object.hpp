@@ -15,7 +15,9 @@ public:
 
 	void paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget);
 	QRectF boundingRect() const;
-	QPointF getCenterPos() const;
+	
+	QPoint getCenterPos() const;
+	QPointF getHalfSize() const;
 
 protected:
 	const lo21* game;

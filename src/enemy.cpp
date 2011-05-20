@@ -10,11 +10,9 @@ Enemy::Enemy(lo21* g, int arg_size, QList<QPixmap> p, int interval)
  : Object(g, p, interval), size(arg_size)
 {
 	// fixme
-	// scale = 0.1 + size/10;
-	// setScale(scale);
-	setPos(g->getStart()->pos() + g->getStart()->getCenterPos());
-
-	qDebug() << "Enemy scale : " << QGraphicsItem::scale();
+	scale = 0.1 + size / 20.0;
+	setScale(scale);
+	setPos(g->getStart()->getCenterPos());
 }
 
 /// \brief Move the enemy along the path

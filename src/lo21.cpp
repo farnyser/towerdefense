@@ -145,9 +145,7 @@ void lo21::updateGame()
             dock.ui->waveComment->setText(waves.first().getComment());
             if (waves.first().tick())
             {
-                Enemy* e=waves.first().getEnemy(this);
-                e->setScale(0.3);
-                e->setPos(start->pos() + start->getCenterPos());
+                Enemy *e = waves.first().getEnemy(this);
                 scene.addItem(e);
             }
         }
