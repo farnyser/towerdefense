@@ -24,7 +24,6 @@ Enemy::Enemy(lo21* game, int arg_size, QList<QPixmap> pixmaps, int interval)
 
 	// set position to the middle of the start tile
 	this->setPos(game->getStart()->pos() + game->getStart()->getCenterPos() - this->getCenterPos());
-
 }
 
 /// \brief Move the enemy along the path

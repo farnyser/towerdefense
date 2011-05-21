@@ -5,6 +5,16 @@
 
 class Enemy: public Object
 {
+public:
+	enum Type
+	{
+		NONE,
+		ANT,
+		BUG,
+		WASP,
+		MOSQUITO
+	};
+
 protected:
 	float scale;
 	float hp;
@@ -15,6 +25,9 @@ protected:
 	QPointF lastVector;
 	int wantedRotation;
 
+
+	QPointF lastVector;
+	int wantedRotation;
 
 protected:
 	Enemy(lo21* g, int size, QList<QPixmap> p, int interval);

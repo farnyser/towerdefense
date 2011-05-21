@@ -9,6 +9,8 @@
 Tile::Tile(lo21 *g, QList<QPixmap> p, int interval)
  : Object(g, p,interval), tower(NULL)
 {
+	// evite l'appel a paint pour un object sans transformation
+	this->setCacheMode(DeviceCoordinateCache);
 }
 
 void Tile::action()
@@ -41,12 +43,12 @@ const vec2f Tile::getVector() const
 	return vector;
 }
 
-bool Tile::buildTower(Tower *t)
+bool Tile::buildTower(Tower *tw)
 {
-	if ( isBuildable() && tower == NULL )
+	if ( isBuildable() && tw != NULL && tower == NULL )
 	{
-		tower = t;
-		t->setParentItem(this);
+		tower = tw;
+		tw->setParentItem(this);
 		return true;
 	}
 

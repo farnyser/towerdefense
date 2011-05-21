@@ -15,7 +15,7 @@ public:
 	const QString& getComment() const;
 private:
 	QString comment;
-	EnemyType enemyType;
+	Enemy::Type enemyType;
 	float size;
 	int amount;
 	int interval;

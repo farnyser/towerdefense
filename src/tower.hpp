@@ -6,8 +6,22 @@
 
 class Tower: public Object
 {
-private:
+public:
+	enum Type 
+	{
+		NONE,
+		WATERGUN,
+		SLINGSHOT,
+		PAINTBALL,
+		PETANQUEPLAYER,
+	};
+protected:
 	int level;
+	int cost;
+	float range, power, firerate, bulletSpeed;
+
+public:
+	int getCost() const;
 protected:
 	Tower(lo21* g,QList<QPixmap> p);
 };
@@ -21,17 +35,23 @@ public:
 
 class Slingshot: public Tower
 {
-
+public:
+	Slingshot(lo21* g);
+	void action();
 };
 
 class PaintBall: public Tower
 {
-
+public:
+	PaintBall(lo21* g);
+	void action();
 };
 
 class PetanquePlayer: public Tower
 {
-
+public:
+	PetanquePlayer(lo21* g);
+	void action();
 };
 
 class Musician: public Tower

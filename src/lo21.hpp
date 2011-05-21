@@ -7,7 +7,9 @@
 #include "dock.hpp"
 #include "wave.hpp"
 #include "gamescene.hpp"
+#include "tower.hpp"
 #include "config.hpp"
+
 
 class Tile;
 class Enemy;
@@ -27,6 +29,9 @@ public:
 	const Tile* getStart() const;
 
 private:
+	Tile* getTile(int x, int y);
+
+private:
 	// configuration
 	int lives;
 	int credits;
@@ -36,7 +41,7 @@ private:
 	GameScene scene;
 	QTimer timer;
 	Dock dock;
-	TowerType selectedTower;
+	Tower::Type selectedTower;
 
 	Tile *tileMap[MAP_SIZE][MAP_SIZE];
 	Tile *start;
