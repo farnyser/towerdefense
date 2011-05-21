@@ -25,10 +25,6 @@ protected:
 	QPointF lastVector;
 	int wantedRotation;
 
-
-	QPointF lastVector;
-	int wantedRotation;
-
 protected:
 	Enemy(lo21* g, int size, QList<QPixmap> p, int interval);
 	float getScale() const;

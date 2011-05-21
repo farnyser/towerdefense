@@ -9,28 +9,31 @@
 Enemy::Enemy(lo21* game, int arg_size, QList<QPixmap> pixmaps, int interval)
  : 
   Object(game, pixmaps, interval), 
-  size(arg_size), 
-  wantedRotation(0),
-  scale(0.2 + arg_size/20)
+  size(arg_size),
+  scale(0.1 + arg_size / 20.0),
+  wantedRotation(0)
 {
-	this->setScale(scale);
+	// resize
+	setScale(scale);
 
 	// remember current vector
 	this->lastVector = game->getStart()->getVector().second - game->getStart()->getVector().first;
-	
+
 	// compute rotation
 	qreal angle = 90 - std::atan(lastVector.x() / lastVector.y()) * 360.0 / (2*3.14957);
+	
+	// set initial orientation
 	this->setRotation(angle);
 
 	// set position to the middle of the start tile
-	this->setPos(game->getStart()->pos() + game->getStart()->getCenterPos() - this->getCenterPos());
+	this->setPos(game->getStart()->getCenterPos() - getCenterPos());
 }
 
 /// \brief Move the enemy along the path
 void Enemy::action()
 {
-	float x = this->x() + this->getCenterPos().x();
-	float y = this->y() + this->getCenterPos().y();
+	float x = this->getCenterPos().x();
+	float y = this->getCenterPos().y();
 
 	const Tile* tile = this->game->getTile(x,y);
 
@@ -47,8 +50,10 @@ void Enemy::action()
 
 
 		// courbe (changement de direction
-		if ( lastVector != vectorP )
+		if ( false &&  (lastVector != vectorP) && (vectorP.x() && vectorP.y()) )
 		{
+			int rotationSpeed = this->getSpeed() * 90/FREQUENCY;
+
 			if ( wantedRotation == 0 )
 			{
 				// precedent mouvement : haut/bas
@@ -70,19 +75,27 @@ void Enemy::action()
 			}
 			else
 			{
-				int newangle = rotation() + (wantedRotation<0 ? -10 : 10); 
+				int newangle = rotation() + (wantedRotation<0 ? -rotationSpeed : rotationSpeed); 
 
 				qDebug() << "will rotate to the angle " << newangle;
 				qDebug() << "Wanted one is " << wantedRotation;
 
-				this->setTransformOriginPoint(getCenterPos());
+
 				this->setRotation(newangle);
-				this->setTransformOriginPoint(0,0);
-				
-				wantedRotation += (wantedRotation<0 ? 10 : -10);
-				
-				if ( this->wantedRotation == 0 )
+
+				if ( (wantedRotation > 0 && (wantedRotation - rotationSpeed) <= 0) 
+					or
+					 (wantedRotation < 0 && (wantedRotation + rotationSpeed) >= 0)
+				)
+				{
+					qDebug() << "End of rotation";
+					this->wantedRotation = 0;
 					this->lastVector = vectorP;
+				}
+				else
+				{
+					this->wantedRotation += (wantedRotation<0 ? rotationSpeed : -rotationSpeed);
+				}
 			}
 		}
 		else
@@ -92,21 +105,12 @@ void Enemy::action()
 			float dy = speed * vectorP.y() / vectorP.manhattanLength();
 			
 			this->moveBy(dx, dy);
-
-			// this->setTransformOriginPoint(getCenterPos());
-			// this->setRotation(angle);
-			// this->setTransformOriginPoint(0,0);
+			this->lastVector = vectorP;
 		}
 	}
 	else
 	{
-		qDebug() << "There is no Walkbale Tile there : " << x << " , " << y; 
-		
-		if ( tile != NULL )
-		{
-			qDebug() << "Tile->isWalkable() -> " << tile->isWalkable();
-			qDebug() << "Tile->getVector() -> " << tile->getVector();
-		}
+		qDebug() << "There is no Walkbale Tile there : " << x << " , " << y;
 	}
 }
 
