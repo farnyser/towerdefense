@@ -142,12 +142,12 @@ void lo21::clickOnScene(int x, int y)
 		}
 		else if (tw->getCost() > this->credits)
 		{
-			qDebug() << "pas assez de credits !";
+			QMessageBox(QMessageBox::Warning,tr("Plus de credits"),tr("Vous n'avez pas assez de credits pour acheter cette tour")).exec();
 			delete tw;
 		}
 		else if (!t->buildTower(tw))
 		{
-			qDebug() << "impossible de constuire ici !";
+			QMessageBox(QMessageBox::Warning,tr("Impossible de construire ici"),tr("Vous ne pouvez pas construire une tour a cet endroit")).exec();
 			delete tw;
 		}
 		else
@@ -212,7 +212,7 @@ void lo21::loadMap(const QString &path)
     if (!map.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         map.close();
-        QMessageBox(QMessageBox::Warning, tr("Impossible de charger la carte"), tr("Impossible d'ouvrir le fichier de la carte"));
+        QMessageBox(QMessageBox::Warning, tr("Impossible de charger la carte"), tr("Impossible d'ouvrir le fichier de la carte")).exec();
         return;
     }
 
@@ -281,7 +281,7 @@ void lo21::loadWaves(const QString path)
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QMessageBox(QMessageBox::Warning, tr("Impossible de charger les vagues"), tr("Impossible d'ouvrir le fichier des vagues"));
+        QMessageBox(QMessageBox::Warning, tr("Impossible de charger les vagues"), tr("Impossible d'ouvrir le fichier des vagues")).exec();
         return;
     }
 
