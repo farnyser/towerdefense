@@ -4,7 +4,7 @@
 #include "object.hpp"
 
 Object::Object(lo21* g, QList<QPixmap> p, int interval, QGraphicsItem *parent)
- : game(g), QGraphicsItem(parent), animatedPixmap(p), frameInterval(interval)
+ : game(g), QGraphicsItem(parent), animatedPixmap(p), frameInterval(interval),angle(0)
 {
 	this->currentFrame = 0;
 }
@@ -72,6 +72,9 @@ void Object::incCurrentFrame()
 void Object::paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	if (this->animatedPixmap.size())
+		p->translate(100,100);
+		p->rotate(angle);
+		p->translate(-100,-100);
 		p->drawPixmap(0, 0, this->animatedPixmap[this->getCurrentFrame()]);
 }
 

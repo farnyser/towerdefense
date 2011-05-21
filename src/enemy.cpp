@@ -43,70 +43,63 @@ void Enemy::action()
 	}
 	else if ( tile != NULL && tile->isWalkable() ) 
 	{
-		vec2f vector = tile->getVector();	
+		vec2f vector = tile->getVector();
 		QPointF vectorP = vector.second - vector.first;
 		qreal angle = 90 - std::atan(vectorP.x() / vectorP.y()) * 360.0 / (2*3.14957);
 		qreal speed = this->getSpeed() * TILE_SIZE/FREQUENCY;
 
 
 		// courbe (changement de direction
-		if ( false &&  (lastVector != vectorP) && (vectorP.x() && vectorP.y()) )
+		if (  (lastVector != vectorP) && (vectorP.x() && vectorP.y()) )
 		{
-			int rotationSpeed = this->getSpeed() * 90/FREQUENCY;
 
-			if ( wantedRotation == 0 )
+			// precedent mouvement : haut/bas
+			if ( lastVector.x() && !lastVector.y() )
 			{
-				// precedent mouvement : haut/bas
-				if ( lastVector.x() && !lastVector.y() )
-				{
-					if ( vectorP.y() > 0 )
-						wantedRotation = 90 - rotation();
-					else
-						wantedRotation = -90 - rotation();
-				}
-				// precedent mouvement : gauche/droite
-				if ( !lastVector.x() && lastVector.y() )
-				{
-					if ( vectorP.x() > 0 )
-						wantedRotation = 0 - rotation();
-					else
-						wantedRotation = 180 - rotation();
-				}
+				if ( vectorP.y() > 0 )
+					wantedRotation = 90 - rotation();
+				else
+					wantedRotation = -90 - rotation();
+			}
+			// precedent mouvement : gauche/droite
+			if ( !lastVector.x() && lastVector.y() )
+			{
+				if ( vectorP.x() > 0 )
+					wantedRotation = 0 - rotation();
+				else
+					wantedRotation = 180 - rotation();
+			}
+		}
+
+		if(wantedRotation)
+		{
+			float rotationSpeed = this->getSpeed() * 90.0/FREQUENCY;
+			float lastWantedRotation=wantedRotation;
+			if(wantedRotation<0)
+			{
+				wantedRotation+=rotationSpeed;
+				if(wantedRotation>0)
+					wantedRotation=0;
+				
+				this->angle-=wantedRotation-lastWantedRotation;
 			}
 			else
 			{
-				int newangle = rotation() + (wantedRotation<0 ? -rotationSpeed : rotationSpeed); 
-
-				qDebug() << "will rotate to the angle " << newangle;
-				qDebug() << "Wanted one is " << wantedRotation;
-
-
-				this->setRotation(newangle);
-
-				if ( (wantedRotation > 0 && (wantedRotation - rotationSpeed) <= 0) 
-					or
-					 (wantedRotation < 0 && (wantedRotation + rotationSpeed) >= 0)
-				)
-				{
-					qDebug() << "End of rotation";
-					this->wantedRotation = 0;
-					this->lastVector = vectorP;
-				}
-				else
-				{
-					this->wantedRotation += (wantedRotation<0 ? rotationSpeed : -rotationSpeed);
-				}
+				wantedRotation-=rotationSpeed;
+				if(wantedRotation<0)
+					wantedRotation=0;
+				
+				this->angle+=lastWantedRotation-wantedRotation;
 			}
 		}
-		else
-		{
-			// rectiligne
-			float dx = speed * vectorP.x() / vectorP.manhattanLength();
-			float dy = speed * vectorP.y() / vectorP.manhattanLength();
-			
-			this->moveBy(dx, dy);
-			this->lastVector = vectorP;
-		}
+
+		// rectiligne
+		float dx = speed * vectorP.x() / vectorP.manhattanLength();
+		float dy = speed * vectorP.y() / vectorP.manhattanLength();
+		
+		this->moveBy(dx, dy);
+		this->lastVector = vectorP;
+		
 	}
 	else
 	{

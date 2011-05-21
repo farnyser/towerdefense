@@ -25,6 +25,7 @@ public:
 protected:
 	const lo21* game;
 	virtual void action() = 0;
+	qreal angle;
 
 private:
 	QList<QPixmap> animatedPixmap;
