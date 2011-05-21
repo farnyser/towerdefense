@@ -73,7 +73,7 @@ void Enemy::action()
 
 		if(wantedRotation)
 		{
-			float rotationSpeed = this->getSpeed() * 90.0/FREQUENCY;
+			float rotationSpeed = this->getSpeed() * 90./FREQUENCY;
 			float lastWantedRotation=wantedRotation;
 			if(wantedRotation<0)
 			{

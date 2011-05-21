@@ -30,6 +30,7 @@ protected:
 private:
 	QList<QPixmap> animatedPixmap;
 	int frameInterval, currentFrame;
+	int pixHeight,pixWidth;
 	void incCurrentFrame();
 	int getCurrentFrame() const;
 	void advance(int phase);
