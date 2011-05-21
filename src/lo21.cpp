@@ -62,7 +62,11 @@ lo21::lo21()
 void lo21::selectTowerPaint()
 {
     if (selectedTower == Tower::PAINTBALL)
+	{
+		selectedTower = Tower::NONE;
+		dock.ui->SelectPaint->setPalette( dock.ui->SelectPetanque->palette() );
         return;
+	}
 
     QPalette p=dock.ui->SelectPaint->palette();
     dock.ui->SelectPaint->setPalette(QPalette(Qt::red));
@@ -75,7 +79,11 @@ void lo21::selectTowerPaint()
 void lo21::selectTowerPetanque()
 {
     if (selectedTower == Tower::PETANQUEPLAYER)
+	{
+		selectedTower = Tower::NONE;
+		dock.ui->SelectPetanque->setPalette( dock.ui->SelectPaint->palette() );
         return;
+	}
 
     QPalette p=dock.ui->SelectPetanque->palette();
     dock.ui->SelectPaint->setPalette(p);
@@ -88,7 +96,11 @@ void lo21::selectTowerPetanque()
 void lo21::selectTowerRock()
 {
     if (selectedTower == Tower::SLINGSHOT)
+	{
+		selectedTower = Tower::NONE;
+		dock.ui->SelectRock->setPalette( dock.ui->SelectPaint->palette() );
         return;
+	}
 
     QPalette p=dock.ui->SelectRock->palette();
     dock.ui->SelectPaint->setPalette(p);
@@ -101,7 +113,11 @@ void lo21::selectTowerRock()
 void lo21::selectTowerWater()
 {
     if (selectedTower == Tower::WATERGUN)
+	{
+		selectedTower = Tower::NONE;
+		dock.ui->SelectWater->setPalette( dock.ui->SelectPetanque->palette() );
         return;
+	}
 
     QPalette p=dock.ui->SelectWater->palette();
     dock.ui->SelectPaint->setPalette(p);
