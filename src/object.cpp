@@ -74,10 +74,12 @@ void Object::incCurrentFrame()
 void Object::paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	if (this->animatedPixmap.size())
+	{
 		p->translate(pixWidth/2.,pixHeight/2.);
 		p->rotate(angle);
 		p->translate(-pixWidth/2.,-pixHeight/2.);
 		p->drawPixmap(0, 0, this->animatedPixmap[this->getCurrentFrame()]);
+	}
 }
 
 QRectF Object::boundingRect() const
