@@ -5,7 +5,9 @@ Ressources *Ressources::_singleton = NULL;
 
 Ressources::Ressources()
 {
-	QList<QPixmap> bug, ant, bee, mosquito, grass, mud, road, end, watergun;
+	QList<QPixmap> bug, ant, bee, mosquito, 
+		grass, mud, road, end, 
+		watergun, slingshot, petanque, paintball;
 
     bug.push_back(QPixmap("ressources/images/cafard1.png"));
 	bug.push_back(QPixmap("ressources/images/cafard2.png"));
@@ -44,11 +46,24 @@ Ressources::Ressources()
 	end.push_back(QPixmap("ressources/images/but.png").scaled(TILE_SIZE, TILE_SIZE));
 	animatedPixmap["end"] = end;
 	animatedInterval["end"] = 1;
-
+	
 	watergun.push_back(QPixmap("ressources/images/watergun.png").scaled(TILE_SIZE, TILE_SIZE));
 	animatedPixmap["watergun"] = watergun;
 	animatedInterval["watergun"] = 1;
+
+	slingshot.push_back(QPixmap("ressources/images/slingshot.png").scaled(TILE_SIZE, TILE_SIZE));
+	animatedPixmap["slingshot"] = slingshot;
+	animatedInterval["slingshot"] = 1;
+
+	paintball.push_back(QPixmap("ressources/images/paintball.png").scaled(TILE_SIZE, TILE_SIZE));
+	animatedPixmap["paintball"] = paintball;
+	animatedInterval["paintball"] = 1;
+
+	petanque.push_back(QPixmap("ressources/images/petanque.png").scaled(TILE_SIZE, TILE_SIZE));
+	animatedPixmap["petanque"] = petanque;
+	animatedInterval["petanque"] = 1;
 }
+
 
 Ressources* Ressources::getInstance()
 {

@@ -38,7 +38,8 @@ lo21::lo21()
     //Ajout du dock des options de jeu
     dock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     addDockWidget(Qt::RightDockWidgetArea, &dock);
-
+    dock.ui->lcdNumber->display(credits);
+    dock.ui->lcdNumber_2->display(lives);
 
     for ( int i = 0 ; i < MAP_SIZE ; i++ )
         for ( int j = 0 ; j < MAP_SIZE ; j++ )
@@ -134,9 +135,26 @@ void lo21::clickOnScene(int x, int y)
 	if (selectedTower != Tower::NONE && t != NULL) 
 	{
 		Tower *tw = Factory::getTower(selectedTower,this);
-
-		if ( !t->buildTower(tw) )
+		
+		if (tw == NULL)
+		{
+			qDebug() << "erreur a la creation de la tour";
+		}
+		else if (tw->getCost() > this->credits)
+		{
+			qDebug() << "pas assez de credits !";
+			delete tw;
+		}
+		else if (!t->buildTower(tw))
+		{
 			qDebug() << "impossible de constuire ici !";
+			delete tw;
+		}
+		else
+		{
+			this->credits -= tw->getCost();
+			dock.ui->lcdNumber->display(this->credits);
+		}
 	}
 }
 const Tile* lo21::getStart() const

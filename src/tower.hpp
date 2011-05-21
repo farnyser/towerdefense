@@ -15,8 +15,13 @@ public:
 		PAINTBALL,
 		PETANQUEPLAYER,
 	};
-private:
+protected:
 	int level;
+	int cost;
+	float range, power, firerate, bulletSpeed;
+
+public:
+	int getCost() const;
 protected:
 	Tower(lo21* g,QList<QPixmap> p);
 };
