@@ -57,17 +57,17 @@ void Enemy::action()
 			if ( lastVector.x() && !lastVector.y() )
 			{
 				if ( vectorP.y() > 0 )
-					wantedRotation = 90 - rotation();
+					wantedRotation = 90;
 				else
-					wantedRotation = -90 - rotation();
+					wantedRotation = -90;
 			}
 			// precedent mouvement : gauche/droite
 			if ( !lastVector.x() && lastVector.y() )
 			{
 				if ( vectorP.x() > 0 )
-					wantedRotation = 0 - rotation();
+					wantedRotation = -90;
 				else
-					wantedRotation = 180 - rotation();
+					wantedRotation = 90;
 			}
 		}
 
