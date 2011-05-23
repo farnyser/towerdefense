@@ -1,11 +1,11 @@
 #include "missile.hpp"
 
 
-Missile::Missile(lo21* g, int size, QList< QPixmap > p, int interval, QPoint pos, QPointF vec, float velocity, float force)
+Missile::Missile(lo21* g, int size, QList< QPixmap > p, int interval, QPointF pos, QPointF vec, float velocity, float force)
 :Object(g, p, interval),force(force),size(size),vec(vec),velocity(velocity)
 {
-setScale(size);
-this->setPos(pos);
+	this->setScale(size);
+	this->setPos(pos);
 }
 
 
@@ -26,7 +26,7 @@ void Missile::action()
 	}
 }
 
-AngryBird::AngryBird(lo21* g, int size, QPoint pos, QPointF vec)
+AngryBird::AngryBird(lo21* g, int size, QPointF pos, QPointF vec)
 :Missile(g, size,Ressources::getAnimatedPixmap("angrybird"),Ressources::getAnimatedInterval("angrybird"),pos,vec, 0.8,1)
 {
 

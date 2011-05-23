@@ -15,14 +15,14 @@ private:
 	float size;
 	float force;
 protected:
-    Missile(lo21* g, int size,QList< QPixmap > p, int interval,QPoint pos,QPointF vec,float velocity,float force);
+    Missile(lo21* g, int size,QList< QPixmap > p, int interval,QPointF pos,QPointF vec,float velocity,float force);
 	virtual void action();
 };
 
 class AngryBird:public Missile
 {
 public:
-	AngryBird(lo21* g,int size,QPoint pos,QPointF vec);
+	AngryBird(lo21* g,int size,QPointF pos,QPointF vec);
 protected:
 };
 
