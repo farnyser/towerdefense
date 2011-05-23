@@ -1,6 +1,10 @@
 #include "tower.hpp"
 #include <cmath>
 
+//
+// Tower
+//
+
 Tower::Tower(lo21* g, QList< QPixmap > p)
 :Object(g, p)
 {
@@ -16,6 +20,21 @@ Tower::Attribute Tower::getUpgradedAttribute() const
 {
 	return this->computeAttribute(this->attr.level+1);
 }
+
+int Tower::upgrade()
+{
+	this->attr = computeAttribute(this->attr.level+1);
+	return this->attr.cost;
+}
+
+int Tower::sell()
+{
+	return this->attr.sellprice;
+}
+
+//
+// WaterGun
+//
 
 WaterGun::WaterGun(lo21* g)
 :Tower(g,Ressources::getAnimatedPixmap("watergun"))
@@ -35,6 +54,10 @@ Tower::Attribute WaterGun::computeAttribute(int level) const
 	else if (level == 2) attr.cost = 20;
 	else if (level == 3) attr.cost = 45;
 	else attr.cost = 0;
+
+	attr.sellprice = attr.cost / 2;
+	for (int i = level-1 ; i > 0 ; i--)
+		attr.sellprice += this->computeAttribute(i).cost / 2;
 
 	attr.level = level;
 	attr.range = 2 + level/2.0;
@@ -64,6 +87,11 @@ Tower::Attribute Slingshot::computeAttribute(int level) const
 	else if (level == 3) attr.cost = 60;
 	else attr.cost = 0;
 
+	attr.sellprice = attr.cost / 2;
+	for (int i = level-1 ; i > 0 ; i--)
+		attr.sellprice += this->computeAttribute(i).cost / 2;
+
+
 	attr.level = level;
 	attr.range = 3 + level/2.0;
 	attr.power = 10 * std::pow(level, 1.5);
@@ -92,6 +120,11 @@ Tower::Attribute PetanquePlayer::computeAttribute(int level) const
 	else if (level == 3) attr.cost = 80;
 	else attr.cost = 0;
 
+	attr.sellprice = attr.cost / 2;
+	for (int i = level-1 ; i > 0 ; i--)
+		attr.sellprice += this->computeAttribute(i).cost / 2;
+
+
 	attr.level = level;
 	attr.range = 3 + level/2.0;
 	attr.power = 10 * std::pow(level, 1.5);
@@ -119,6 +152,11 @@ Tower::Attribute PaintBall::computeAttribute(int level) const
 	else if (level == 2) attr.cost = 25;
 	else if (level == 3) attr.cost = 60;
 	else attr.cost = 0;
+
+	attr.sellprice = attr.cost / 2;
+	for (int i = level-1 ; i > 0 ; i--)
+		attr.sellprice += this->computeAttribute(i).cost / 2;
+
 
 	attr.level = level;
 	attr.range = 4 + level/2.0;

@@ -19,6 +19,8 @@ public:
 	virtual bool isStartPoint() const;
 	virtual bool isEndPoint() const;
 	virtual const vec2f getVector() const;
+	
+	void deleteTower();
 	bool buildTower(Tower *t);
 	Tower* getTower() const;
 

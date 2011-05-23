@@ -130,16 +130,16 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="Upgrade">
            <property name="text">
             <string>Améliorer</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="Sell">
            <property name="text">
-            <string>Supprimer</string>
+            <string>Vendre</string>
            </property>
           </widget>
          </item>
