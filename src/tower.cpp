@@ -52,7 +52,7 @@ void WaterGun::action()
 	else
 	{
 		timeUntilNextFire=20;
-		game->addObject(new AngryBird(game,1,scenePos(),QPointF(sin(angle/360.0*2*3.1415927),cos(angle/360.0*2*3.1415927))));
+		game->addObject(new AngryBird(game,1,scenePos()+this->getHalfSize()/2,QPointF(cos(angle/360.0*2*3.1415927),sin(angle/360.0*2*3.1415927))));
 	}
 	update();
 }
