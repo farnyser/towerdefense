@@ -29,6 +29,7 @@ public:
 	const Tile* getStart() const;
 	void addObject(Object* o);
 	Tile* getTile(int x, int y);
+	void selectTowerOnMap(Tower *tw = NULL);
 
 private:
 	// configuration
@@ -40,7 +41,9 @@ private:
 	GameScene scene;
 	QTimer timer;
 	Dock dock;
+	
 	Tower::Type selectedTower;
+	Tower *selectedTowerOnMap;
 
 	Tile *tileMap[MAP_SIZE][MAP_SIZE];
 	Tile *start;

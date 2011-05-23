@@ -147,34 +147,61 @@ void lo21::clickOnScene(int x, int y)
 		if (tw == NULL)
 		{
 			qDebug() << "erreur a la creation de la tour";
+			this->selectTowerOnMap(NULL);
 		}
-		else if (tw->getCost() > this->credits)
+		else if (tw->getAttribute().cost > this->credits)
 		{
-			QMessageBox(QMessageBox::Warning,tr("Plus de credits"),tr("Vous n'avez pas assez de credits pour acheter cette tour")).exec();
+			QMessageBox(QMessageBox::Warning,tr("Plus de credits"),
+				tr("Vous n'avez pas assez de credits pour acheter cette tour")).exec();
+			this->selectTowerOnMap(NULL);
 			delete tw;
 		}
 		else if (!t->buildTower(tw))
 		{
-			QMessageBox(QMessageBox::Warning,tr("Impossible de construire ici"),tr("Vous ne pouvez pas construire une tour a cet endroit")).exec();
+			QMessageBox(QMessageBox::Warning,tr("Impossible de construire ici"),
+				tr("Vous ne pouvez pas construire une tour a cet endroit")).exec();
+			this->selectTowerOnMap(NULL);
 			delete tw;
 		}
 		else
 		{
-			this->credits -= tw->getCost();
+			this->credits -= tw->getAttribute().cost;
 			dock.ui->lcdNumber->display(this->credits);
+			this->selectTowerOnMap(tw);
 		}
 	}
 	// selection d'une tour
 	else if (selectedTower == Tower::NONE && t!= NULL)
 	{
-		const Tower *tw = t->getTower();
+		Tower *tw = t->getTower();
 
 		if (tw != NULL)
-		{
-			qDebug() << "cout d'upgrade: " << tw->getUpgradeCost();
-		}
+			this->selectTowerOnMap(tw);
+		else
+			this->selectTowerOnMap(NULL);
+	}
+	else
+	{
+		this->selectTowerOnMap(NULL);
 	}
 }
+
+void lo21::selectTowerOnMap(Tower *tw)
+{
+	this->selectedTowerOnMap = tw;
+
+	if (tw == NULL)
+	{
+		this->dock.ui->groupBox_2->setEnabled(false);
+		this->dock.ui->label_edition->setText("pas de selection");
+	}
+	else
+	{
+		this->dock.ui->groupBox_2->setEnabled(true);
+		this->dock.ui->label_edition->setText("prix:");
+	}
+}
+
 const Tile* lo21::getStart() const
 {
     return start;

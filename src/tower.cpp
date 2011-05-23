@@ -5,7 +5,6 @@
 Tower::Tower(lo21* g, QList< QPixmap > p)
 :Object(g, p),timeUntilNextFire(0)
 {
-	this->level = 1;
 	//this->setFlag(QGraphicsItem::ItemIsSelectable);
 }
 
@@ -16,32 +15,13 @@ Tower::Attribute Tower::getAttribute() const
 
 Tower::Attribute Tower::getUpgradedAttribute() const
 {
-	return this->computeAttribute(this->level+1);
-}
-
-int Tower::getCost() const
-{
-	if ( level > 0 && level <= this->cost.size() )
-		return this->cost[level-1];
-	else 
-		return -1;
-}
-
-int Tower::getUpgradeCost() const
-{
-	if ( level >= 0 && level < this->cost.size() )
-		return this->cost[level];
-	else
-		return -1;
+	return this->computeAttribute(this->attr.level+1);
 }
 
 WaterGun::WaterGun(lo21* g)
 :Tower(g,Ressources::getAnimatedPixmap("watergun"))
 {
-	this->cost.push_back(8);
-	this->cost.push_back(20);
-	this->cost.push_back(45);
-	this->attr = this->computeAttribute(level);
+	this->attr = this->computeAttribute(1);
 }
 
 void WaterGun::action()
@@ -60,21 +40,25 @@ void WaterGun::action()
 Tower::Attribute WaterGun::computeAttribute(int level) const
 {
 	Attribute attr;
+
+	if (level == 1) attr.cost = 8;
+	else if (level == 2) attr.cost = 20;
+	else if (level == 3) attr.cost = 45;
+	else attr.cost = 0;
+
 	attr.level = level;
 	attr.range = 2 + level/2.0;
 	attr.power = 5 * std::pow(level, 1.5);
 	attr.firerate = 4 - level/2.0;
 	attr.bulletSpeed = 40;
+
 	return attr;
 }
 
 Slingshot::Slingshot(lo21* g)
 :Tower(g,Ressources::getAnimatedPixmap("slingshot"))
 {
-	this->cost.push_back(12);
-	this->cost.push_back(25);
-	this->cost.push_back(60);
-	this->attr = this->computeAttribute(level);
+	this->attr = this->computeAttribute(1);
 }
 
 void Slingshot::action()
@@ -84,21 +68,25 @@ void Slingshot::action()
 Tower::Attribute Slingshot::computeAttribute(int level) const
 {
 	Attribute attr;
+
+	if (level == 1) attr.cost = 12;
+	else if (level == 2) attr.cost = 25;
+	else if (level == 3) attr.cost = 60;
+	else attr.cost = 0;
+
 	attr.level = level;
 	attr.range = 3 + level/2.0;
 	attr.power = 10 * std::pow(level, 1.5);
 	attr.firerate = 1;
 	attr.bulletSpeed = 25;
+
 	return attr;
 }
 
 PetanquePlayer::PetanquePlayer(lo21* g)
 :Tower(g,Ressources::getAnimatedPixmap("petanque"))
 {
-	this->cost.push_back(15);
-	this->cost.push_back(40);
-	this->cost.push_back(80);
-	this->attr = this->computeAttribute(level);
+	this->attr = this->computeAttribute(1);
 }
 
 void PetanquePlayer::action()
@@ -108,21 +96,25 @@ void PetanquePlayer::action()
 Tower::Attribute PetanquePlayer::computeAttribute(int level) const
 {
 	Attribute attr;
+
+	if (level == 1) attr.cost = 15;
+	else if (level == 2) attr.cost = 40;
+	else if (level == 3) attr.cost = 80;
+	else attr.cost = 0;
+
 	attr.level = level;
 	attr.range = 3 + level/2.0;
 	attr.power = 10 * std::pow(level, 1.5);
 	attr.firerate = 1;
 	attr.bulletSpeed = 25;
+
 	return attr;
 }
 
 PaintBall::PaintBall(lo21* g)
 :Tower(g,Ressources::getAnimatedPixmap("paintball"))
 {
-	this->cost.push_back(12);
-	this->cost.push_back(25);
-	this->cost.push_back(60);
-	this->attr = this->computeAttribute(level);
+	this->attr = this->computeAttribute(1);
 }
 
 void PaintBall::action()
@@ -132,11 +124,18 @@ void PaintBall::action()
 Tower::Attribute PaintBall::computeAttribute(int level) const
 {
 	Attribute attr;
+
+	if (level == 1) attr.cost = 12;
+	else if (level == 2) attr.cost = 25;
+	else if (level == 3) attr.cost = 60;
+	else attr.cost = 0;
+
 	attr.level = level;
 	attr.range = 4 + level/2.0;
 	attr.power = 4 * std::pow(level, 1.5);
 	attr.firerate = 2;
 	attr.bulletSpeed = 30;
+
 	return attr;
 }
 

@@ -27,13 +27,11 @@ public:
 
 protected:
 	Attribute attr;
-	int level;
 	QList<int> cost;
 	float timeUntilNextFire;
 
+
 public:
-	int getCost() const;
-	int getUpgradeCost() const;
 	Attribute getAttribute() const;
 	Attribute getUpgradedAttribute() const;
 
