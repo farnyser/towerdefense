@@ -20,6 +20,7 @@ public:
 	virtual bool isEndPoint() const;
 	virtual const vec2f getVector() const;
 	bool buildTower(Tower *t);
+	const Tower* getTower() const;
 
 protected:
 	Tower *tower;

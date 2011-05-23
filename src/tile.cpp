@@ -43,6 +43,11 @@ const vec2f Tile::getVector() const
 	return vector;
 }
 
+const Tower* Tile::getTower() const
+{
+	return this->tower;
+}
+
 bool Tile::buildTower(Tower *tw)
 {
 	if ( isBuildable() && tw != NULL && tower == NULL )

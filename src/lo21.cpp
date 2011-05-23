@@ -132,6 +132,7 @@ void lo21::clickOnScene(int x, int y)
 {
 	Tile *t = this->getTile(x,y);
 
+	// construction d'une tour
 	if (selectedTower != Tower::NONE && t != NULL) 
 	{
 		Tower *tw = Factory::getTower(selectedTower,this);
@@ -154,6 +155,16 @@ void lo21::clickOnScene(int x, int y)
 		{
 			this->credits -= tw->getCost();
 			dock.ui->lcdNumber->display(this->credits);
+		}
+	}
+	// selection d'une tour
+	else if (selectedTower == Tower::NONE && t!= NULL)
+	{
+		const Tower *tw = t->getTower();
+
+		if (tw != NULL)
+		{
+			qDebug() << "cout d'upgrade: " << tw->getUpgradeCost();
 		}
 	}
 }

@@ -15,15 +15,30 @@ public:
 		PAINTBALL,
 		PETANQUEPLAYER,
 	};
+	struct Attribute 
+	{
+		int level;
+		int cost;
+		float range;
+		float power;
+		float firerate;
+		float bulletSpeed;
+	};
+
 protected:
+	Attribute attr;
 	int level;
-	int cost;
-	float range, power, firerate, bulletSpeed;
+	QList<int> cost;
 
 public:
 	int getCost() const;
+	int getUpgradeCost() const;
+	Attribute getAttribute() const;
+	Attribute getUpgradedAttribute() const;
+
 protected:
 	Tower(lo21* g,QList<QPixmap> p);
+	virtual Attribute computeAttribute(int level) const = 0;
 };
 
 class WaterGun: public Tower
@@ -31,6 +46,8 @@ class WaterGun: public Tower
 public:
 	WaterGun(lo21* g);
 	void action();
+protected:
+	Tower::Attribute computeAttribute(int level) const;
 };
 
 class Slingshot: public Tower
@@ -38,6 +55,8 @@ class Slingshot: public Tower
 public:
 	Slingshot(lo21* g);
 	void action();
+protected:
+	Tower::Attribute computeAttribute(int level) const;
 };
 
 class PaintBall: public Tower
@@ -45,6 +64,8 @@ class PaintBall: public Tower
 public:
 	PaintBall(lo21* g);
 	void action();
+protected:
+	Tower::Attribute computeAttribute(int level) const;
 };
 
 class PetanquePlayer: public Tower
@@ -52,6 +73,8 @@ class PetanquePlayer: public Tower
 public:
 	PetanquePlayer(lo21* g);
 	void action();
+protected:
+	Tower::Attribute computeAttribute(int level) const;
 };
 
 class Musician: public Tower
