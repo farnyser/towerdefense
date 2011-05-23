@@ -1,5 +1,5 @@
 #include "missile.hpp"
-
+#include <typeinfo>
 
 Missile::Missile(lo21* g, int size, QList< QPixmap > p, int interval, QPointF pos, QPointF vec, float velocity, float force)
 :Object(g, p, interval),force(force),size(size),vec(vec),velocity(velocity)
@@ -23,7 +23,25 @@ void Missile::action()
 		y+=vec.y()*velocity;
 		this->setPos(QPointF(x,y));
 		this->update();
+	
+	
+	
+		QList<QGraphicsItem *> c=collidingItems(Qt::IntersectsItemShape );
+		QListIterator<QGraphicsItem*> it(c);
+		while(it.hasNext())
+		{
+			QGraphicsItem* t=it.next();
+			//vérifie si l'object dérive de Enemy
+			if(typeid(*t).before(typeid(Enemy)))
+			{
+				((Enemy*) t)->hit(1);
+				delete this;
+				break;
+			}
+
+		}
 	}
+	
 }
 
 AngryBird::AngryBird(lo21* g, int size, QPointF pos, QPointF vec)

@@ -39,6 +39,7 @@ void Enemy::action()
 
 	if ( tile != NULL && tile->isEndPoint() )
 	{
+		game->subLive(size);//TODO mettre la bonne valeur
 		delete this;
 	}
 	else if ( tile != NULL && tile->isWalkable() ) 
@@ -121,6 +122,17 @@ float Enemy::getResistance() const
 {
 	return this->resistance;
 }
+
+void Enemy::hit(int damage)
+{
+	hp-=damage;
+	if(hp<=0)
+	{
+		game->addCredit(size);//TODO mettre les vrais valeurs
+		//delete this;
+	}
+}
+
 
 Ant::Ant(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("ant"),Ressources::getAnimatedInterval("ant"))

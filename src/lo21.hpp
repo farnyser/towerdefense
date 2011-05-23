@@ -30,6 +30,8 @@ public:
 	void addObject(Object* o);
 	Tile* getTile(int x, int y);
 	void selectTowerOnMap(Tower *tw = NULL);
+	void addCredit(int c);
+	void subLive(int l);
 
 private:
 	// configuration

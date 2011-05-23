@@ -61,6 +61,25 @@ lo21::lo21()
     connect(&scene,SIGNAL(clickOnScene(int,int)),this,SLOT(clickOnScene(int,int)));
 }
 
+void lo21::addCredit(int c)
+{
+	credits+=c;
+	dock.ui->lcdNumber->display(credits);
+}
+
+void lo21::subLive(int l)
+{
+	lives-=l;
+	dock.ui->lcdNumber_2->display(lives);
+	if(lives<=0)
+	{
+		QMessageBox(QMessageBox::Warning,tr("Perdu"),
+				tr("Vous etes une merde")).exec();
+	}
+}
+
+
+
 void lo21::addObject(Object* o)
 {
 	scene.addItem(o);

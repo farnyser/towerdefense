@@ -14,6 +14,7 @@ public:
 		WASP,
 		MOSQUITO
 	};
+    void hit(int damage);
 
 protected:
 	float scale;
