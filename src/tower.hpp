@@ -29,6 +29,7 @@ protected:
 	Attribute attr;
 	int level;
 	QList<int> cost;
+	float timeUntilNextFire;
 
 public:
 	int getCost() const;

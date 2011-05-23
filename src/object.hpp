@@ -23,7 +23,7 @@ public:
 	QPointF getHalfSize() const;
 
 protected:
-	const lo21* game;
+	lo21* game;
 	virtual void action() = 0;
 	qreal angle;
 

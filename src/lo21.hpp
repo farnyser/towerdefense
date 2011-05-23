@@ -27,8 +27,7 @@ public:
 	void loadWaves(const QString path);
 	const Tile* getTile(int x, int y) const;
 	const Tile* getStart() const;
-
-private:
+	void addObject(Object* o);
 	Tile* getTile(int x, int y);
 
 private:

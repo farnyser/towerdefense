@@ -12,6 +12,7 @@
 #include "enemy.hpp"
 #include "tower.hpp"
 #include "factory.hpp"
+#include "missile.hpp"
 
 lo21::lo21()
  : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1),selectedTower(Tower::NONE)
@@ -59,6 +60,12 @@ lo21::lo21()
 
     connect(&scene,SIGNAL(clickOnScene(int,int)),this,SLOT(clickOnScene(int,int)));
 }
+
+void lo21::addObject(Object* o)
+{
+	scene.addItem(o);
+}
+
 
 void lo21::selectTowerPaint()
 {

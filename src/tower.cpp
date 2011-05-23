@@ -1,8 +1,9 @@
 #include "tower.hpp"
 #include <cmath>
+#include "missile.hpp"
 
 Tower::Tower(lo21* g, QList< QPixmap > p)
-:Object(g, p)
+:Object(g, p),timeUntilNextFire(0)
 {
 	this->level = 1;
 	//this->setFlag(QGraphicsItem::ItemIsSelectable);
@@ -45,6 +46,15 @@ WaterGun::WaterGun(lo21* g)
 
 void WaterGun::action()
 {
+	angle+=0.5;
+	if(timeUntilNextFire>0)
+		timeUntilNextFire--;
+	else
+	{
+		timeUntilNextFire=20;
+		game->addObject(new AngryBird(game,1,QPoint(x(),y()),QPointF(sin(angle/360.0*2*3.1415927),cos(angle/360.0*2*3.1415927))));
+	}
+	update();
 }
 
 Tower::Attribute WaterGun::computeAttribute(int level) const
