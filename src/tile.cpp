@@ -43,7 +43,7 @@ const vec2f Tile::getVector() const
 	return vector;
 }
 
-const Tower* Tile::getTower() const
+Tower* Tile::getTower() const
 {
 	return this->tower;
 }

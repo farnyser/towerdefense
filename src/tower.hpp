@@ -27,12 +27,8 @@ public:
 
 protected:
 	Attribute attr;
-	int level;
-	QList<int> cost;
 
 public:
-	int getCost() const;
-	int getUpgradeCost() const;
 	Attribute getAttribute() const;
 	Attribute getUpgradedAttribute() const;
 
