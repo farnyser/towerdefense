@@ -36,5 +36,6 @@ target_link_libraries(
 	${PROJECT_BIN}
     ${QT_QTCORE_LIBRARY}
 	${QT_QTGUI_LIBRARY}
+	QtOpenGL
 )
 

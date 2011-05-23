@@ -6,6 +6,7 @@
 #include <QtGui/QMenuBar>
 #include <QtGui/QAction>
 #include <QMessageBox>
+#include <QGLFormat>
 
 #include "ressources.hpp"
 #include "tile.hpp"
@@ -34,7 +35,9 @@ lo21::lo21()
     view.setScene(&scene);
     view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setCentralWidget(&view);
+	view.setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
+    view.setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+	setCentralWidget(&view);
 
     //Ajout du dock des options de jeu
     dock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
