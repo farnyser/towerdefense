@@ -272,6 +272,20 @@ lo21::~lo21()
 
 void lo21::loadMap(const QString &path)
 {
+	/* clean */
+	for (int i = 0; i < MAP_SIZE ; i++) 
+	{
+		for (int j = 0; j < MAP_SIZE ; j++) 
+		{
+			if (tileMap[i][j] != NULL)
+			{
+				delete tileMap[i][j];
+				tileMap[i][j] = NULL;
+			}
+		}
+	}
+
+	/* load */
     QFile map(path);
     int x = 0, y = 0;
 
