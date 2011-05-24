@@ -29,9 +29,9 @@ public:
 	const Tile* getStart() const;
 	void addObject(Object* o);
 	Tile* getTile(int x, int y);
-	void selectTowerOnMap(Tower *tw = NULL);
 	void addCredit(int c);
 	void subLive(int l);
+	void selectTile(Tile *t = NULL);
 
 private:
 	// configuration
@@ -45,10 +45,10 @@ private:
 	Dock dock;
 	
 	Tower::Type selectedTower;
-	Tower *selectedTowerOnMap;
 
 	Tile *tileMap[MAP_SIZE][MAP_SIZE];
 	Tile *start;
+	Tile *selectedTile;
 	
 	QList<Wave> waves;
 	int timeUntilNextWave;
@@ -62,6 +62,8 @@ public slots:
 	void selectTowerRock();
 	void selectTowerPaint();
 	void selectTowerPetanque();
+	void upgradeTower();
+	void sellTower();
 	void clickOnScene(int x,int y);
 	
 signals:

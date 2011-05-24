@@ -19,6 +19,7 @@ public:
 	{
 		int level;
 		int cost;
+		int sellprice;
 		float range;
 		float power;
 		float firerate;
@@ -34,6 +35,8 @@ protected:
 public:
 	Attribute getAttribute() const;
 	Attribute getUpgradedAttribute() const;
+	int upgrade();
+	int sell();
 
 protected:
 	Tower(lo21* g,QList<QPixmap> p);

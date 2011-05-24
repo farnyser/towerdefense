@@ -60,6 +60,8 @@ lo21::lo21()
     connect(dock.ui->SelectRock,SIGNAL(clicked()),this,SLOT(selectTowerRock()));
     connect(dock.ui->SelectPaint,SIGNAL(clicked()),this,SLOT(selectTowerPaint()));
     connect(dock.ui->SelectPetanque,SIGNAL(clicked()),this,SLOT(selectTowerPetanque()));
+    connect(dock.ui->Upgrade,SIGNAL(clicked()),this,SLOT(upgradeTower()));
+    connect(dock.ui->Sell,SIGNAL(clicked()),this,SLOT(sellTower()));
 
     connect(&scene,SIGNAL(clickOnScene(int,int)),this,SLOT(clickOnScene(int,int)));
 }
@@ -157,6 +159,34 @@ void lo21::selectTowerWater()
     selectedTower = Tower::WATERGUN;
 }
 
+void lo21::upgradeTower()
+{
+	if (selectedTile != NULL)
+	{
+		Tower *tw = selectedTile->getTower();
+		
+		if (tw->getUpgradedAttribute().cost <= this->credits)
+		{
+			this->credits -= tw->getUpgradedAttribute().cost;
+			dock.ui->lcdNumber->display(this->credits);
+			tw->upgrade();
+			selectTile(selectedTile);
+		}
+	}
+}
+
+void lo21::sellTower()
+{
+	if (selectedTile != NULL && selectedTile->getTower() != NULL)
+	{
+		this->credits += selectedTile->getTower()->sell();
+		dock.ui->lcdNumber->display(this->credits);
+		
+		selectedTile->deleteTower();
+		selectTile();
+	}
+}
+
 void lo21::clickOnScene(int x, int y)
 {
 	Tile *t = this->getTile(x,y);
@@ -169,58 +199,56 @@ void lo21::clickOnScene(int x, int y)
 		if (tw == NULL)
 		{
 			qDebug() << "erreur a la creation de la tour";
-			this->selectTowerOnMap(NULL);
+			this->selectTile(NULL);
 		}
 		else if (tw->getAttribute().cost > this->credits)
 		{
 			QMessageBox(QMessageBox::Warning,tr("Plus de credits"),
 				tr("Vous n'avez pas assez de credits pour acheter cette tour")).exec();
-			this->selectTowerOnMap(NULL);
+			this->selectTile(NULL);
 			delete tw;
 		}
 		else if (!t->buildTower(tw))
 		{
 			QMessageBox(QMessageBox::Warning,tr("Impossible de construire ici"),
 				tr("Vous ne pouvez pas construire une tour a cet endroit")).exec();
-			this->selectTowerOnMap(NULL);
+			this->selectTile(NULL);
 			delete tw;
 		}
 		else
 		{
 			this->credits -= tw->getAttribute().cost;
 			dock.ui->lcdNumber->display(this->credits);
-			this->selectTowerOnMap(tw);
+			this->selectTile(t);
 		}
 	}
-	// selection d'une tour
-	else if (selectedTower == Tower::NONE && t!= NULL)
-	{
-		Tower *tw = t->getTower();
-
-		if (tw != NULL)
-			this->selectTowerOnMap(tw);
-		else
-			this->selectTowerOnMap(NULL);
-	}
+	// selection d'un tile
 	else
 	{
-		this->selectTowerOnMap(NULL);
+		this->selectTile(t);
 	}
 }
 
-void lo21::selectTowerOnMap(Tower *tw)
+void lo21::selectTile(Tile *t)
 {
-	this->selectedTowerOnMap = tw;
+	this->selectedTile = t;
 
-	if (tw == NULL)
+	if (t == NULL or t->getTower() == NULL)
 	{
 		this->dock.ui->groupBox_2->setEnabled(false);
 		this->dock.ui->label_edition->setText("pas de selection");
 	}
 	else
 	{
+		// affichage
 		this->dock.ui->groupBox_2->setEnabled(true);
-		this->dock.ui->label_edition->setText("prix:");
+		this->dock.ui->Upgrade->setEnabled((selectedTile->getTower()->getUpgradedAttribute().cost <= this->credits));
+
+		// mise a jour label
+		this->dock.ui->label_edition->setText(
+			"prix amelioration: " + QString::number(t->getTower()->getUpgradedAttribute().cost) +"<br />"
+			+ "prix de vente: " + QString::number(t->getTower()->getAttribute().sellprice)
+			);
 	}
 }
 

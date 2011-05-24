@@ -60,6 +60,14 @@ bool Tile::buildTower(Tower *tw)
 	return false;
 }
 
+void Tile::deleteTower()
+{
+	if (this->tower != NULL)
+	{
+		delete this->tower;
+		this->tower = NULL;
+	}
+}
 //
 // Grass
 //
