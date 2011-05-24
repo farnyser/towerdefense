@@ -1,6 +1,7 @@
 #include "tile.hpp"
 #include "ressources.hpp"
 #include "tower.hpp"
+#include "lo21.hpp"
 
 //
 // Tile
@@ -64,7 +65,7 @@ void Tile::deleteTower()
 {
 	if (this->tower != NULL)
 	{
-		delete this->tower;
+		game->removeObject(this->tower);
 		this->tower = NULL;
 	}
 }

@@ -90,6 +90,16 @@ void lo21::addObject(Object* o)
 	scene.addItem(o);
 }
 
+void lo21::removeObject(Object* o)
+{
+	qDebug() << "removeObject called"; 
+	
+	if (o != NULL)
+	{
+		scene.removeItem(o);
+		//delete o;
+	}
+}
 
 void lo21::selectTowerPaint()
 {

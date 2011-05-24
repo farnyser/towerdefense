@@ -39,8 +39,9 @@ void Enemy::action()
 
 	if ( tile != NULL && tile->isEndPoint() )
 	{
-		game->subLive(size);//TODO mettre la bonne valeur
-		delete this;
+		game->subLive(1);
+		game->removeObject(this);
+		return;
 	}
 	else if ( tile != NULL && tile->isWalkable() ) 
 	{
@@ -125,11 +126,13 @@ float Enemy::getResistance() const
 
 void Enemy::hit(int damage)
 {
-	hp-=damage;
-	if(hp<=0)
+	if (damage > resistance)
+		hp = hp - (damage-resistance);
+	
+	if(hp <= 0)
 	{
-		game->addCredit(size);//TODO mettre les vrais valeurs
-		//delete this;
+		game->addCredit(1);
+		game->removeObject(this);
 	}
 }
 

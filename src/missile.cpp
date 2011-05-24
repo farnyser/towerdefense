@@ -15,7 +15,7 @@ void Missile::action()
 	float y=this->y();
 	if(x>MAP_SIZE*TILE_SIZE || y>MAP_SIZE*TILE_SIZE || x<-20  ||y<-20)
 	{
-		delete this;
+		game->removeObject(this);
 	}
 	else
 	{
@@ -35,7 +35,7 @@ void Missile::action()
 			if(typeid(*t).before(typeid(Enemy)))
 			{
 				((Enemy*) t)->hit(1);
-				delete this;
+				game->removeObject(this);
 				break;
 			}
 
