@@ -35,7 +35,7 @@ void Enemy::action()
 	float x = this->getCenterPos().x();
 	float y = this->getCenterPos().y();
 
-	const Tile* tile = this->game->getTile(x,y);
+	const Tile* tile = ((const lo21*)this->game)->getTile(x,y);
 
 	if ( tile != NULL && tile->isEndPoint() )
 	{

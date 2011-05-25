@@ -25,14 +25,20 @@ public:
 public:
 	void loadMap(const QString &path);
 	void loadWaves(const QString path);
+	const Enemy* getClosestEnemy(int x, int y) const;
 	const Tile* getTile(int x, int y) const;
 	const Tile* getStart() const;
+	void removeObject(Enemy* o);
+	void addObject(Enemy* o);
 	void removeObject(Object* o);
 	void addObject(Object* o);
-	Tile* getTile(int x, int y);
 	void addCredit(int c);
 	void subLive(int l);
 	void selectTile(Tile *t = NULL);
+	bool isEnemy(void *o) const;
+
+private:
+	 Tile* getTile(int x, int y);
 
 private:
 	// configuration
@@ -46,6 +52,8 @@ private:
 	Dock dock;
 	
 	Tower::Type selectedTower;
+	
+	QList<Enemy*> enemyList;
 
 	Tile *tileMap[MAP_SIZE][MAP_SIZE];
 	Tile *start;

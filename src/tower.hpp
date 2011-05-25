@@ -37,6 +37,7 @@ public:
 	Attribute getUpgradedAttribute() const;
 	int upgrade();
 	int sell();
+	void action();
 
 protected:
 	Tower(lo21* g,QList<QPixmap> p);

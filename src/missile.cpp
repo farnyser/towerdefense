@@ -32,11 +32,16 @@ void Missile::action()
 		{
 			QGraphicsItem* t=it.next();
 			//vérifie si l'object dérive de Enemy
-			if(typeid(*t).before(typeid(Enemy)))
+			//if(typeid(*t).before(typeid(Enemy)))
+			if (game->isEnemy(t))
 			{
-				((Enemy*) t)->hit(1);
-				game->removeObject(this);
-				break;
+				Enemy *e = dynamic_cast<Enemy*>(t);
+				if (e != NULL)
+				{
+					e->hit(100);
+					game->removeObject(this);
+					break;
+				}
 			}
 
 		}

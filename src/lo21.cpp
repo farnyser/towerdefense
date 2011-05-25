@@ -90,6 +90,12 @@ void lo21::addObject(Object* o)
 	scene.addItem(o);
 }
 
+void lo21::addObject(Enemy *o)
+{
+	this->addObject((Object*)o);
+	this->enemyList.push_back(o);
+}
+
 void lo21::removeObject(Object* o)
 {
 	qDebug() << "removeObject called"; 
@@ -99,6 +105,39 @@ void lo21::removeObject(Object* o)
 		scene.removeItem(o);
 		//delete o;
 	}
+}
+
+void lo21::removeObject(Enemy *o)
+{
+	this->enemyList.removeOne(o);
+	this->removeObject((Object*)o);
+}
+
+bool lo21::isEnemy(void *o) const
+{
+	for ( int i = 0 ; i < enemyList.size() ; i++ )
+		if ( enemyList[i] == o ) 
+			return true;
+	
+	return false;
+}
+
+const Enemy* lo21::getClosestEnemy(int x, int y) const
+{
+	Enemy *e = NULL;
+	
+	for ( unsigned int distance = -1, i = 0 ; i < enemyList.size() ; i++ )
+	{
+		unsigned int tmp = (enemyList[i]->pos() - QPoint(x,y)).manhattanLength(); 
+		
+		if ( tmp < distance )
+		{
+			e = enemyList[i];
+			distance = tmp;
+		}
+	}
+
+	return e;
 }
 
 void lo21::selectTowerPaint()
@@ -285,7 +324,7 @@ void lo21::updateGame()
             if (waves.first().tick())
             {
                 Enemy *e = waves.first().getEnemy(this);
-                scene.addItem(e);
+                this->addObject(e);
             }
         }
         else if (timeUntilNextWave>0)

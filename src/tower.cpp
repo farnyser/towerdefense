@@ -6,10 +6,11 @@
 // Tower
 //
 
-Tower::Tower(lo21* g, QList< QPixmap > p)
-:Object(g, p),timeUntilNextFire(0)
+Tower::Tower(lo21* game, QList< QPixmap > pixmaps)
+ : 
+  Object(game, pixmaps), 
+  timeUntilNextFire(0)
 {
-	//this->setFlag(QGraphicsItem::ItemIsSelectable);
 }
 
 Tower::Attribute Tower::getAttribute() const
@@ -33,6 +34,21 @@ int Tower::sell()
 	return this->attr.sellprice;
 }
 
+void Tower::action()
+{
+	// remise a '0' du compteur
+	if (timeUntilNextFire == -1 )
+		timeUntilNextFire = FREQUENCY / this->attr.firerate;
+
+	//si il faut attendre, attendre ...
+	if (timeUntilNextFire >= 1)
+		timeUntilNextFire--;
+	else if (timeUntilNextFire > 0)
+		timeUntilNextFire = 0;
+	//else if ( /*il y a un enemy a porte de tir */)
+		//fire()	
+}
+
 //
 // WaterGun
 //
@@ -45,14 +61,19 @@ WaterGun::WaterGun(lo21* g)
 
 void WaterGun::action()
 {
-	angle+=0.5;
-	if(timeUntilNextFire>0)
-		timeUntilNextFire--;
-	else
+	Tower::action();
+
+	const Enemy *target = this->game->getClosestEnemy(scenePos().x(), scenePos().y());
+
+	// doit s'orienter vers l'enemy cible, pas tourner en rond
+	angle += 0.5;
+
+	if (timeUntilNextFire == 0)
 	{
-		timeUntilNextFire=20;
 		game->addObject(new AngryBird(game,1,scenePos()+this->getHalfSize()/2,QPointF(cos(angle/360.0*2*3.1415927),sin(angle/360.0*2*3.1415927))));
+		timeUntilNextFire = -1;
 	}
+	
 	update();
 }
 
@@ -72,7 +93,7 @@ Tower::Attribute WaterGun::computeAttribute(int level) const
 	attr.level = level;
 	attr.range = 2 + level/2.0;
 	attr.power = 5 * std::pow(level, 1.5);
-	attr.firerate = 4 - level/2.0;
+	attr.firerate = 4 + level/2.0;
 	attr.bulletSpeed = 40;
 
 	return attr;
