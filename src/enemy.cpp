@@ -58,7 +58,7 @@ void Enemy::action()
 			// precedent mouvement : haut/bas
 			if ( lastVector.x() && !lastVector.y() )
 			{
-				if ( vectorP.y() > 0 && vectorP.x() >0)
+				if (vectorP.y() > 0 && vectorP.x() > 0)
 					wantedRotation = 90;
 				else
 					wantedRotation = -90;
@@ -66,7 +66,7 @@ void Enemy::action()
 			// precedent mouvement : gauche/droite
 			if ( !lastVector.x() && lastVector.y() )
 			{
-				if ( vectorP.x() > 0 && vectorP.y() >0)
+				if (vectorP.x() > 0 && vectorP.y() > 0)
 					wantedRotation = -90;
 				else
 					wantedRotation = 90;

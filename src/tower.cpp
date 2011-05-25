@@ -43,8 +43,6 @@ void Tower::action()
 	//si il faut attendre, attendre ...
 	if (timeUntilNextFire >= 1)
 		timeUntilNextFire--;
-	else if (timeUntilNextFire > 0)
-		timeUntilNextFire = 0;
 	//else if ( /*il y a un enemy a porte de tir */)
 		//fire()	
 }
@@ -63,17 +61,35 @@ void WaterGun::action()
 {
 	Tower::action();
 
-	const Enemy *target = this->game->getClosestEnemy(scenePos().x(), scenePos().y());
 
 	// doit s'orienter vers l'enemy cible, pas tourner en rond
 	angle += 0.5;
 
 	if (timeUntilNextFire == 0)
 	{
-		game->addObject(new AngryBird(game,1,scenePos()+this->getHalfSize()/2,QPointF(cos(angle/360.0*2*3.1415927),sin(angle/360.0*2*3.1415927))));
-		timeUntilNextFire = -1;
+		QPointF myPos = scenePos() + getCenterPos();
+		const Enemy *target = this->game->getClosestEnemy(myPos.x(), myPos.y());
+		
+		qDebug() << myPos;
+
+		if (target != NULL)
+		{
+			// vector
+			QPointF vector = target->getCenterPos() - myPos;
+			
+			// compute distance
+			int distance_q = vector.x()*vector.x() + vector.y()*vector.y();	
+			int range_q = this->attr.range * TILE_SIZE;
+			range_q *= range_q;
+
+			if (distance_q <= range_q) 
+			{
+				game->addObject(new AngryBird(game,1,myPos,vector));
+				timeUntilNextFire = -1;
+			}
+		}
 	}
-	
+
 	update();
 }
 

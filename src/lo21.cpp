@@ -7,6 +7,7 @@
 #include <QtGui/QAction>
 #include <QMessageBox>
 #include <QGLFormat>
+#include <cmath>
 
 #include "ressources.hpp"
 #include "tile.hpp"
@@ -103,7 +104,7 @@ void lo21::removeObject(Object* o)
 	if (o != NULL)
 	{
 		scene.removeItem(o);
-		//delete o;
+		// delete o;
 	}
 }
 
@@ -128,7 +129,7 @@ const Enemy* lo21::getClosestEnemy(int x, int y) const
 	
 	for ( unsigned int distance = -1, i = 0 ; i < enemyList.size() ; i++ )
 	{
-		unsigned int tmp = (enemyList[i]->pos() - QPoint(x,y)).manhattanLength(); 
+		unsigned int tmp = (enemyList[i]->getCenterPos() - QPoint(x,y)).manhattanLength(); 
 		
 		if ( tmp < distance )
 		{

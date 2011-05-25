@@ -2,10 +2,18 @@
 #include <typeinfo>
 
 Missile::Missile(lo21* g, int size, QList< QPixmap > p, int interval, QPointF pos, QPointF vec, float velocity, float force)
-:Object(g, p, interval),force(force),size(size),vec(vec),velocity(velocity)
+:Object(g, p, interval),
+force(force),
+size(size),
+velocity(velocity)
 {
 	this->setScale(size);
-	this->setPos(pos);
+	this->setPos(pos-getCenterPos());
+
+	// vecteur unitaire
+	int distance_q = ((vec.x()*vec.x()) + (vec.y()*vec.y()));
+	this->vec.setX( (vec.x() < 0 ? -1 : 1) * (vec.x()*vec.x()) / distance_q ); 
+	this->vec.setY( (vec.y() < 0 ? -1 : 1) * (vec.y()*vec.y()) / distance_q ); 
 }
 
 

@@ -29,7 +29,7 @@ public:
 protected:
 	Attribute attr;
 	QList<int> cost;
-	float timeUntilNextFire;
+	int timeUntilNextFire;
 
 
 public:
