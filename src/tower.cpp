@@ -1,5 +1,6 @@
-#include "tower.hpp"
 #include <cmath>
+#include "factory.hpp"
+#include "tower.hpp"
 #include "missile.hpp"
 
 //
@@ -43,8 +44,17 @@ void Tower::action()
 	//si il faut attendre, attendre ...
 	if (timeUntilNextFire >= 1)
 		timeUntilNextFire--;
-	//else if ( /*il y a un enemy a porte de tir */)
-		//fire()	
+	else
+	{
+		QPointF myPos = scenePos() + getCenterPos();
+		const Enemy *target = game->getClosestEnemy(myPos.x(), myPos.y(), attr.range * TILE_SIZE);
+		
+		if (target != NULL)
+		{
+			game->addObject(Factory::getMissile(this, target, game));
+			timeUntilNextFire = -1;
+		}
+	}
 }
 
 //
@@ -61,28 +71,15 @@ void WaterGun::action()
 {
 	Tower::action();
 
-
 	// doit s'orienter vers l'enemy cible, pas tourner en rond
 	angle += 0.5;
-
-	if (timeUntilNextFire == 0)
-	{
-		QPointF myPos = scenePos() + getCenterPos();
-		const Enemy *target = this->game->getClosestEnemy(myPos.x(), myPos.y(), this->attr.range * TILE_SIZE);
-		
-		if (target != NULL)
-		{
-			game->addObject(new AngryBird(game,myPos,attr.bulletSpeed,attr.power,target));
-			timeUntilNextFire = -1;
-		}
-	}
-
 	update();
 }
 
 Tower::Attribute WaterGun::computeAttribute(int level) const
 {
 	Attribute attr;
+	attr.type = Tower::WATERGUN;
 
 	if (level == 1) attr.cost = 8;
 	else if (level == 2) attr.cost = 20;
@@ -110,11 +107,13 @@ Slingshot::Slingshot(lo21* g)
 
 void Slingshot::action()
 {
+	Tower::action();
 }
 
 Tower::Attribute Slingshot::computeAttribute(int level) const
 {
 	Attribute attr;
+	attr.type = Tower::SLINGSHOT;
 
 	if (level == 1) attr.cost = 12;
 	else if (level == 2) attr.cost = 25;
@@ -143,11 +142,13 @@ PetanquePlayer::PetanquePlayer(lo21* g)
 
 void PetanquePlayer::action()
 {
+	Tower::action();
 }
 
 Tower::Attribute PetanquePlayer::computeAttribute(int level) const
 {
 	Attribute attr;
+	attr.type = Tower::PETANQUEPLAYER;
 
 	if (level == 1) attr.cost = 15;
 	else if (level == 2) attr.cost = 40;
@@ -176,11 +177,13 @@ PaintBall::PaintBall(lo21* g)
 
 void PaintBall::action()
 {
+	Tower::action();
 }
 
 Tower::Attribute PaintBall::computeAttribute(int level) const
 {
 	Attribute attr;
+	attr.type = Tower::PAINTBALL;
 
 	if (level == 1) attr.cost = 12;
 	else if (level == 2) attr.cost = 25;

@@ -17,6 +17,7 @@ public:
 	};
 	struct Attribute 
 	{
+		Type type;
 		int level;
 		int cost;
 		int sellprice;

@@ -15,6 +15,7 @@ private:
 	float velocity;
 	float size;
 	float force;
+
 public:
 	int getPower() const;
 

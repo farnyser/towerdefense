@@ -3,6 +3,7 @@
 
 #include "tower.hpp"
 #include "enemy.hpp"
+#include "missile.hpp"
 
 class Factory
 {
@@ -38,6 +39,20 @@ public:
 				return new WaterGun(game);
 			case Tower::PAINTBALL:
 				return new PaintBall(game);
+		}
+
+		return NULL;
+	}
+
+	static Missile* getMissile(const Tower * const tw, const Enemy * const target, lo21 *game)
+	{
+		Tower::Attribute attr = tw->getAttribute();
+		QPointF pos = tw->scenePos() + tw->getCenterPos();
+
+		switch (attr.type)
+		{
+			default:
+				return new AngryBird(game, pos, attr.bulletSpeed, attr.power, target);
 		}
 
 		return NULL;
