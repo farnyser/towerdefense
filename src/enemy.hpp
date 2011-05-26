@@ -2,6 +2,7 @@
 #define LO21_ENEMY_HPP
 
 #include "object.hpp"
+class Missile;
 
 class Enemy: public Object
 {
@@ -15,6 +16,7 @@ public:
 		MOSQUITO
 	};
     void hit(int damage);
+	void hit(const Missile *m);
 
 protected:
 	float scale;
@@ -49,6 +51,7 @@ class Bug: public Enemy
 {
 public:
 	Bug(lo21*, int size);
+	~Bug();
 protected:
 	int getSpeed();
 	int getSize();

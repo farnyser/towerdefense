@@ -262,8 +262,10 @@ void lo21::clickOnScene(int x, int y)
 		{
 			QMessageBox(QMessageBox::Warning,tr("Impossible de construire ici"),
 				tr("Vous ne pouvez pas construire une tour a cet endroit")).exec();
-			this->selectTile(NULL);
 			delete tw;
+			
+			// si il y a une tour, selection
+			this->selectTile(t);
 		}
 		else
 		{

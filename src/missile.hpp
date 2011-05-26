@@ -15,8 +15,11 @@ private:
 	float velocity;
 	float size;
 	float force;
+public:
+	int getPower() const;
+
 protected:
-    Missile(lo21* g, int size,QList< QPixmap > p, int interval,QPointF pos, const Enemy *target,float velocity,float force);
+    Missile(lo21* g, QList< QPixmap > p, int interval,QPointF pos, float velocity, float force, const Enemy *target);
 	void computeVector();
 	virtual void action();
 };
@@ -24,7 +27,7 @@ protected:
 class AngryBird:public Missile
 {
 public:
-	AngryBird(lo21* g, int size, QPointF pos, const Enemy *target);
+	AngryBird(lo21* g, QPointF pos, float velocity, float power, const Enemy *target);
 protected:
 };
 

@@ -72,7 +72,7 @@ void WaterGun::action()
 		
 		if (target != NULL)
 		{
-			game->addObject(new AngryBird(game,1,myPos,target));
+			game->addObject(new AngryBird(game,myPos,attr.bulletSpeed,attr.power,target));
 			timeUntilNextFire = -1;
 		}
 	}

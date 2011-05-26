@@ -1,5 +1,6 @@
 #include "enemy.hpp"
 #include "ressources.hpp"
+#include "missile.hpp"
 #include "tile.hpp"
 #include "lo21.hpp"
 #include <cmath>
@@ -136,6 +137,12 @@ void Enemy::hit(int damage)
 	}
 }
 
+void Enemy::hit(const Missile *m)
+{
+	this->hit(m->getPower());
+}
+
+
 
 Ant::Ant(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("ant"),Ressources::getAnimatedInterval("ant"))
@@ -151,6 +158,21 @@ Bug::Bug(lo21 *g, int size)
 	this->hp = 10 * this->size * this->size;
 	this->resistance = 5 * this->size * this->size;
 	this->speed = 2;
+}
+
+Bug::~Bug()
+{
+	if (this->size > 1)
+	{
+		Bug *c1 = new Bug(game, this->size - 1);
+		Bug *c2 = new Bug(game, this->size - 1);
+
+		c1->setPos(this->getCenterPos() - getCenterPos() + QPointF(2,2));
+		c2->setPos(this->getCenterPos() - getCenterPos() - QPointF(2,2));
+
+		game->addObject(c1);
+		game->addObject(c2);
+	}
 }
 
 Wasp::Wasp(lo21 *g, int size)

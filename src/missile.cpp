@@ -1,14 +1,13 @@
 #include "missile.hpp"
 #include "enemy.hpp"
 
-Missile::Missile(lo21* g, int size, QList< QPixmap > p, int interval, QPointF pos, const Enemy *target, float velocity, float force)
+Missile::Missile(lo21* g, QList< QPixmap > p, int interval, QPointF pos, float velocity, float force, const Enemy *target)
 :Object(g, p, interval),
 force(force),
-size(size),
 velocity(velocity),
 target(target)
 {
-	this->setScale(size);
+	this->setScale(1.5);
 	this->setPos(pos-getCenterPos());
 }
 
@@ -17,8 +16,6 @@ void Missile::computeVector()
 	// verif en cas de suppression
 	if (target != NULL && game->isEnemy(target))
 	{
-		qDebug() << "y a un vilain !!";
-
 		// direction
 		vec = target->getCenterPos() - this->getCenterPos();
 		
@@ -47,10 +44,11 @@ void Missile::action()
 	}
 	else
 	{
+		int trueVelocity = (velocity * TILE_SIZE) / FREQUENCY;
 		this->computeVector();
 
-		x += vec.x()*velocity;
-		y += vec.y()*velocity;
+		x += vec.x()*trueVelocity;
+		y += vec.y()*trueVelocity;
 		this->setPos(QPointF(x,y));
 		this->update();
 	
@@ -59,14 +57,13 @@ void Missile::action()
 		while(it.hasNext())
 		{
 			QGraphicsItem* t=it.next();
-			//vérifie si l'object dérive de Enemy
-			//if(typeid(*t).before(typeid(Enemy)))
-			if (game->isEnemy(t))
+			
+			if (game->isEnemy(t) /* && t->type inclut dans this->targetType */)
 			{
 				Enemy *e = dynamic_cast<Enemy*>(t);
 				if (e != NULL)
 				{
-					e->hit(100);
+					e->hit(this);
 					game->removeObject(this);
 					break;
 				}
@@ -77,8 +74,13 @@ void Missile::action()
 	
 }
 
-AngryBird::AngryBird(lo21* g, int size, QPointF pos, const Enemy *target)
-:Missile(g, size,Ressources::getAnimatedPixmap("angrybird"),Ressources::getAnimatedInterval("angrybird"),pos,target, 0.8,1)
+int Missile::getPower() const
+{
+	return this->force;
+}
+
+AngryBird::AngryBird(lo21* g, QPointF pos, float velocity, float power, const Enemy *target)
+:Missile(g,Ressources::getAnimatedPixmap("angrybird"),Ressources::getAnimatedInterval("angrybird"),pos, velocity, power, target)
 {
 
 }
