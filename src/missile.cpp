@@ -1,11 +1,12 @@
 #include "missile.hpp"
 #include "enemy.hpp"
 
-Missile::Missile(lo21* g, QList< QPixmap > p, int interval, QPointF pos, float velocity, float force, const Enemy *target)
+Missile::Missile(lo21* g, QList< QPixmap > p, int interval, int agtype, QPointF pos, float velocity, float force, const Enemy *target)
 :Object(g, p, interval),
 force(force),
 velocity(velocity),
-target(target)
+target(target),
+agtype(agtype)
 {
 	this->setScale(1.5);
 	this->setPos(pos-getCenterPos());
@@ -58,17 +59,21 @@ void Missile::action()
 		{
 			QGraphicsItem* t=it.next();
 			
-			if (game->isEnemy(t) /* && t->type inclut dans this->targetType */)
+			if (game->isEnemy(t))
 			{
 				Enemy *e = dynamic_cast<Enemy*>(t);
 				if (e != NULL)
 				{
-					e->hit(this);
-					game->removeObject(this);
-					break;
+					// renvoit false (et ne fais rien)
+					// si le missile ne peut pas toucher l'ennemi
+					// a cause du type (sol ou air)
+					if ( e->hit(this) )
+					{
+						game->removeObject(this);
+						break;
+					}
 				}
 			}
-
 		}
 	}
 	
@@ -79,8 +84,13 @@ int Missile::getPower() const
 	return this->force;
 }
 
+int Missile::getAGType() const
+{
+	return this->agtype;
+}
+
 AngryBird::AngryBird(lo21* g, QPointF pos, float velocity, float power, const Enemy *target)
-:Missile(g,Ressources::getAnimatedPixmap("angrybird"),Ressources::getAnimatedInterval("angrybird"),pos, velocity, power, target)
+:Missile(g,Ressources::getAnimatedPixmap("angrybird"),Ressources::getAnimatedInterval("angrybird"), Enemy::GROUND, pos, velocity, power, target)
 {
 
 }

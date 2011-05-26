@@ -26,8 +26,14 @@ Tower::Attribute Tower::getUpgradedAttribute() const
 
 int Tower::upgrade()
 {
-	this->attr = computeAttribute(this->attr.level+1);
-	return this->attr.cost;
+	// niveau max
+	if ( attr.level < 3 )
+	{
+		this->attr = computeAttribute(this->attr.level+1);
+		return this->attr.cost;
+	}
+
+	return 0;
 }
 
 int Tower::sell()

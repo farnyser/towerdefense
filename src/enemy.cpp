@@ -137,11 +137,16 @@ void Enemy::hit(int damage)
 	}
 }
 
-void Enemy::hit(const Missile *m)
+bool Enemy::hit(const Missile *m)
 {
-	this->hit(m->getPower());
-}
+	if (m->getAGType() & this->agtype)
+	{
+		this->hit(m->getPower());
+		return true;
+	}
 
+	return false;
+}
 
 
 Ant::Ant(lo21 *g, int size)
@@ -150,6 +155,7 @@ Ant::Ant(lo21 *g, int size)
 	this->speed = 2 + this->size/2;
 	this->hp = 5 * this->size * this->size;
 	this->resistance = this->size * this->size;
+	this->agtype = GROUND;
 }
 
 Bug::Bug(lo21 *g, int size)
@@ -158,6 +164,7 @@ Bug::Bug(lo21 *g, int size)
 	this->hp = 10 * this->size * this->size;
 	this->resistance = 5 * this->size * this->size;
 	this->speed = 2;
+	this->agtype = GROUND;
 }
 
 Bug::~Bug()
@@ -181,11 +188,18 @@ Wasp::Wasp(lo21 *g, int size)
 	this->hp = 7 * this->size * this->size;
 	this->resistance = 4 * this->size * this->size;
 	this->speed = 3;
+	this->agtype = AIR;
 }
 
 Mosquito::Mosquito(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("mosquito"),Ressources::getAnimatedInterval("mosquito"))
 {
-	this->hp = 6 * this->size * this->size; 
+	this->hp = 6 * this->size * this->size;
+
+	// attention: resistance & vitesse depend de si il est au sol ou non !!
+	// au sol
+	this->agtype = GROUND;
+	this->speed = 1 + this->size/2.0;
+	this->resistance = 15 * this->size;
 }
 

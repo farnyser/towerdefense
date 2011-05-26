@@ -10,17 +10,18 @@
 class Missile : public Object
 {
 private:
-	const Enemy *target;
 	QPointF vec;
 	float velocity;
 	float size;
 	float force;
-
+	int agtype;
+	const Enemy *target;
 public:
 	int getPower() const;
+	int getAGType() const;
 
 protected:
-    Missile(lo21* g, QList< QPixmap > p, int interval,QPointF pos, float velocity, float force, const Enemy *target);
+    Missile(lo21* g, QList< QPixmap > p, int interval, int agtype, QPointF pos, float velocity, float force, const Enemy *target);
 	void computeVector();
 	virtual void action();
 };

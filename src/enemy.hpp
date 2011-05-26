@@ -15,8 +15,14 @@ public:
 		WASP,
 		MOSQUITO
 	};
-    void hit(int damage);
-	void hit(const Missile *m);
+    enum AGType
+	{
+		GROUND = 1 << 1,
+		AIR = 1 << 2
+	};
+	void hit(int damage);
+	bool hit(const Missile *m);
+	
 
 protected:
 	float scale;
@@ -24,6 +30,7 @@ protected:
 	float resistance;
 	float speed;
 	int size;
+	AGType agtype;
 	
 	QPointF lastVector;
 	float wantedRotation;
@@ -42,9 +49,6 @@ class Ant: public Enemy
 {
 public:
 	Ant(lo21*, int size);
-protected:
-	int getSpeed();
-	int getSize();
 };
 
 class Bug: public Enemy
@@ -52,18 +56,12 @@ class Bug: public Enemy
 public:
 	Bug(lo21*, int size);
 	~Bug();
-protected:
-	int getSpeed();
-	int getSize();
 };
 
 class Wasp: public Enemy
 {
 public:
 	Wasp(lo21*, int size);
-protected:
-	int getSpeed();
-	int getSize();
 };
 
 class Mosquito: public Enemy
