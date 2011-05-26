@@ -114,7 +114,7 @@ void lo21::removeObject(Enemy *o)
 	this->removeObject((Object*)o);
 }
 
-bool lo21::isEnemy(void *o) const
+bool lo21::isEnemy(const void *o) const
 {
 	for ( int i = 0 ; i < enemyList.size() ; i++ )
 		if ( enemyList[i] == o ) 
@@ -123,7 +123,7 @@ bool lo21::isEnemy(void *o) const
 	return false;
 }
 
-const Enemy* lo21::getClosestEnemy(int x, int y) const
+const Enemy* lo21::getClosestEnemy(int x, int y, unsigned int range) const
 {
 	Enemy *e = NULL;
 	
@@ -131,7 +131,7 @@ const Enemy* lo21::getClosestEnemy(int x, int y) const
 	{
 		unsigned int tmp = (enemyList[i]->getCenterPos() - QPoint(x,y)).manhattanLength(); 
 		
-		if ( tmp < distance )
+		if (tmp < distance && tmp <= range)
 		{
 			e = enemyList[i];
 			distance = tmp;

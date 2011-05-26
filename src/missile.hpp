@@ -10,19 +10,21 @@
 class Missile : public Object
 {
 private:
+	const Enemy *target;
 	QPointF vec;
 	float velocity;
 	float size;
 	float force;
 protected:
-    Missile(lo21* g, int size,QList< QPixmap > p, int interval,QPointF pos,QPointF vec,float velocity,float force);
+    Missile(lo21* g, int size,QList< QPixmap > p, int interval,QPointF pos, const Enemy *target,float velocity,float force);
+	void computeVector();
 	virtual void action();
 };
 
 class AngryBird:public Missile
 {
 public:
-	AngryBird(lo21* g,int size,QPointF pos,QPointF vec);
+	AngryBird(lo21* g, int size, QPointF pos, const Enemy *target);
 protected:
 };
 

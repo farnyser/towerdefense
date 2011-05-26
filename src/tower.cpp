@@ -68,25 +68,12 @@ void WaterGun::action()
 	if (timeUntilNextFire == 0)
 	{
 		QPointF myPos = scenePos() + getCenterPos();
-		const Enemy *target = this->game->getClosestEnemy(myPos.x(), myPos.y());
+		const Enemy *target = this->game->getClosestEnemy(myPos.x(), myPos.y(), this->attr.range * TILE_SIZE);
 		
-		qDebug() << myPos;
-
 		if (target != NULL)
 		{
-			// vector
-			QPointF vector = target->getCenterPos() - myPos;
-			
-			// compute distance
-			int distance_q = vector.x()*vector.x() + vector.y()*vector.y();	
-			int range_q = this->attr.range * TILE_SIZE;
-			range_q *= range_q;
-
-			if (distance_q <= range_q) 
-			{
-				game->addObject(new AngryBird(game,1,myPos,vector));
-				timeUntilNextFire = -1;
-			}
+			game->addObject(new AngryBird(game,1,myPos,target));
+			timeUntilNextFire = -1;
 		}
 	}
 

@@ -25,7 +25,7 @@ public:
 public:
 	void loadMap(const QString &path);
 	void loadWaves(const QString path);
-	const Enemy* getClosestEnemy(int x, int y) const;
+	const Enemy* getClosestEnemy(int x, int y, unsigned int range = -1) const;
 	const Tile* getTile(int x, int y) const;
 	const Tile* getStart() const;
 	void removeObject(Enemy* o);
@@ -35,7 +35,7 @@ public:
 	void addCredit(int c);
 	void subLive(int l);
 	void selectTile(Tile *t = NULL);
-	bool isEnemy(void *o) const;
+	bool isEnemy(const void *o) const;
 
 private:
 	 Tile* getTile(int x, int y);
