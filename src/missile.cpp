@@ -42,6 +42,7 @@ void Missile::action()
 	if(x > MAP_SIZE*TILE_SIZE || y > MAP_SIZE*TILE_SIZE || x < -20  ||y < -20)
 	{
 		game->removeObject(this);
+		return;
 	}
 	else
 	{
@@ -70,7 +71,7 @@ void Missile::action()
 					if ( e->hit(this) )
 					{
 						game->removeObject(this);
-						break;
+						return;
 					}
 				}
 			}
@@ -92,7 +93,6 @@ int Missile::getAGType() const
 AngryBird::AngryBird(lo21* g, QPointF pos, float velocity, float power, const Enemy *target)
 :Missile(g,Ressources::getAnimatedPixmap("angrybird"),Ressources::getAnimatedInterval("angrybird"), Enemy::GROUND, pos, velocity, power, target)
 {
-
 }
 
 

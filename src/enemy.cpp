@@ -191,6 +191,11 @@ Wasp::Wasp(lo21 *g, int size)
 	this->agtype = AIR;
 }
 
+Wasp::~Wasp()
+{
+	// doit s'ecraser et causer des degats
+}
+
 Mosquito::Mosquito(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("mosquito"),Ressources::getAnimatedInterval("mosquito"))
 {

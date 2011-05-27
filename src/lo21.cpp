@@ -99,18 +99,16 @@ void lo21::addObject(Enemy *o)
 
 void lo21::removeObject(Object* o)
 {
-	qDebug() << "removeObject called"; 
-	
 	if (o != NULL)
 	{
 		scene.removeItem(o);
-		// delete o;
+		deleteLaters << o;
 	}
 }
 
 void lo21::removeObject(Enemy *o)
 {
-	this->enemyList.removeOne(o);
+	this->enemyList.removeAll(o);
 	this->removeObject((Object*)o);
 }
 
@@ -312,7 +310,13 @@ const Tile* lo21::getStart() const
 
 void lo21::updateGame()
 {
-    if (!waves.empty())
+	// delete objects
+	for ( int i = 0 ; i < deleteLaters.size() ; i++ )
+		delete deleteLaters[i];
+	deleteLaters.clear();
+
+	// charge un enemy
+	if (!waves.empty())
     {
         //Si la vague en cours est vide, on passe à la suivante.
         if (waves.first().end())
@@ -327,7 +331,7 @@ void lo21::updateGame()
             if (waves.first().tick())
             {
                 Enemy *e = waves.first().getEnemy(this);
-                this->addObject(e);
+                if ( e != NULL ) this->addObject(e);
             }
         }
         else if (timeUntilNextWave>0)

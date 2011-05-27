@@ -61,6 +61,8 @@ private:
 	
 	QList<Wave> waves;
 	int timeUntilNextWave;
+
+	QList<Object*> deleteLaters;
 	
 private slots:
 	void updateGame();

@@ -2,6 +2,7 @@
 #define LO21_ENEMY_HPP
 
 #include "object.hpp"
+
 class Missile;
 
 class Enemy: public Object
@@ -20,9 +21,10 @@ public:
 		GROUND = 1 << 1,
 		AIR = 1 << 2
 	};
+public:
 	void hit(int damage);
 	bool hit(const Missile *m);
-	
+	virtual ~Enemy() { };
 
 protected:
 	float scale;
@@ -49,6 +51,7 @@ class Ant: public Enemy
 {
 public:
 	Ant(lo21*, int size);
+	virtual ~Ant() { };
 };
 
 class Bug: public Enemy
@@ -62,6 +65,7 @@ class Wasp: public Enemy
 {
 public:
 	Wasp(lo21*, int size);
+	virtual ~Wasp();
 };
 
 class Mosquito: public Enemy
