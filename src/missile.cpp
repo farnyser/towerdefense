@@ -17,6 +17,13 @@ void Missile::computeVector()
 	// verif en cas de suppression
 	if (target != NULL && game->isEnemy(target))
 	{
+		// si changement de type, on "perd" la cible
+		if (!target->canBeHit(agtype))
+		{
+			target = NULL;
+			return;
+		}
+
 		// direction
 		vec = target->getCenterPos() - this->getCenterPos();
 		
@@ -29,7 +36,7 @@ void Missile::computeVector()
 	{
 		// on conserve le vecteur courant
 		// sauf si nul
-		if (vec.x() == vec.y() == 0)
+		if (vec.x() == 0 && vec.y() == 0)
 			game->removeObject(this);
 	}
 }
@@ -63,6 +70,7 @@ void Missile::action()
 			if (game->isEnemy(t))
 			{
 				Enemy *e = dynamic_cast<Enemy*>(t);
+				
 				if (e != NULL)
 				{
 					// renvoit false (et ne fais rien)
