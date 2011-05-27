@@ -70,11 +70,13 @@ public:
 
 class Mosquito: public Enemy
 {
+private:
+	int state;
 public:
 	Mosquito(lo21*,int size);
 protected:
-	int getSpeed();
-	int getSize();
+	virtual void action();
+	virtual void hit(int damage);
 };
 
 #endif /* end of include guard: LO21_ENEMY_HPP */

@@ -205,12 +205,36 @@ Wasp::~Wasp()
 Mosquito::Mosquito(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("mosquito"),Ressources::getAnimatedInterval("mosquito"))
 {
+	/* de 0,1,2,3,4,5,6 vol, de 7,8,9 marche, 10->0 (le tout * FREQUENCY) */
+	this->state = 0;
 	this->hp = 6 * this->size * this->size;
-
-	// attention: resistance & vitesse depend de si il est au sol ou non !!
-	// au sol
-	this->agtype = GROUND;
-	this->speed = 1 + this->size/2.0;
-	this->resistance = 15 * this->size;
 }
 
+void Mosquito::action()
+{
+	switch ( state )
+	{
+		case 0 * FREQUENCY:
+			// en l'air
+			this->agtype = AIR;
+			this->speed = 2 + this->size/2.0;
+			this->resistance = 3 * this->size;
+			break;
+		case 7 * FREQUENCY:		
+			// au sol
+			this->agtype = GROUND;
+			this->speed = 1 + this->size/2.0;
+			this->resistance = 15 * this->size;
+			break;
+	}
+
+	state = (state+1) % (10 * FREQUENCY);
+
+	Enemy::action();
+}
+
+void Mosquito::hit(int x)
+{
+	this->state = 7 * FREQUENCY; 
+	Enemy::hit(x);
+}
