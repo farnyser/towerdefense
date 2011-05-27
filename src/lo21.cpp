@@ -17,7 +17,9 @@
 #include "missile.hpp"
 
 lo21::lo21()
- : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1),selectedTower(Tower::NONE)
+ : 
+  QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1),selectedTower(Tower::NONE),
+  selectedTile(NULL) 
 {
     //Init des tableaux
     for (int i = 0 ; i < MAP_SIZE ; i++)
@@ -67,16 +69,81 @@ lo21::lo21()
     connect(&scene,SIGNAL(clickOnScene(int,int)),this,SLOT(clickOnScene(int,int)));
 }
 
+void lo21::updateDock()
+{
+	dock.ui->lcdNumber->display(credits);
+	dock.ui->lcdNumber_2->display(lives);
+
+	//
+	// bouttons
+	//
+    dock.ui->SelectPaint->setStyleSheet("QPushButton {}");
+    dock.ui->SelectRock->setStyleSheet("QPushButton {}");
+    dock.ui->SelectWater->setStyleSheet("QPushButton {}");
+    dock.ui->SelectPetanque->setStyleSheet("QPushButton {}");
+
+	switch (selectedTower)
+	{
+		case Tower::WATERGUN:
+			dock.ui->SelectWater->setStyleSheet("QPushButton { background-color: red; }");
+			break;
+		case Tower::PETANQUEPLAYER:
+			dock.ui->SelectPetanque->setStyleSheet("QPushButton { background-color: red; }");
+			break;
+		case Tower::PAINTBALL:
+			dock.ui->SelectPaint->setStyleSheet("QPushButton { background-color: red; }");
+			break;
+		case Tower::SLINGSHOT:
+			dock.ui->SelectRock->setStyleSheet("QPushButton { background-color: red; }");
+			break;
+	}
+	
+	//
+	// bloc info
+	//
+	if (selectedTile == NULL or selectedTile->getTower() == NULL)
+	{
+		this->dock.ui->groupBox_2->setEnabled(false);
+		this->dock.ui->label_edition->setText("pas de selection");
+	}
+	else
+	{
+		const Tower* tw = selectedTile->getTower();
+		const Tower::Attribute attr = tw->getUpgradedAttribute();
+
+		// affichage
+		this->dock.ui->groupBox_2->setEnabled(true);
+		this->dock.ui->Upgrade->setEnabled((attr.cost > 0) && (attr.cost <= this->credits));
+
+		if ( attr.cost > 0 )
+		{
+			this->dock.ui->label_edition->setText(
+				"prix amelioration: " + QString::number(tw->getUpgradedAttribute().cost) +"<br />"
+				+ "prix de vente: " + QString::number(tw->getAttribute().sellprice)
+			);
+		}
+		else
+		{
+			this->dock.ui->label_edition->setText(
+				"prix de vente: " + QString::number(tw->getAttribute().sellprice)
+			);
+		}
+	}
+
+
+}
+
 void lo21::addCredit(int c)
 {
 	credits+=c;
-	dock.ui->lcdNumber->display(credits);
+	updateDock();
 }
 
 void lo21::subLive(int l)
 {
 	lives-=l;
-	dock.ui->lcdNumber_2->display(lives);
+	updateDock();
+
 	if(lives<=0)
 	{
 		QMessageBox(QMessageBox::Warning,tr("Perdu"),
@@ -145,69 +212,41 @@ const Enemy* lo21::getClosestEnemy(int x, int y, unsigned int range, int agtype)
 void lo21::selectTowerPaint()
 {
     if (selectedTower == Tower::PAINTBALL)
-	{
 		selectedTower = Tower::NONE;
-		dock.ui->SelectPaint->setPalette( dock.ui->SelectPetanque->palette() );
-        return;
-	}
+	else
+		selectedTower = Tower::PAINTBALL;
 
-    QPalette p=dock.ui->SelectPaint->palette();
-    dock.ui->SelectPaint->setPalette(QPalette(Qt::red));
-    dock.ui->SelectRock->setPalette(p);
-    dock.ui->SelectWater->setPalette(p);
-    dock.ui->SelectPetanque->setPalette(p);
-    selectedTower = Tower::PAINTBALL;
+	updateDock();
 }
 
 void lo21::selectTowerPetanque()
 {
     if (selectedTower == Tower::PETANQUEPLAYER)
-	{
 		selectedTower = Tower::NONE;
-		dock.ui->SelectPetanque->setPalette( dock.ui->SelectPaint->palette() );
-        return;
-	}
-
-    QPalette p=dock.ui->SelectPetanque->palette();
-    dock.ui->SelectPaint->setPalette(p);
-    dock.ui->SelectRock->setPalette(p);
-    dock.ui->SelectWater->setPalette(p);
-    dock.ui->SelectPetanque->setPalette(QPalette(Qt::red));
-    selectedTower = Tower::PETANQUEPLAYER;
-
+	else
+		selectedTower = Tower::PETANQUEPLAYER;
+	
+	updateDock();
 }
+
 void lo21::selectTowerRock()
 {
     if (selectedTower == Tower::SLINGSHOT)
-	{
 		selectedTower = Tower::NONE;
-		dock.ui->SelectRock->setPalette( dock.ui->SelectPaint->palette() );
-        return;
-	}
-
-    QPalette p=dock.ui->SelectRock->palette();
-    dock.ui->SelectPaint->setPalette(p);
-    dock.ui->SelectRock->setPalette(QPalette(Qt::red));
-    dock.ui->SelectWater->setPalette(p);
-    dock.ui->SelectPetanque->setPalette(p);
-    selectedTower = Tower::SLINGSHOT;
+	else
+		selectedTower = Tower::SLINGSHOT;
+	
+	updateDock();
 }
 
 void lo21::selectTowerWater()
 {
     if (selectedTower == Tower::WATERGUN)
-	{
 		selectedTower = Tower::NONE;
-		dock.ui->SelectWater->setPalette( dock.ui->SelectPetanque->palette() );
-        return;
-	}
-
-    QPalette p=dock.ui->SelectWater->palette();
-    dock.ui->SelectPaint->setPalette(p);
-    dock.ui->SelectRock->setPalette(p);
-    dock.ui->SelectWater->setPalette(QPalette(Qt::red));
-    dock.ui->SelectPetanque->setPalette(p);
-    selectedTower = Tower::WATERGUN;
+	else
+		selectedTower = Tower::WATERGUN;
+	
+	updateDock();
 }
 
 void lo21::upgradeTower()
@@ -219,9 +258,9 @@ void lo21::upgradeTower()
 		if (tw->getUpgradedAttribute().cost <= this->credits)
 		{
 			this->credits -= tw->getUpgradedAttribute().cost;
-			dock.ui->lcdNumber->display(this->credits);
 			tw->upgrade();
 			selectTile(selectedTile);
+			updateDock();
 		}
 	}
 }
@@ -231,10 +270,9 @@ void lo21::sellTower()
 	if (selectedTile != NULL && selectedTile->getTower() != NULL)
 	{
 		this->credits += selectedTile->getTower()->sell();
-		dock.ui->lcdNumber->display(this->credits);
-		
 		selectedTile->deleteTower();
 		selectTile();
+		updateDock();
 	}
 }
 
@@ -271,7 +309,6 @@ void lo21::clickOnScene(int x, int y)
 		else
 		{
 			this->credits -= tw->getAttribute().cost;
-			dock.ui->lcdNumber->display(this->credits);
 			this->selectTile(t);
 		}
 	}
@@ -285,24 +322,7 @@ void lo21::clickOnScene(int x, int y)
 void lo21::selectTile(Tile *t)
 {
 	this->selectedTile = t;
-
-	if (t == NULL or t->getTower() == NULL)
-	{
-		this->dock.ui->groupBox_2->setEnabled(false);
-		this->dock.ui->label_edition->setText("pas de selection");
-	}
-	else
-	{
-		// affichage
-		this->dock.ui->groupBox_2->setEnabled(true);
-		this->dock.ui->Upgrade->setEnabled((selectedTile->getTower()->getUpgradedAttribute().cost <= this->credits));
-
-		// mise a jour label
-		this->dock.ui->label_edition->setText(
-			"prix amelioration: " + QString::number(t->getTower()->getUpgradedAttribute().cost) +"<br />"
-			+ "prix de vente: " + QString::number(t->getTower()->getAttribute().sellprice)
-			);
-	}
+	updateDock();
 }
 
 const Tile* lo21::getStart() const

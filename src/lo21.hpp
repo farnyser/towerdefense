@@ -39,6 +39,7 @@ public:
 
 private:
 	 Tile* getTile(int x, int y);
+	 void updateDock();
 
 private:
 	// configuration
