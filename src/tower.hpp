@@ -25,6 +25,7 @@ public:
 		float power;
 		float firerate;
 		float bulletSpeed;
+		int bulletType;
 	};
 
 protected:

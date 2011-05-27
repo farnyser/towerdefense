@@ -24,6 +24,7 @@ public:
 public:
 	void hit(int damage);
 	bool hit(const Missile *m);
+	bool canBeHit(int agtype) const;
 	virtual ~Enemy() { };
 
 protected:
@@ -45,7 +46,6 @@ protected:
 	float getResistance() const;
 	virtual void action();
 };
-//advance()
 
 class Ant: public Enemy
 {
@@ -57,7 +57,7 @@ public:
 class Bug: public Enemy
 {
 public:
-	Bug(lo21*, int size);
+	Bug(lo21*, int size, int angle = 0);
 	~Bug();
 };
 

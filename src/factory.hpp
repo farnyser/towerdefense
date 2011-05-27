@@ -52,7 +52,7 @@ public:
 		switch (attr.type)
 		{
 			default:
-				return new AngryBird(game, pos, attr.bulletSpeed, attr.power, target);
+				return new AngryBird(game, pos, attr.bulletSpeed, attr.power, attr.bulletType, target);
 		}
 
 		return NULL;

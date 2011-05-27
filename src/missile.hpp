@@ -13,7 +13,7 @@ private:
 	float velocity;
 	float size;
 	float force;
-	int agtype;
+	const int agtype;
 	const Enemy *target;
 public:
 	int getPower() const;
@@ -30,7 +30,7 @@ protected:
 class AngryBird:public Missile
 {
 public:
-	AngryBird(lo21* g, QPointF pos, float velocity, float power, const Enemy *target);
+	AngryBird(lo21* g, QPointF pos, float velocity, float power, int agtype, const Enemy *target);
 	virtual ~AngryBird() {};
 protected:
 };

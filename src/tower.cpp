@@ -53,7 +53,7 @@ void Tower::action()
 	else
 	{
 		QPointF myPos = scenePos() + getCenterPos();
-		const Enemy *target = game->getClosestEnemy(myPos.x(), myPos.y(), attr.range * TILE_SIZE);
+		const Enemy *target = game->getClosestEnemy(myPos.x(), myPos.y(), attr.range * TILE_SIZE, attr.bulletType);
 		
 		if (target != NULL)
 		{
@@ -86,6 +86,7 @@ Tower::Attribute WaterGun::computeAttribute(int level) const
 {
 	Attribute attr;
 	attr.type = Tower::WATERGUN;
+	attr.bulletType = Enemy::GROUND | Enemy::AIR;
 
 	if (level == 1) attr.cost = 8;
 	else if (level == 2) attr.cost = 20;
@@ -120,6 +121,7 @@ Tower::Attribute Slingshot::computeAttribute(int level) const
 {
 	Attribute attr;
 	attr.type = Tower::SLINGSHOT;
+	attr.bulletType = Enemy::AIR;
 
 	if (level == 1) attr.cost = 12;
 	else if (level == 2) attr.cost = 25;
@@ -155,6 +157,7 @@ Tower::Attribute PetanquePlayer::computeAttribute(int level) const
 {
 	Attribute attr;
 	attr.type = Tower::PETANQUEPLAYER;
+	attr.bulletType = Enemy::GROUND;
 
 	if (level == 1) attr.cost = 15;
 	else if (level == 2) attr.cost = 40;
@@ -190,6 +193,7 @@ Tower::Attribute PaintBall::computeAttribute(int level) const
 {
 	Attribute attr;
 	attr.type = Tower::PAINTBALL;
+	attr.bulletType = Enemy::GROUND | Enemy::AIR;
 
 	if (level == 1) attr.cost = 12;
 	else if (level == 2) attr.cost = 25;

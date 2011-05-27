@@ -121,18 +121,21 @@ bool lo21::isEnemy(const void *o) const
 	return false;
 }
 
-const Enemy* lo21::getClosestEnemy(int x, int y, unsigned int range) const
+const Enemy* lo21::getClosestEnemy(int x, int y, unsigned int range, int agtype) const
 {
 	Enemy *e = NULL;
 	
 	for ( unsigned int distance = -1, i = 0 ; i < enemyList.size() ; i++ )
 	{
-		unsigned int tmp = (enemyList[i]->getCenterPos() - QPoint(x,y)).manhattanLength(); 
-		
-		if (tmp < distance && tmp <= range)
+		if ( enemyList[i]->canBeHit(agtype) )
 		{
-			e = enemyList[i];
-			distance = tmp;
+			unsigned int tmp = (enemyList[i]->getCenterPos() - QPoint(x,y)).manhattanLength(); 
+		
+			if (tmp < distance && tmp <= range)
+			{
+				e = enemyList[i];
+				distance = tmp;
+			}
 		}
 	}
 

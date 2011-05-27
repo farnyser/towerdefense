@@ -25,7 +25,7 @@ public:
 public:
 	void loadMap(const QString &path);
 	void loadWaves(const QString path);
-	const Enemy* getClosestEnemy(int x, int y, unsigned int range = -1) const;
+	const Enemy* getClosestEnemy(int x, int y, unsigned int range, int agtype) const;
 	const Tile* getTile(int x, int y) const;
 	const Tile* getStart() const;
 	void removeObject(Enemy* o);

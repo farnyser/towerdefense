@@ -5,3 +5,4 @@ Ca gratte...;moustique:1:15:20
 Les fourmis et une grande guêpe;fourmi:1:15:25;guepe:1.7:1:25
 Multiplication;cafard:2:7:30
 Sept cafards, trois moustiques et dix fourmis géantes;cafard:1:7:25;moustique:1.1:3:30;fourmi:3:10:40
+Deux Cafards géants;cafard:3:2:40

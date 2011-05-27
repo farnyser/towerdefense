@@ -90,8 +90,8 @@ int Missile::getAGType() const
 	return this->agtype;
 }
 
-AngryBird::AngryBird(lo21* g, QPointF pos, float velocity, float power, const Enemy *target)
-:Missile(g,Ressources::getAnimatedPixmap("angrybird"),Ressources::getAnimatedInterval("angrybird"), Enemy::GROUND, pos, velocity, power, target)
+AngryBird::AngryBird(lo21* g, QPointF pos, float velocity, float power, int agtype, const Enemy *target)
+:Missile(g,Ressources::getAnimatedPixmap("angrybird"),Ressources::getAnimatedInterval("angrybird"), agtype, pos, velocity, power, target)
 {
 }
 

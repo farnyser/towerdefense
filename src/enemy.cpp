@@ -139,7 +139,7 @@ void Enemy::hit(int damage)
 
 bool Enemy::hit(const Missile *m)
 {
-	if (m->getAGType() & this->agtype)
+	if (this->canBeHit(m->getAGType()))
 	{
 		this->hit(m->getPower());
 		return true;
@@ -148,6 +148,10 @@ bool Enemy::hit(const Missile *m)
 	return false;
 }
 
+bool Enemy::canBeHit(int agtype) const
+{
+	return this->agtype & agtype; 
+}
 
 Ant::Ant(lo21 *g, int size)
  : Enemy(g, size, Ressources::getAnimatedPixmap("ant"),Ressources::getAnimatedInterval("ant"))
@@ -158,9 +162,10 @@ Ant::Ant(lo21 *g, int size)
 	this->agtype = GROUND;
 }
 
-Bug::Bug(lo21 *g, int size)
+Bug::Bug(lo21 *g, int size, int angle)
  : Enemy(g, size, Ressources::getAnimatedPixmap("bug"),Ressources::getAnimatedInterval("bug"))
 {
+	this->angle = angle;
 	this->hp = 10 * this->size * this->size;
 	this->resistance = 5 * this->size * this->size;
 	this->speed = 2;
@@ -169,13 +174,14 @@ Bug::Bug(lo21 *g, int size)
 
 Bug::~Bug()
 {
-	if (this->size > 1)
+	// ne se reproduit que si mort (pas en cas d'atteinte du but)
+	if (this->size > 1 && this->hp == 0)
 	{
-		Bug *c1 = new Bug(game, this->size - 1);
-		Bug *c2 = new Bug(game, this->size - 1);
+		Bug *c1 = new Bug(game, this->size - 1, this->angle);
+		Bug *c2 = new Bug(game, this->size - 1, this->angle);
 
-		c1->setPos(this->getCenterPos() - getCenterPos() + QPointF(2,2));
-		c2->setPos(this->getCenterPos() - getCenterPos() - QPointF(2,2));
+		c1->setPos(this->getCenterPos() - c1->getHalfSize() + QPointF(2,2));
+		c2->setPos(this->getCenterPos() - c2->getHalfSize() - QPointF(2,2));
 
 		game->addObject(c1);
 		game->addObject(c2);
