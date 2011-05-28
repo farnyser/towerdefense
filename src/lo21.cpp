@@ -408,7 +408,10 @@ void lo21::updateGame()
 			if (waves.first().end())
 			{
 				waves.pop_front();
-				timeUntilNextWave=TIME_BETWEEN_WAVES*FREQUENCY;
+				if(waves.first().isWithPause())
+					timeUntilNextWave=TIME_BETWEEN_WAVES*FREQUENCY;
+				else
+					timeUntilNextWave=0;
 			}
 
 			if (timeUntilNextWave==0)
@@ -516,8 +519,9 @@ void lo21::loadMap(const QString &path)
 
 void lo21::loadWaves(const QString path)
 {
+	bool withPause;
+	
 	waves.clear();
-
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -527,6 +531,7 @@ void lo21::loadWaves(const QString path)
 
     while (!file.atEnd())
     {
+		withPause=true;
         QString rawLine=file.readLine();
         QStringList line = rawLine.split(';', QString::SkipEmptyParts);
         QString comment=line.first();
@@ -543,9 +548,11 @@ void lo21::loadWaves(const QString path)
                      wave[0],			//Type d'insect
                      wave[1].toFloat(),	//taille
                      wave[2].toInt(),	//Nombre
-                     wave[3].toInt()		//Interval
+                     wave[3].toInt(),		//Interval
+					 withPause
                     )
             );
+			withPause=false;
         }
 
     }
