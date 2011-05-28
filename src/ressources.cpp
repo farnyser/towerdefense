@@ -7,7 +7,8 @@ Ressources::Ressources()
 {
 	QList<QPixmap> bug, ant, bee, mosquito, 
 		grass, mud, road, end, 
-		watergun, slingshot, petanque, paintball;
+		watergun, slingshot, petanque, paintball,
+		angrybird;
 
     bug.push_back(QPixmap("ressources/images/cafard1.png"));
 	bug.push_back(QPixmap("ressources/images/cafard2.png"));
@@ -62,6 +63,10 @@ Ressources::Ressources()
 	petanque.push_back(QPixmap("ressources/images/petanque.png").scaled(TILE_SIZE, TILE_SIZE));
 	animatedPixmap["petanque"] = petanque;
 	animatedInterval["petanque"] = 1;
+	
+	angrybird.push_back(QPixmap("ressources/images/angrybird.png").scaled(TILE_SIZE/2.0, TILE_SIZE/2.0));
+	animatedPixmap["angrybird"] = angrybird;
+	animatedInterval["angrybird"] = 1;
 }
 
 

@@ -6,34 +6,29 @@
 #include <QtGui/QMenuBar>
 #include <QtGui/QAction>
 #include <QMessageBox>
+#include <QGLFormat>
+#include <cmath>
 
 #include "ressources.hpp"
 #include "tile.hpp"
 #include "enemy.hpp"
 #include "tower.hpp"
 #include "factory.hpp"
+#include "missile.hpp"
 
 lo21::lo21()
- : QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this), timeUntilNextWave(-1),selectedTower(Tower::NONE)
+ : 
+  QMainWindow(0, 0), timer(this), scene(this), view(this), dock(this) 
 {
-    //Init des tableaux
-    for (int i = 0 ; i < MAP_SIZE ; i++)
-        for (int j = 0 ; j < MAP_SIZE ; j++)
-            tileMap[i][j] = NULL;
-
-    //Config par defaut
-    lives = 10;
-    credits = 100; /* valeur inconnue ? */
-
-    loadMap("ressources/map.txt");
-    loadWaves("ressources/waves.txt");
 
     //Ajout de la scene en tant que widget principale
     //scene.setSceneRect(0, 0, 300, 300);
     view.setScene(&scene);
     view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setCentralWidget(&view);
+	view.setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
+    view.setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+	setCentralWidget(&view);
 
     //Ajout du dock des options de jeu
     dock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -41,17 +36,12 @@ lo21::lo21()
     dock.ui->lcdNumber->display(credits);
     dock.ui->lcdNumber_2->display(lives);
 
-    for ( int i = 0 ; i < MAP_SIZE ; i++ )
-        for ( int j = 0 ; j < MAP_SIZE ; j++ )
-            if ( tileMap[i][j] != NULL && tileMap[i][j]->isStartPoint() )
-                start = tileMap[i][j];
-
-
-    timer.start(1000.0/FREQUENCY);
     connect(&timer, SIGNAL(timeout()), this, SLOT(updateGame()));
     connect(this, SIGNAL(advance_scene()),&scene,SLOT(advance()));
 
+    connect(dock.ui->newGame,SIGNAL(clicked()),this,SLOT(newGame()));
     connect(dock.ui->launchWave,SIGNAL(clicked()),this,SLOT(launchWave()));
+    connect(dock.ui->toggleState,SIGNAL(clicked()),this,SLOT(toggleState()));
     connect(dock.ui->SelectWater,SIGNAL(clicked()),this,SLOT(selectTowerWater()));
     connect(dock.ui->SelectRock,SIGNAL(clicked()),this,SLOT(selectTowerRock()));
     connect(dock.ui->SelectPaint,SIGNAL(clicked()),this,SLOT(selectTowerPaint()));
@@ -60,74 +50,264 @@ lo21::lo21()
     connect(dock.ui->Sell,SIGNAL(clicked()),this,SLOT(sellTower()));
 
     connect(&scene,SIGNAL(clickOnScene(int,int)),this,SLOT(clickOnScene(int,int)));
+
+	// lancement
+	newGame();
+}
+
+void lo21::newGame()
+{
+	//
+	// remove everything
+	//
+	while (scene.items().size())
+	{
+		for ( int i = 0 ; i < scene.items().size() ; i++ )
+			removeObject(scene.items()[i]);
+	
+		for ( int i = 0 ; i < deleteLaters.size() ; i++ )
+			delete deleteLaters[i];
+		deleteLaters.clear();
+
+		enemyList.clear();
+	}
+
+    //Init des tableaux
+    for (int i = 0 ; i < MAP_SIZE ; i++)
+        for (int j = 0 ; j < MAP_SIZE ; j++)
+            tileMap[i][j] = NULL;
+
+	selectedTile = NULL;
+	selectedTower = Tower::NONE;
+
+
+	//
+	// reload
+	//
+	timeUntilNextWave = -1;
+
+	//Config par defaut
+    lives = 10;
+    credits = 100; /* valeur inconnue ? */
+
+    loadMap("ressources/map.txt");
+    loadWaves("ressources/waves.txt");
+   
+   for ( int i = 0 ; i < MAP_SIZE ; i++ )
+        for ( int j = 0 ; j < MAP_SIZE ; j++ )
+            if ( tileMap[i][j] != NULL && tileMap[i][j]->isStartPoint() )
+                start = tileMap[i][j];
+
+    timer.start(1000.0/FREQUENCY);
+	state = GAME_RUN;
+
+	updateDock();
+}
+
+void lo21::updateDock()
+{
+	dock.ui->lcdNumber->display(credits);
+	dock.ui->lcdNumber_2->display(lives);
+
+	/* EN JEU */
+	if (state == GAME_RUN)
+	{
+		this->dock.ui->launchWave->setEnabled(true);
+		this->dock.ui->groupBox->setEnabled(true);
+
+		//
+		// bouttons
+		//
+		dock.ui->SelectPaint->setStyleSheet("QPushButton {}");
+		dock.ui->SelectRock->setStyleSheet("QPushButton {}");
+		dock.ui->SelectWater->setStyleSheet("QPushButton {}");
+		dock.ui->SelectPetanque->setStyleSheet("QPushButton {}");
+
+		switch (selectedTower)
+		{
+			case Tower::WATERGUN:
+				dock.ui->SelectWater->setStyleSheet("QPushButton { background-color: red; }");
+				break;
+			case Tower::PETANQUEPLAYER:
+				dock.ui->SelectPetanque->setStyleSheet("QPushButton { background-color: red; }");
+				break;
+			case Tower::PAINTBALL:
+				dock.ui->SelectPaint->setStyleSheet("QPushButton { background-color: red; }");
+				break;
+			case Tower::SLINGSHOT:
+				dock.ui->SelectRock->setStyleSheet("QPushButton { background-color: red; }");
+				break;
+		}
+		
+		//
+		// bloc info
+		//
+		if (selectedTile == NULL or selectedTile->getTower() == NULL)
+		{
+			this->dock.ui->groupBox_2->setEnabled(false);
+			this->dock.ui->label_edition->setText("pas de selection");
+		}
+		else
+		{
+			const Tower* tw = selectedTile->getTower();
+			const Tower::Attribute attr = tw->getUpgradedAttribute();
+
+			// affichage
+			this->dock.ui->groupBox_2->setEnabled(true);
+			this->dock.ui->Upgrade->setEnabled((attr.cost > 0) && (attr.cost <= this->credits));
+
+			if ( attr.cost > 0 )
+			{
+				this->dock.ui->label_edition->setText(
+					"prix amelioration: " + QString::number(tw->getUpgradedAttribute().cost) +"<br />"
+					+ "prix de vente: " + QString::number(tw->getAttribute().sellprice)
+				);
+			}
+			else
+			{
+				this->dock.ui->label_edition->setText(
+					"prix de vente: " + QString::number(tw->getAttribute().sellprice)
+				);
+			}
+		}
+	}
+
+	/* EN PAUSE / FIN */
+	else
+	{
+		this->dock.ui->toggleState->setEnabled(state!=GAME_END);
+		this->dock.ui->launchWave->setEnabled(false);
+		this->dock.ui->groupBox->setEnabled(false);
+		this->dock.ui->groupBox_2->setEnabled(false);
+	}
+}
+
+void lo21::addCredit(int c)
+{
+	credits+=c;
+	updateDock();
+}
+
+void lo21::subLive(int l)
+{
+	lives-=l;
+
+	if(lives<=0)
+	{
+		QMessageBox(QMessageBox::Warning,tr("Perdu"),
+				tr("insert coin")).exec();
+		state = GAME_END;
+	}
+
+	updateDock();
+}
+
+
+
+void lo21::addObject(Object* o)
+{
+	scene.addItem(o);
+}
+
+void lo21::addObject(Enemy *o)
+{
+	this->addObject((Object*)o);
+	this->enemyList.push_back(o);
+}
+
+void lo21::removeObject(QGraphicsItem* o)
+{
+	if (o != NULL)
+	{
+		scene.removeItem(o);
+		deleteLaters << o;
+	}
+}
+
+void lo21::removeObject(Enemy *o)
+{
+	this->enemyList.removeAll(o);
+	this->removeObject((Object*)o);
+}
+
+bool lo21::isEnemy(const void *o) const
+{
+	for ( int i = 0 ; i < enemyList.size() ; i++ )
+		if ( enemyList[i] == o ) 
+			return true;
+	
+	return false;
+}
+
+const Enemy* lo21::getClosestEnemy(int x, int y, unsigned int range, int agtype) const
+{
+	Enemy *e = NULL;
+	
+	for ( unsigned int distance = -1, i = 0 ; i < enemyList.size() ; i++ )
+	{
+		if ( enemyList[i]->canBeHit(agtype) )
+		{
+			unsigned int tmp = (enemyList[i]->getCenterPos() - QPoint(x,y)).manhattanLength(); 
+		
+			if (tmp < distance && tmp <= range)
+			{
+				e = enemyList[i];
+				distance = tmp;
+			}
+		}
+	}
+
+	return e;
+}
+
+void lo21::toggleState()
+{
+    if (state == GAME_RUN)
+		state = GAME_STOP;
+	else if (state == GAME_STOP)
+		state = GAME_RUN;
+
+	updateDock();
 }
 
 void lo21::selectTowerPaint()
 {
     if (selectedTower == Tower::PAINTBALL)
-	{
 		selectedTower = Tower::NONE;
-		dock.ui->SelectPaint->setPalette( dock.ui->SelectPetanque->palette() );
-        return;
-	}
+	else
+		selectedTower = Tower::PAINTBALL;
 
-    QPalette p=dock.ui->SelectPaint->palette();
-    dock.ui->SelectPaint->setPalette(QPalette(Qt::red));
-    dock.ui->SelectRock->setPalette(p);
-    dock.ui->SelectWater->setPalette(p);
-    dock.ui->SelectPetanque->setPalette(p);
-    selectedTower = Tower::PAINTBALL;
+	updateDock();
 }
 
 void lo21::selectTowerPetanque()
 {
     if (selectedTower == Tower::PETANQUEPLAYER)
-	{
 		selectedTower = Tower::NONE;
-		dock.ui->SelectPetanque->setPalette( dock.ui->SelectPaint->palette() );
-        return;
-	}
-
-    QPalette p=dock.ui->SelectPetanque->palette();
-    dock.ui->SelectPaint->setPalette(p);
-    dock.ui->SelectRock->setPalette(p);
-    dock.ui->SelectWater->setPalette(p);
-    dock.ui->SelectPetanque->setPalette(QPalette(Qt::red));
-    selectedTower = Tower::PETANQUEPLAYER;
-
+	else
+		selectedTower = Tower::PETANQUEPLAYER;
+	
+	updateDock();
 }
+
 void lo21::selectTowerRock()
 {
     if (selectedTower == Tower::SLINGSHOT)
-	{
 		selectedTower = Tower::NONE;
-		dock.ui->SelectRock->setPalette( dock.ui->SelectPaint->palette() );
-        return;
-	}
-
-    QPalette p=dock.ui->SelectRock->palette();
-    dock.ui->SelectPaint->setPalette(p);
-    dock.ui->SelectRock->setPalette(QPalette(Qt::red));
-    dock.ui->SelectWater->setPalette(p);
-    dock.ui->SelectPetanque->setPalette(p);
-    selectedTower = Tower::SLINGSHOT;
+	else
+		selectedTower = Tower::SLINGSHOT;
+	
+	updateDock();
 }
 
 void lo21::selectTowerWater()
 {
     if (selectedTower == Tower::WATERGUN)
-	{
 		selectedTower = Tower::NONE;
-		dock.ui->SelectWater->setPalette( dock.ui->SelectPetanque->palette() );
-        return;
-	}
-
-    QPalette p=dock.ui->SelectWater->palette();
-    dock.ui->SelectPaint->setPalette(p);
-    dock.ui->SelectRock->setPalette(p);
-    dock.ui->SelectWater->setPalette(QPalette(Qt::red));
-    dock.ui->SelectPetanque->setPalette(p);
-    selectedTower = Tower::WATERGUN;
+	else
+		selectedTower = Tower::WATERGUN;
+	
+	updateDock();
 }
 
 void lo21::upgradeTower()
@@ -139,9 +319,9 @@ void lo21::upgradeTower()
 		if (tw->getUpgradedAttribute().cost <= this->credits)
 		{
 			this->credits -= tw->getUpgradedAttribute().cost;
-			dock.ui->lcdNumber->display(this->credits);
 			tw->upgrade();
 			selectTile(selectedTile);
+			updateDock();
 		}
 	}
 }
@@ -151,10 +331,9 @@ void lo21::sellTower()
 	if (selectedTile != NULL && selectedTile->getTower() != NULL)
 	{
 		this->credits += selectedTile->getTower()->sell();
-		dock.ui->lcdNumber->display(this->credits);
-		
 		selectedTile->deleteTower();
 		selectTile();
+		updateDock();
 	}
 }
 
@@ -183,13 +362,14 @@ void lo21::clickOnScene(int x, int y)
 		{
 			QMessageBox(QMessageBox::Warning,tr("Impossible de construire ici"),
 				tr("Vous ne pouvez pas construire une tour a cet endroit")).exec();
-			this->selectTile(NULL);
 			delete tw;
+			
+			// si il y a une tour, selection
+			this->selectTile(t);
 		}
 		else
 		{
 			this->credits -= tw->getAttribute().cost;
-			dock.ui->lcdNumber->display(this->credits);
 			this->selectTile(t);
 		}
 	}
@@ -203,24 +383,7 @@ void lo21::clickOnScene(int x, int y)
 void lo21::selectTile(Tile *t)
 {
 	this->selectedTile = t;
-
-	if (t == NULL or t->getTower() == NULL)
-	{
-		this->dock.ui->groupBox_2->setEnabled(false);
-		this->dock.ui->label_edition->setText("pas de selection");
-	}
-	else
-	{
-		// affichage
-		this->dock.ui->groupBox_2->setEnabled(true);
-		this->dock.ui->Upgrade->setEnabled((selectedTile->getTower()->getUpgradedAttribute().cost <= this->credits));
-
-		// mise a jour label
-		this->dock.ui->label_edition->setText(
-			"prix amelioration: " + QString::number(t->getTower()->getUpgradedAttribute().cost) +"<br />"
-			+ "prix de vente: " + QString::number(t->getTower()->getAttribute().sellprice)
-			);
-	}
+	updateDock();
 }
 
 const Tile* lo21::getStart() const
@@ -231,29 +394,41 @@ const Tile* lo21::getStart() const
 
 void lo21::updateGame()
 {
-    if (!waves.empty())
-    {
-        //Si la vague en cours est vide, on passe à la suivante.
-        if (waves.first().end())
-        {
-            waves.pop_front();
-            timeUntilNextWave=TIME_BETWEEN_WAVES*FREQUENCY;
-        }
+	// delete objects
+	for ( int i = 0 ; i < deleteLaters.size() ; i++ )
+		delete deleteLaters[i];
+	deleteLaters.clear();
 
-        if (timeUntilNextWave==0)
-        {
-            dock.ui->waveComment->setText(waves.first().getComment());
-            if (waves.first().tick())
-            {
-                Enemy *e = waves.first().getEnemy(this);
-                scene.addItem(e);
-            }
-        }
-        else if (timeUntilNextWave>0)
-            timeUntilNextWave--;
-    }
+	if (state == GAME_RUN)
+	{
+		// charge un enemy
+		if (!waves.empty())
+		{
+			//Si la vague en cours est vide, on passe à la suivante.
+			if (waves.first().end())
+			{
+				waves.pop_front();
+				if(waves.first().isWithPause())
+					timeUntilNextWave=TIME_BETWEEN_WAVES*FREQUENCY;
+				else
+					timeUntilNextWave=0;
+			}
 
-    emit advance_scene();
+			if (timeUntilNextWave==0)
+			{
+				dock.ui->waveComment->setText(waves.first().getComment());
+				if (waves.first().tick())
+				{
+					Enemy *e = waves.first().getEnemy(this);
+					if ( e != NULL ) this->addObject(e);
+				}
+			}
+			else if (timeUntilNextWave>0)
+				timeUntilNextWave--;
+		}
+
+		emit advance_scene();
+	}
 }
 
 void lo21::launchWave()
@@ -358,6 +533,9 @@ void lo21::loadMap(const QString &path)
 
 void lo21::loadWaves(const QString path)
 {
+	bool withPause;
+	
+	waves.clear();
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -367,6 +545,7 @@ void lo21::loadWaves(const QString path)
 
     while (!file.atEnd())
     {
+		withPause=true;
         QString rawLine=file.readLine();
         QStringList line = rawLine.split(';', QString::SkipEmptyParts);
         QString comment=line.first();
@@ -383,9 +562,11 @@ void lo21::loadWaves(const QString path)
                      wave[0],			//Type d'insect
                      wave[1].toFloat(),	//taille
                      wave[2].toInt(),	//Nombre
-                     wave[3].toInt()		//Interval
+                     wave[3].toInt(),		//Interval
+					 withPause
                     )
             );
+			withPause=false;
         }
 
     }

@@ -15,6 +15,7 @@ class Object: public QGraphicsItem
 {
 public:
 	Object(lo21* g, QList<QPixmap> p, int interval = 10, QGraphicsItem *parent = 0);
+	virtual ~Object() {};
 
 	void paint(QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* widget);
 	QRectF boundingRect() const;
@@ -23,7 +24,7 @@ public:
 	QPointF getHalfSize() const;
 
 protected:
-	const lo21* game;
+	lo21* game;
 	virtual void action() = 0;
 	qreal angle;
 

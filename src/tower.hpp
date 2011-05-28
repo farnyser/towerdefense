@@ -17,6 +17,7 @@ public:
 	};
 	struct Attribute 
 	{
+		Type type;
 		int level;
 		int cost;
 		int sellprice;
@@ -24,16 +25,21 @@ public:
 		float power;
 		float firerate;
 		float bulletSpeed;
+		int bulletType;
 	};
 
 protected:
 	Attribute attr;
+	QList<int> cost;
+	int timeUntilNextFire;
+
 
 public:
 	Attribute getAttribute() const;
 	Attribute getUpgradedAttribute() const;
 	int upgrade();
 	int sell();
+	void action();
 
 protected:
 	Tower(lo21* g,QList<QPixmap> p);

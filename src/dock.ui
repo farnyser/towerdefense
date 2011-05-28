@@ -44,6 +44,20 @@
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="newGame">
+      <property name="text">
+       <string>Nouvelle partie</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="toggleState">
+      <property name="text">
+       <string>Pause</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QPushButton" name="launchWave">
       <property name="text">
        <string>Lancer la vague</string>

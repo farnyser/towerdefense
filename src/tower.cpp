@@ -1,14 +1,17 @@
-#include "tower.hpp"
 #include <cmath>
+#include "factory.hpp"
+#include "tower.hpp"
+#include "missile.hpp"
 
 //
 // Tower
 //
 
-Tower::Tower(lo21* g, QList< QPixmap > p)
-:Object(g, p)
+Tower::Tower(lo21* game, QList< QPixmap > pixmaps)
+ : 
+  Object(game, pixmaps), 
+  timeUntilNextFire(0)
 {
-	//this->setFlag(QGraphicsItem::ItemIsSelectable);
 }
 
 Tower::Attribute Tower::getAttribute() const
@@ -23,13 +26,41 @@ Tower::Attribute Tower::getUpgradedAttribute() const
 
 int Tower::upgrade()
 {
-	this->attr = computeAttribute(this->attr.level+1);
-	return this->attr.cost;
+	// niveau max
+	if ( attr.level < 3 )
+	{
+		this->attr = computeAttribute(this->attr.level+1);
+		return this->attr.cost;
+	}
+
+	return 0;
 }
 
 int Tower::sell()
 {
 	return this->attr.sellprice;
+}
+
+void Tower::action()
+{
+	// remise a '0' du compteur
+	if (timeUntilNextFire == -1 )
+		timeUntilNextFire = FREQUENCY / this->attr.firerate;
+
+	//si il faut attendre, attendre ...
+	if (timeUntilNextFire >= 1)
+		timeUntilNextFire--;
+	else
+	{
+		QPointF myPos = scenePos() + getCenterPos();
+		const Enemy *target = game->getClosestEnemy(myPos.x(), myPos.y(), attr.range * TILE_SIZE, attr.bulletType);
+		
+		if (target != NULL)
+		{
+			game->addObject(Factory::getMissile(this, target, game));
+			timeUntilNextFire = -1;
+		}
+	}
 }
 
 //
@@ -44,11 +75,18 @@ WaterGun::WaterGun(lo21* g)
 
 void WaterGun::action()
 {
+	Tower::action();
+
+	// doit s'orienter vers l'enemy cible, pas tourner en rond
+	angle += 0.5;
+	update();
 }
 
 Tower::Attribute WaterGun::computeAttribute(int level) const
 {
 	Attribute attr;
+	attr.type = Tower::WATERGUN;
+	attr.bulletType = Enemy::GROUND | Enemy::AIR;
 
 	if (level == 1) attr.cost = 8;
 	else if (level == 2) attr.cost = 20;
@@ -62,7 +100,7 @@ Tower::Attribute WaterGun::computeAttribute(int level) const
 	attr.level = level;
 	attr.range = 2 + level/2.0;
 	attr.power = 5 * std::pow(level, 1.5);
-	attr.firerate = 4 - level/2.0;
+	attr.firerate = 4 + level/2.0;
 	attr.bulletSpeed = 40;
 
 	return attr;
@@ -76,11 +114,14 @@ Slingshot::Slingshot(lo21* g)
 
 void Slingshot::action()
 {
+	Tower::action();
 }
 
 Tower::Attribute Slingshot::computeAttribute(int level) const
 {
 	Attribute attr;
+	attr.type = Tower::SLINGSHOT;
+	attr.bulletType = Enemy::AIR;
 
 	if (level == 1) attr.cost = 12;
 	else if (level == 2) attr.cost = 25;
@@ -109,11 +150,14 @@ PetanquePlayer::PetanquePlayer(lo21* g)
 
 void PetanquePlayer::action()
 {
+	Tower::action();
 }
 
 Tower::Attribute PetanquePlayer::computeAttribute(int level) const
 {
 	Attribute attr;
+	attr.type = Tower::PETANQUEPLAYER;
+	attr.bulletType = Enemy::GROUND;
 
 	if (level == 1) attr.cost = 15;
 	else if (level == 2) attr.cost = 40;
@@ -142,11 +186,14 @@ PaintBall::PaintBall(lo21* g)
 
 void PaintBall::action()
 {
+	Tower::action();
 }
 
 Tower::Attribute PaintBall::computeAttribute(int level) const
 {
 	Attribute attr;
+	attr.type = Tower::PAINTBALL;
+	attr.bulletType = Enemy::GROUND | Enemy::AIR;
 
 	if (level == 1) attr.cost = 12;
 	else if (level == 2) attr.cost = 25;
